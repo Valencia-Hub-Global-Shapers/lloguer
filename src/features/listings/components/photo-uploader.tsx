@@ -19,18 +19,15 @@ const ACCEPTED = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 type Item = { path: string; uploading: boolean; preview: string };
 
 export function PhotoUploader({
-  userId,
-  folder,
   value,
   onChange,
 }: {
-  userId: string;
-  /** storage subfolder: listing id, or "draft" for new listings */
-  folder: string;
   value: string[];
   onChange: (paths: string[]) => void;
 }) {
   const { t } = useI18n();
+  // One random folder per form session keeps a poster's uploads together
+  const [folder] = useState(() => crypto.randomUUID());
   const inputRef = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Item[]>(() =>
     value.map((p) => ({ path: p, uploading: false, preview: photoUrl(p) })),
@@ -67,7 +64,7 @@ export function PhotoUploader({
         continue;
       }
 
-      const path = photoPath(userId, folder, `${crypto.randomUUID()}.webp`);
+      const path = photoPath(folder, `${crypto.randomUUID()}.webp`);
       commit([
         ...itemsRef.current,
         { path, uploading: true, preview: URL.createObjectURL(file) },
@@ -98,12 +95,8 @@ export function PhotoUploader({
     }
   };
 
-  const remove = async (path: string) => {
-    const supabase = createClient();
-    await supabase.storage
-      .from(LISTING_PHOTOS_BUCKET)
-      .remove([path])
-      .catch(() => {});
+  // Anonymous posters cannot delete from storage; the file is just unreferenced.
+  const remove = (path: string) => {
     commit(itemsRef.current.filter((i) => i.path !== path));
   };
 
@@ -124,7 +117,7 @@ export function PhotoUploader({
             ) : (
               <button
                 type="button"
-                onClick={() => void remove(item.path)}
+                onClick={() => remove(item.path)}
                 className="bg-background/80 hover:bg-background absolute top-1 right-1 cursor-pointer rounded-full p-1 shadow-xs"
                 aria-label={t("common.delete")}
               >

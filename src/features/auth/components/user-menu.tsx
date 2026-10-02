@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { List, LogOut, ShieldCheck } from "lucide-react";
+import { LogOut, ShieldCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,12 +57,6 @@ export function UserMenu({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel className="max-w-48 truncate">{fullName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href={`/${locale}/me/listings`}>
-            <List />
-            {t("common.myListings")}
-          </Link>
-        </DropdownMenuItem>
         {isAdmin ? (
           <DropdownMenuItem asChild>
             <Link href={`/${locale}/admin/moderation`}>

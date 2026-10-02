@@ -1,6 +1,6 @@
 # MyLloguer — agent guide
 
-Map-first rental classifieds for València + ~20 km metro area. Next.js 15 (App Router) + TypeScript + Tailwind v4 + Supabase (Postgres/PostGIS, Auth, Storage) + Mapbox GL + supercluster.
+Map-first, open shared-flat classifieds for València + ~20 km metro area. Anyone can publish without an account; every listing is manually moderated and expires 10 days after approval. Next.js 15 (App Router) + TypeScript + Tailwind v4 + Supabase (Postgres/PostGIS, Auth, Storage) + Mapbox GL + supercluster.
 
 ## Commands
 
@@ -36,22 +36,25 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 
 ## Data & security (critical invariants)
 
-- All mutations go through server actions + RLS. Public reads use the `public_listings` / `public_profiles` **security-definer views**; the base `listings` table is owner/admin only. `location` (exact coords) must never appear in public queries — only `public_lat/lng` (snapped to 3 decimals by trigger at write time).
-- "Owner edit of an approved listing ⇒ status back to `pending`" is enforced by the `enforce_listing_transitions` DB trigger, not by app code. Owner-allowed transitions: approved→draft (deactivate), draft/rejected/expired→pending (republish), any→deleted. Admin bypasses the trigger. Security-definer internals bypass it via the `mylloguer.internal` GUC.
+- Posters have **no accounts**. Anonymous writes go only through security-definer functions (`submit_listing`, `update_listing_by_token`, `set_listing_status_by_token`, `get_listing_by_token`, migration 0008); `anon` has no table privileges. Ownership = a random edit token shown/emailed once; only its sha256 is stored (`listings.edit_token_hash`). `owner_id` is nullable (legacy/admin rows). Admin writes go through server actions + RLS (admin only).
+- The optional `submit_gate` secret (`private_settings` row + `SUBMIT_GATE_SECRET` env) makes the functions callable only from the server actions (captcha + IP rate limit). Without the row they are open (local dev).
+- Public reads use the `public_listings` / `public_profiles` **security-definer views**; the base `listings` table is admin only. `location` (exact coords), `contact_email` and `edit_token_hash` must never appear in public queries; only `public_lat/lng` (snapped to 3 decimals by trigger at write time).
+- Any poster edit sends the listing back to `pending` (done inside the token functions; the `enforce_listing_transitions` trigger still guards direct owner/admin updates). Admins bypass the trigger. Security-definer internals bypass it via the `mylloguer.internal` GUC.
 - `database.types.ts` is hand-maintained to match `supabase/migrations` (use `type`, not `interface` — Supabase's `GenericSchema` constraint requires implicit index signatures). Regenerate with `npx supabase gen types typescript --local` when the schema changes, then reconcile.
-- Rate limiting (Upstash) in `src/lib/rate-limit.ts`: publish 5/day, edits 20/day, views 30/min/IP. No-ops when env vars are empty (local dev). Fail closed on mutations, fail open on views.
-- Photos: Supabase Storage bucket `listing-photos` (public read, owner-folder writes `<uid>/<listing|draft>/<file>.webp`), ≤8 photos, ≤5 MB, client downscales to ≤1600 px WebP.
+- Rate limiting (Upstash) in `src/lib/rate-limit.ts`, keyed by IP for posters: publish 5/day, edits 20/day, views 30/min. No-ops when env vars are empty (local dev). Fail closed on mutations, fail open on views. Also: Turnstile captcha (`src/lib/captcha.ts`, skipped without keys), honeypot field, and 5 submissions/email/day inside `submit_listing`.
+- Photos: Supabase Storage bucket `listing-photos` (public read, anonymous writes only under `anon/<draft-uuid>/<file>.webp`), ≤8 photos, ≤5 MB, client downscales to ≤1600 px WebP. Anonymous uploads cannot be deleted by posters; removed photos are just unreferenced.
 
 ## Conventions
 
 - i18n: all UI copy via dictionaries in `src/i18n/*.json` (same keys in all three). Server components use `getDictionary`, client components `useI18n()` (`t("a.b", { var })`). Descriptions render as plain text only.
-- Filter state lives only in URL searchParams (`src/features/search/params.ts`).
+- Filter state lives only in URL searchParams (`src/features/search/params.ts`). The gender filter means "listings that accept my gender" (`preferred_gender` is `any` or the chosen value).
+- Listing TTL is `LISTING_TTL_DAYS` (`src/lib/constants.ts`, 10 days), applied on approval.
 - Migrations are append-only files in `supabase/migrations`; `supabase/seed.sql` must stay reproducible via `db reset`.
 - Neighborhood names are stored in Valencian (`name_ca`) on listings; the filter maps slug → `name_ca`.
 
 ## Known MVP shortcuts
 
 - Detail page is a full page, not the panel overlay from the UX blueprint (still deep-linkable).
-- Admin notifications = pending-count badge on the moderation nav link.
+- Admin notifications = pending-count badge on the moderation nav link. Admins sign in at `/login` (no header link); the demo email login form only shows outside production unless `ENABLE_EMAIL_LOGIN=1`.
 - pg_cron is optional locally; public reads also filter `expires_at` as belt-and-braces. `expire_listings()` can be called manually.
-- Email sign-in form on `/login` exists for local dev/demo accounts; production login is Google-only per plan.
+- Email sign-in form on `/login` exists for local dev/demo accounts; production login (admins only) is Google-only.

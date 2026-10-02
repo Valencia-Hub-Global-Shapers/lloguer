@@ -33,4 +33,27 @@ El stack local con Docker (`npm run supabase:start`, `db:reset`, `test:rls`) sig
 | `npm run supabase:start` / `stop` | Stack local Supabase |
 | `npm run db:reset` | Reaplica migraciones + seed |
 
+## Publicar sin cuenta
+
+Cualquiera puede publicar un anuncio sin registrarse (`/publish`). Cada anuncio entra en `pending` y un admin lo revisa a mano; al aprobarlo se activa **10 días** y después caduca solo.
+
+- Al publicar se genera un **enlace privado de gestión** (`/manage/<id>/<token>`) que se muestra en pantalla y se envía por email (Resend). Con él se edita, desactiva, republica o borra el anuncio. En la base de datos solo se guarda el hash sha256 del token. Editar un anuncio aprobado lo devuelve a revisión.
+- La escritura anónima pasa solo por funciones `security definer` (`submit_listing`, `update_listing_by_token`, `set_listing_status_by_token`, `get_listing_by_token`). `anon` no tiene permisos sobre las tablas.
+- Antiabuso: captcha Cloudflare Turnstile, honeypot, límite por IP (Upstash) y máximo 5 envíos por email al día en la base de datos.
+- Los admins siguen entrando con Google en `/login` (no hay enlace en la cabecera).
+
+### Puesta en producción
+
+1. Aplica las migraciones (`npx supabase db push`).
+2. Rellena las variables de `.env.example` (Turnstile, Resend, Upstash, `NEXT_PUBLIC_SITE_URL`).
+3. Cierra la puerta directa a la API: elige un secreto y guárdalo en los dos sitios para que solo el servidor pueda enviar anuncios.
+
+   ```sql
+   insert into private_settings (key, value) values ('submit_gate', '<secreto>');
+   ```
+
+   y `SUBMIT_GATE_SECRET=<secreto>` en el hosting. Si no hay fila en `private_settings`, las funciones quedan abiertas (útil en local).
+4. Marca tu usuario como admin: `update profiles set is_admin = true where email = '<tu email>';`
+5. No ejecutes `supabase/seed.sql` en producción (crea usuarios demo con contraseña conocida).
+
 Más detalles para agentes en [AGENTS.md](AGENTS.md).

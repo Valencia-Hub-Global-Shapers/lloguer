@@ -5,7 +5,6 @@
     "publish": "Publish",
     "login": "Sign in",
     "logout": "Sign out",
-    "myListings": "My listings",
     "admin": "Admin",
     "moderation": "Moderation",
     "allListings": "All listings",
@@ -45,7 +44,9 @@
     "flatmates": "Max flatmates",
     "availableBefore": "Available before",
     "apply": "Apply",
-    "reset": "Clear"
+    "reset": "Clear",
+    "gender": "My gender",
+    "genderHint": "Only listings that accept me"
   },
   "listing": {
     "perMonth": "€/month",
@@ -78,7 +79,6 @@
     "whatsappCta": "Message on WhatsApp",
     "externalCta": "View external contact",
     "views": "{count} views",
-    "publishedBy": "Published by {name}",
     "notFound": "This listing is not available.",
     "statusDraft": "Draft",
     "statusPending": "In review",
@@ -126,13 +126,18 @@
     "submit": "Submit for review",
     "submitEdit": "Save and resubmit",
     "successTitle": "Listing submitted!",
-    "successDescription": "Your listing is under review. It will go live once approved.",
-    "goToMyListings": "Go to my listings"
-  },
-  "myListings": {
-    "title": "My listings",
-    "empty": "You don't have any listings yet.",
-    "publishFirst": "Publish your first one"
+    "successDescription": "We will review it manually and it will show on the map once approved. It switches off by itself after 10 days.",
+    "stepEmail": "Private contact and submit",
+    "email": "Your email",
+    "emailHint": "It is not published. We send you a private link to edit, deactivate or delete your listing.",
+    "contactPublicHint": "The WhatsApp number or link you enter here is visible to anyone viewing the listing.",
+    "acceptTerms": "I have read and accept the legal notice.",
+    "editLinkTitle": "Your private management link",
+    "editLinkEmailed": "We also emailed it to you. Keep it: it is the only way to edit your listing.",
+    "editLinkSaveIt": "Save it now: it is the only way to edit, deactivate or delete your listing.",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "manageListing": "Manage listing"
   },
   "auth": {
     "loginTitle": "Sign in",
@@ -150,9 +155,9 @@
     "rejectComment": "Reason for rejection",
     "history": "History",
     "status": "Status",
-    "owner": "Owner",
     "createdAt": "Created",
-    "pendingCount": "{count} pending"
+    "pendingCount": "{count} pending",
+    "contactEmail": "Contact email"
   },
   "moderationAction": {
     "submitted": "Submitted",
@@ -172,7 +177,8 @@
     "photoTooLarge": "Photo exceeds 5 MB.",
     "photoInvalidType": "Unsupported image format.",
     "tooManyPhotos": "Maximum 8 photos.",
-    "firstPhotoRequired": "The first photo is required."
+    "firstPhotoRequired": "The first photo is required.",
+    "captcha": "We could not verify you are human. Please try again."
   },
   "legal": {
     "title": "Legal notice & privacy",
@@ -183,5 +189,13 @@
     "contentBody": "Listings are the sole responsibility of their publishers. We moderate listings before publication but cannot guarantee their accuracy.",
     "contactTitle": "Contact",
     "contactBody": "For any enquiry you can write to hola@mylloguer.example."
+  },
+  "manage": {
+    "title": "Manage your listing",
+    "saved": "Changes saved. We will review the listing again.",
+    "liveUntil": "Live until {date}.",
+    "pendingHint": "Waiting for review. It will show on the map once approved.",
+    "expiredHint": "This listing has expired. You can republish it and we will review it again.",
+    "rejectedHint": "Fix what is mentioned and republish it."
   }
 }

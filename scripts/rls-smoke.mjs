@@ -141,7 +141,7 @@ const anon = rest(ANON);
     body: JSON.stringify({
       status: "approved",
       approved_at: new Date().toISOString(),
-      expires_at: new Date(Date.now() + 30 * 864e5).toISOString(),
+      expires_at: new Date(Date.now() + 10 * 864e5).toISOString(),
     }),
   });
   const { json: after } = await admin(`listings?id=eq.${id}&select=status`);
@@ -155,6 +155,77 @@ const anon = rest(ANON);
     `publisher sees only own profile (got ${profiles.length})`,
     profiles.length === 1,
   );
+}
+
+// 9. anonymous submission flow (no account): only via security-definer functions
+{
+  const { createHash, randomBytes } = await import("node:crypto");
+  const token = randomBytes(32).toString("base64url");
+  const hash = createHash("sha256").update(token).digest("hex");
+  const email = `smoke-${Date.now()}@example.com`;
+  const payload = {
+    type: "room",
+    price: 380,
+    neighborhood: "Russafa",
+    municipality: "València",
+    lat: 39.46,
+    lng: -0.37,
+    description: "Habitación de prueba para el smoke test anónimo",
+    room_type: "single",
+    contact_whatsapp: "+34600000000",
+    contact_email: email,
+    photos: [],
+  };
+
+  const direct = await anon("listings", {
+    method: "POST",
+    body: JSON.stringify({
+      type: "room",
+      price: 400,
+      location: "SRID=4326;POINT(-0.37 39.47)",
+      contact_whatsapp: "+34600000000",
+      room_type: "single",
+      description: "directo",
+    }),
+  });
+  check(`anon cannot insert into listings directly (http ${direct.status})`, direct.status >= 400);
+
+  const submitted = await anon("rpc/submit_listing", {
+    method: "POST",
+    body: JSON.stringify({ p_gate: "", p_token_hash: hash, p_payload: payload }),
+  });
+  const id = submitted.json;
+  check(`anon submit_listing returns an id (http ${submitted.status})`, typeof id === "string");
+
+  const { json: pubRows } = await anon(`public_listings?id=eq.${id}&select=id`);
+  check(`new anonymous listing is not public before approval`, pubRows.length === 0);
+
+  const mine = await anon("rpc/get_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_id: id, p_token_hash: hash }),
+  });
+  check(
+    `poster reads own listing with the token (status ${mine.json?.status})`,
+    mine.json?.status === "pending" && mine.json?.edit_token_hash === undefined,
+  );
+
+  const wrong = await anon("rpc/get_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_id: id, p_token_hash: "0".repeat(64) }),
+  });
+  check(`wrong token reads nothing`, wrong.json === null);
+
+  const badEdit = await anon("rpc/update_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_gate: "", p_id: id, p_token_hash: "0".repeat(64), p_payload: payload }),
+  });
+  check(`wrong token cannot edit (http ${badEdit.status})`, badEdit.status >= 400);
+
+  const del = await anon("rpc/set_listing_status_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_gate: "", p_id: id, p_token_hash: hash, p_action: "delete" }),
+  });
+  check(`poster can delete with the token (http ${del.status})`, del.status < 300);
 }
 
 process.exit(failures ? 1 : 0);

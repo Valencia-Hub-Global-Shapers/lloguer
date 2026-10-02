@@ -123,7 +123,7 @@ select
   case when i % 10 not in (7, 8, 9) then now() - ((i % 20) || ' days')::interval end,
   case
     when i % 10 = 7 then now() - '2 days'::interval
-    when i % 10 not in (8, 9) then now() + ((30 - i % 20) || ' days')::interval
+    when i % 10 not in (8, 9) then now() + ((10 - i % 10) || ' days')::interval
   end,
   now() - ((i % 60) || ' days')::interval
 from generate_series(1, 40) as g(i)

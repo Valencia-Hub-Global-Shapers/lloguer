@@ -1,5 +1,7 @@
 import type { ListingType } from "@/lib/types/database.types";
 
+export type FilterGender = "female" | "male" | "non_binary";
+
 export type FilterState = {
   type?: ListingType;
   minPrice?: number;
@@ -10,6 +12,8 @@ export type FilterState = {
   pets?: boolean;
   smokers?: boolean;
   maxFlatmates?: number;
+  /** show listings that accept this gender (open to anyone, or asking for it) */
+  gender?: FilterGender;
   /** ISO date (YYYY-MM-DD): show listings available on or before this date */
   availableBefore?: string;
 };
@@ -28,6 +32,10 @@ function toInt(v: string | undefined): number | undefined {
   return Number.isFinite(n) ? n : undefined;
 }
 
+function toGender(v: string | undefined): FilterGender | undefined {
+  return v === "female" || v === "male" || v === "non_binary" ? v : undefined;
+}
+
 export function parseFilters(raw: RawParams): FilterState {
   const type = get(raw, "type");
   const avail = get(raw, "avail");
@@ -40,6 +48,7 @@ export function parseFilters(raw: RawParams): FilterState {
     pets: get(raw, "pets") === "1" || undefined,
     smokers: get(raw, "smokers") === "1" || undefined,
     maxFlatmates: toInt(get(raw, "mates")),
+    gender: toGender(get(raw, "gender")),
     availableBefore: avail && /^\d{4}-\d{2}-\d{2}$/.test(avail) ? avail : undefined,
   };
 }
@@ -54,6 +63,7 @@ export function filtersToSearchParams(filters: FilterState): URLSearchParams {
   if (filters.pets) p.set("pets", "1");
   if (filters.smokers) p.set("smokers", "1");
   if (filters.maxFlatmates != null) p.set("mates", String(filters.maxFlatmates));
+  if (filters.gender) p.set("gender", filters.gender);
   if (filters.availableBefore) p.set("avail", filters.availableBefore);
   return p;
 }
@@ -68,6 +78,7 @@ export function countActiveFilters(f: FilterState): number {
     f.pets,
     f.smokers,
     f.maxFlatmates,
+    f.gender,
     f.availableBefore,
   ].filter((v) => v !== undefined && v !== false).length;
 }

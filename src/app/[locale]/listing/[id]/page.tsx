@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
-  getListingForOwnerOrAdmin,
+  getListingForAdmin,
   getPublicListingById,
-  getPublicProfile,
 } from "@/features/listings/server/queries";
 import { ListingDetail } from "@/features/listings/components/listing-detail";
 import type { Locale } from "@/i18n/config";
@@ -33,17 +32,17 @@ export default async function ListingPage({ params }: Props) {
   let isPreview = false;
 
   if (!listing) {
-    // Owner/admin preview of a non-public listing (RLS restricts to owner+admin)
-    const own = await getListingForOwnerOrAdmin(supabase, id).catch(() => null);
+    // Admin preview of a non-public listing (RLS restricts to admins)
+    const own = await getListingForAdmin(supabase, id).catch(() => null);
     if (!own) notFound();
-    // Strip the exact location from the owner/admin preview payload
-    const { location, ...safe } = own;
+    // Strip the exact location and private fields from the preview payload
+    const { location, edit_token_hash, contact_email, ...safe } = own;
     void location;
+    void edit_token_hash;
+    void contact_email;
     listing = safe as unknown as PublicListing;
     isPreview = true;
   }
 
-  const owner = await getPublicProfile(supabase, listing.owner_id).catch(() => null);
-
-  return <ListingDetail listing={listing} owner={owner} isPreview={isPreview} />;
+  return <ListingDetail listing={listing} isPreview={isPreview} />;
 }

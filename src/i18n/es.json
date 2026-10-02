@@ -5,7 +5,6 @@
     "publish": "Publica",
     "login": "Inicia sesión",
     "logout": "Cierra sesión",
-    "myListings": "Mis anuncios",
     "admin": "Administración",
     "moderation": "Moderación",
     "allListings": "Todos los anuncios",
@@ -45,7 +44,9 @@
     "flatmates": "Compañeros de piso máx.",
     "availableBefore": "Disponible antes de",
     "apply": "Aplicar",
-    "reset": "Borrar"
+    "reset": "Borrar",
+    "gender": "Mi género",
+    "genderHint": "Solo anuncios que me aceptan"
   },
   "listing": {
     "perMonth": "€/mes",
@@ -78,7 +79,6 @@
     "whatsappCta": "Escribir por WhatsApp",
     "externalCta": "Ver contacto externo",
     "views": "{count} visitas",
-    "publishedBy": "Publicado por {name}",
     "notFound": "Este anuncio no está disponible.",
     "statusDraft": "Borrador",
     "statusPending": "En revisión",
@@ -126,13 +126,18 @@
     "submit": "Enviar a revisión",
     "submitEdit": "Guardar y reenviar",
     "successTitle": "¡Anuncio enviado!",
-    "successDescription": "Tu anuncio está en revisión. Se publicará cuando sea aprobado.",
-    "goToMyListings": "Ir a mis anuncios"
-  },
-  "myListings": {
-    "title": "Mis anuncios",
-    "empty": "Todavía no tienes ningún anuncio.",
-    "publishFirst": "Publica el primero"
+    "successDescription": "Lo revisaremos manualmente y aparecerá en el mapa cuando lo aprobemos. Se desactivará solo a los 10 días.",
+    "stepEmail": "Contacto interno y envío",
+    "email": "Tu email",
+    "emailHint": "No se publica. Te enviamos un enlace privado para editar, desactivar o borrar tu anuncio.",
+    "contactPublicHint": "El WhatsApp o enlace que pongas aquí será visible para cualquiera que vea el anuncio.",
+    "acceptTerms": "He leído y acepto el aviso legal.",
+    "editLinkTitle": "Tu enlace privado de gestión",
+    "editLinkEmailed": "Te lo hemos enviado también por email. Guárdalo: es la única forma de editar tu anuncio.",
+    "editLinkSaveIt": "Guárdalo ahora: es la única forma de editar, desactivar o borrar tu anuncio.",
+    "copyLink": "Copiar enlace",
+    "linkCopied": "Enlace copiado",
+    "manageListing": "Gestionar anuncio"
   },
   "auth": {
     "loginTitle": "Inicia sesión",
@@ -150,9 +155,9 @@
     "rejectComment": "Motivo del rechazo",
     "history": "Historial",
     "status": "Estado",
-    "owner": "Propietario",
     "createdAt": "Creado",
-    "pendingCount": "{count} pendientes"
+    "pendingCount": "{count} pendientes",
+    "contactEmail": "Email de contacto"
   },
   "moderationAction": {
     "submitted": "Enviado",
@@ -172,7 +177,8 @@
     "photoTooLarge": "La foto supera los 5 MB.",
     "photoInvalidType": "Formato de imagen no admitido.",
     "tooManyPhotos": "Máximo 8 fotos.",
-    "firstPhotoRequired": "La primera foto es obligatoria."
+    "firstPhotoRequired": "La primera foto es obligatoria.",
+    "captcha": "No hemos podido verificar que eres una persona. Inténtalo de nuevo."
   },
   "legal": {
     "title": "Aviso legal y privacidad",
@@ -183,5 +189,13 @@
     "contentBody": "Los anuncios son responsabilidad exclusiva de quien los publica. Moderamos los anuncios antes de su publicación, pero no garantizamos su veracidad.",
     "contactTitle": "Contacto",
     "contactBody": "Para cualquier consulta puedes escribirnos a hola@mylloguer.example."
+  },
+  "manage": {
+    "title": "Gestiona tu anuncio",
+    "saved": "Cambios guardados. Volveremos a revisar el anuncio.",
+    "liveUntil": "Visible hasta el {date}.",
+    "pendingHint": "Pendiente de revisión. Aparecerá en el mapa cuando lo aprobemos.",
+    "expiredHint": "Este anuncio ha caducado. Puedes volver a publicarlo y lo revisaremos de nuevo.",
+    "rejectedHint": "Corrige lo indicado y vuelve a publicarlo."
   }
 }

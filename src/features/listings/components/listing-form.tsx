@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -26,9 +28,15 @@ import { PinPickerMap } from "@/features/map/components/pin-picker-map";
 import { hasMapboxToken } from "@/features/map/components/explorer-map";
 import { nearestNeighborhood } from "@/features/map/geocode";
 import { VALENCIA_CENTER } from "@/lib/utils";
-import { listingFormSchema, type ListingFormInput, type ListingFormValues } from "../schemas";
-import { createListing, updateListing } from "../server/actions";
+import {
+  listingFormSchema,
+  submissionSchema,
+  type SubmissionInput,
+  type SubmissionValues,
+} from "../schemas";
+import { createListing, updateListing, type CreatedListing } from "../server/actions";
 import { PhotoUploader } from "./photo-uploader";
+import { captchaEnabled, TurnstileWidget } from "./turnstile";
 
 const nullableNumber = {
   setValueAs: (v: unknown) => (v === "" || v == null ? null : Number(v)),
@@ -36,23 +44,27 @@ const nullableNumber = {
 
 export function ListingForm({
   mode,
-  userId,
   listingId,
+  token,
   neighborhoods,
   defaults,
 }: {
   mode: "create" | "edit";
-  userId: string;
+  /** edit mode: the poster's secret edit token */
   listingId?: string;
+  token?: string;
   neighborhoods: Pick<Neighborhood, "name_ca" | "municipality" | "lat" | "lng">[];
-  defaults: ListingFormValues;
+  defaults: SubmissionValues;
 }) {
   const { locale, t } = useI18n();
   const router = useRouter();
-  const [success, setSuccess] = useState(false);
+  const [created, setCreated] = useState<CreatedListing | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  const form = useForm<ListingFormValues, unknown, ListingFormInput>({
-    resolver: zodResolver(listingFormSchema),
+  // Edit mode only validates the listing content (no email/terms/captcha)
+  const schema = mode === "create" ? submissionSchema : listingFormSchema;
+  const form = useForm<SubmissionValues, unknown, SubmissionInput>({
+    resolver: zodResolver(schema) as unknown as Resolver<SubmissionValues, unknown, SubmissionInput>,
     defaultValues: defaults,
     mode: "onBlur",
   });
@@ -94,34 +106,61 @@ export function ListingForm({
   };
 
   const onSubmit = handleSubmit(async (values) => {
-    const result =
-      mode === "create" ? await createListing(values) : await updateListing(listingId!, values);
+    if (mode === "create") {
+      if (captchaEnabled && !captchaToken) {
+        toast.error(t("errors.captcha"));
+        return;
+      }
+      const result = await createListing({ ...values, captcha_token: captchaToken ?? undefined }, locale);
+      if (!result.ok) {
+        toast.error(t(result.error));
+        return;
+      }
+      setCreated(result.data);
+      window.scrollTo({ top: 0 });
+      return;
+    }
+
+    const result = await updateListing(listingId!, token!, values);
     if (!result.ok) {
       toast.error(t(result.error));
       return;
     }
-    if (mode === "create") {
-      setSuccess(true);
-    } else {
-      toast.success(t("publish.submitEdit"));
-      router.push(`/${locale}/me/listings`);
-      router.refresh();
-    }
+    toast.success(t("manage.saved"));
+    router.refresh();
   });
 
   const fieldError = (key: string | undefined) =>
     key ? <p className="text-destructive text-xs">{t(key)}</p> : null;
 
-  if (success) {
+  if (created) {
+    const editUrl = `${window.location.origin}/${locale}/manage/${created.id}/${created.token}`;
     return (
       <Card className="mx-auto mt-16 w-full max-w-md text-center">
         <CardContent className="flex flex-col items-center gap-3 p-8">
           <CheckCircle2 className="text-primary size-10" />
           <h1 className="text-xl font-bold tracking-tight">{t("publish.successTitle")}</h1>
           <p className="text-muted-foreground text-sm">{t("publish.successDescription")}</p>
-          <Button onClick={() => router.push(`/${locale}/me/listings`)}>
-            {t("publish.goToMyListings")}
-          </Button>
+          <div className="bg-muted w-full rounded-lg p-3 text-left">
+            <p className="mb-1 text-xs font-semibold">{t("publish.editLinkTitle")}</p>
+            <p className="text-muted-foreground mb-2 text-xs">
+              {created.emailed ? t("publish.editLinkEmailed") : t("publish.editLinkSaveIt")}
+            </p>
+            <p className="font-mono text-xs break-all">{editUrl}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                void navigator.clipboard.writeText(editUrl);
+                toast.success(t("publish.linkCopied"));
+              }}
+            >
+              <Copy />
+              {t("publish.copyLink")}
+            </Button>
+            <Button onClick={() => router.push(editUrl)}>{t("publish.manageListing")}</Button>
+          </div>
         </CardContent>
       </Card>
     );
@@ -288,7 +327,7 @@ export function ListingForm({
               <Select
                 value={watch("preferred_gender")}
                 onValueChange={(v) =>
-                  setValue("preferred_gender", v as ListingFormValues["preferred_gender"])
+                  setValue("preferred_gender", v as SubmissionValues["preferred_gender"])
                 }
               >
                 <SelectTrigger>
@@ -307,7 +346,7 @@ export function ListingForm({
               <Select
                 value={watch("tenant_pref")}
                 onValueChange={(v) =>
-                  setValue("tenant_pref", v as ListingFormValues["tenant_pref"])
+                  setValue("tenant_pref", v as SubmissionValues["tenant_pref"])
                 }
               >
                 <SelectTrigger>
@@ -367,8 +406,6 @@ export function ListingForm({
           <div className="grid gap-1.5">
             <Label>{t("publish.photos")}</Label>
             <PhotoUploader
-              userId={userId}
-              folder={listingId ?? "draft"}
               value={watch("photos") ?? []}
               onChange={(paths) => setValue("photos", paths, { shouldValidate: true })}
             />
@@ -397,8 +434,60 @@ export function ListingForm({
               {fieldError(errors.contact_external?.message)}
             </div>
           </div>
+          <p className="text-muted-foreground text-xs">{t("publish.contactPublicHint")}</p>
         </CardContent>
       </Card>
+
+      {mode === "create" ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>4 · {t("publish.stepEmail")}</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-1.5">
+              <Label htmlFor="contact_email">{t("publish.email")}</Label>
+              <Input
+                id="contact_email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...register("contact_email")}
+              />
+              <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
+              {fieldError(errors.contact_email?.message)}
+            </div>
+
+            {/* Honeypot: invisible to people, tempting to bots */}
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden
+              className="absolute -left-[9999px] h-0 w-0 opacity-0"
+              {...register("website")}
+            />
+
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="accept_terms"
+                checked={watch("accept_terms") === true}
+                onCheckedChange={(checked) =>
+                  setValue("accept_terms", (checked === true) as true, { shouldValidate: true })
+                }
+              />
+              <Label htmlFor="accept_terms" className="text-sm leading-snug font-normal">
+                {t("publish.acceptTerms")}{" "}
+                <Link href={`/${locale}/legal`} target="_blank" className="text-primary underline">
+                  {t("common.legal")}
+                </Link>
+              </Label>
+            </div>
+            {fieldError(errors.accept_terms?.message)}
+
+            <TurnstileWidget onToken={setCaptchaToken} />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Button type="submit" size="lg" disabled={isSubmitting}>
         {isSubmitting
@@ -411,7 +500,7 @@ export function ListingForm({
   );
 }
 
-export const createDefaults: ListingFormValues = {
+export const createDefaults: SubmissionValues = {
   type: "room",
   lat: VALENCIA_CENTER[1],
   lng: VALENCIA_CENTER[0],
@@ -433,4 +522,7 @@ export const createDefaults: ListingFormValues = {
   contact_whatsapp: "",
   contact_external: "",
   photos: [],
+  contact_email: "",
+  accept_terms: false as unknown as true,
+  website: "",
 };

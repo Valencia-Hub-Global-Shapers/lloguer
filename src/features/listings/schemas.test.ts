@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { listingFormSchema } from "./schemas";
+import { listingFormSchema, submissionSchema } from "./schemas";
 
 const validRoom = {
   type: "room",
@@ -22,7 +22,7 @@ const validRoom = {
   bedrooms: null,
   contact_whatsapp: "+34 600 123 456",
   contact_external: "",
-  photos: ["user/draft/photo1.webp"],
+  photos: ["anon/draft/photo1.webp"],
 };
 
 describe("listingFormSchema", () => {
@@ -112,5 +112,42 @@ describe("listingFormSchema", () => {
     });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.price).toBe(500);
+  });
+});
+
+describe("submissionSchema", () => {
+  const submission = {
+    ...validRoom,
+    contact_email: "  Poster@Example.com ",
+    accept_terms: true,
+  };
+
+  it("accepts an anonymous submission and normalises the email", () => {
+    const result = submissionSchema.safeParse(submission);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.contact_email).toBe("poster@example.com");
+  });
+
+  it("requires an email", () => {
+    expect(submissionSchema.safeParse({ ...submission, contact_email: "" }).success).toBe(false);
+    expect(submissionSchema.safeParse({ ...submission, contact_email: "nope" }).success).toBe(
+      false,
+    );
+  });
+
+  it("requires accepting the terms", () => {
+    expect(submissionSchema.safeParse({ ...submission, accept_terms: false }).success).toBe(
+      false,
+    );
+  });
+
+  it("only allows photos from the anonymous upload folder", () => {
+    expect(
+      submissionSchema.safeParse({ ...submission, photos: ["someone-else/draft/a.webp"] })
+        .success,
+    ).toBe(false);
+    expect(
+      submissionSchema.safeParse({ ...submission, photos: ["anon/../secret.webp"] }).success,
+    ).toBe(false);
   });
 });

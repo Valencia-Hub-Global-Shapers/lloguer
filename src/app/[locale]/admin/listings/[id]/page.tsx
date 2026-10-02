@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/lib/supabase/server";
 import {
-  getListingForOwnerOrAdmin,
-  getPublicProfile,
+  getListingForAdmin,
 } from "@/features/listings/server/queries";
 import { getModerationHistory } from "@/features/moderation/server/queries";
 import { ModerateActions } from "@/features/moderation/components/moderate-actions";
@@ -23,13 +22,10 @@ export default async function AdminListingDetailPage({
   const dict = await getDictionary(locale);
 
   const supabase = await createClient();
-  const listing = await getListingForOwnerOrAdmin(supabase, id).catch(() => null);
+  const listing = await getListingForAdmin(supabase, id).catch(() => null);
   if (!listing) notFound();
 
-  const [owner, history] = await Promise.all([
-    getPublicProfile(supabase, listing.owner_id).catch(() => null),
-    getModerationHistory(supabase, id).catch(() => []),
-  ]);
+  const history = await getModerationHistory(supabase, id).catch(() => []);
 
   return (
     <>
@@ -62,7 +58,7 @@ export default async function AdminListingDetailPage({
               k={dict.filters.neighborhood}
               v={listing.neighborhood ?? listing.municipality}
             />
-            <Row k={dict.admin.owner} v={owner?.full_name ?? listing.owner_id.slice(0, 8)} />
+            <Row k={dict.admin.contactEmail} v={listing.contact_email ?? "—"} />
             <Row k={dict.listing.views.replace("{count}", "")} v={String(listing.views_count)} />
             <Row k="WhatsApp" v={listing.contact_whatsapp ?? "—"} />
             <Row k={dict.publish.contactExternal} v={listing.contact_external ?? "—"} />

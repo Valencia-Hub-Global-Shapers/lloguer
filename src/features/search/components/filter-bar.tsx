@@ -26,7 +26,12 @@ import { Label } from "@/components/ui/label";
 import { useI18n } from "@/i18n/client";
 import type { Locale } from "@/i18n/config";
 import type { Neighborhood } from "@/lib/types/database.types";
-import { countActiveFilters, parseFilters, filtersToSearchParams } from "../params";
+import {
+  countActiveFilters,
+  filtersToSearchParams,
+  parseFilters,
+  type FilterGender,
+} from "../params";
 import { useState } from "react";
 
 function neighborhoodName(n: Neighborhood, locale: Locale): string {
@@ -197,6 +202,27 @@ export function FilterBar({ neighborhoods }: { neighborhoods: Neighborhood[] }) 
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="grid gap-1.5">
+              <Label htmlFor="filter-gender">{t("filters.gender")}</Label>
+              <Select
+                value={filters.gender ?? "any"}
+                onValueChange={(v) =>
+                  apply({ gender: v === "any" ? undefined : (v as FilterGender) })
+                }
+              >
+                <SelectTrigger id="filter-gender">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">{t("common.any")}</SelectItem>
+                  <SelectItem value="female">{t("listing.genderFemale")}</SelectItem>
+                  <SelectItem value="male">{t("listing.genderMale")}</SelectItem>
+                  <SelectItem value="non_binary">{t("listing.genderNonBinary")}</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-muted-foreground text-xs">{t("filters.genderHint")}</p>
             </div>
 
             <div className="grid gap-1.5">

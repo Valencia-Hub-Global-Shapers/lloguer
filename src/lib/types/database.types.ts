@@ -41,7 +41,8 @@ export type ProfileUpdate = Partial<Omit<ProfileInsert, "id">>;
 
 export type ListingRow = {
   id: string;
-  owner_id: string;
+  /** Null for anonymous submissions (ownership is proven by the edit token). */
+  owner_id: string | null;
   type: ListingType;
   status: ListingStatus;
   price: number;
@@ -69,6 +70,10 @@ export type ListingRow = {
   photos: string[];
   publisher_kind: "private" | "agency";
   agency_label: string | null;
+  /** Private: poster email, never exposed by public views. */
+  contact_email: string | null;
+  /** Private: sha256 of the poster's edit token. */
+  edit_token_hash: string | null;
   expires_at: string | null;
   approved_at: string | null;
   published_version: number;
@@ -78,7 +83,7 @@ export type ListingRow = {
 }
 export type ListingInsert = {
   id?: string;
-  owner_id: string;
+  owner_id?: string | null;
   type: ListingType;
   status?: ListingStatus;
   price: number;
@@ -104,6 +109,8 @@ export type ListingInsert = {
   photos?: string[];
   publisher_kind?: "private" | "agency";
   agency_label?: string | null;
+  contact_email?: string | null;
+  edit_token_hash?: string | null;
 }
 export type ListingUpdate = Partial<
   Omit<ListingInsert, "owner_id"> & {
@@ -117,7 +124,7 @@ export type ListingUpdate = Partial<
 export type ModerationEventRow = {
   id: string;
   listing_id: string;
-  actor_id: string;
+  actor_id: string | null;
   action: ModerationAction;
   comment: string | null;
   created_at: string;
@@ -175,7 +182,7 @@ export type PublicListingRow = {
   photos: string[];
   publisher_kind: "private" | "agency";
   agency_label: string | null;
-  owner_id: string;
+  owner_id: string | null;
   published_version: number;
   created_at: string;
 }
@@ -244,6 +251,22 @@ export type Database = {
       };
       expire_listings: { Args: Record<string, never>; Returns: number };
       is_admin: { Args: Record<string, never>; Returns: boolean };
+      submit_listing: {
+        Args: { p_gate: string; p_token_hash: string; p_payload: Json };
+        Returns: string;
+      };
+      get_listing_by_token: {
+        Args: { p_id: string; p_token_hash: string };
+        Returns: Json | null;
+      };
+      update_listing_by_token: {
+        Args: { p_gate: string; p_id: string; p_token_hash: string; p_payload: Json };
+        Returns: undefined;
+      };
+      set_listing_status_by_token: {
+        Args: { p_gate: string; p_id: string; p_token_hash: string; p_action: string };
+        Returns: undefined;
+      };
     };
     Enums: {
       listing_type: ListingType;

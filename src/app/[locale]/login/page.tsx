@@ -8,6 +8,10 @@ import { EmailSignInForm } from "@/features/auth/components/email-signin-form";
 
 export const dynamic = "force-dynamic";
 
+/** Demo email/password login: dev only, unless ENABLE_EMAIL_LOGIN=1. */
+const showEmailLogin =
+  process.env.NODE_ENV !== "production" || process.env.ENABLE_EMAIL_LOGIN === "1";
+
 export default async function LoginPage({
   params,
   searchParams,
@@ -31,7 +35,7 @@ export default async function LoginPage({
         </CardHeader>
         <CardContent className="grid gap-4">
           <GoogleSignInButton next={next ?? `/${locale}`} label={dict.auth.loginWithGoogle} />
-          <EmailSignInForm next={next ?? `/${locale}`} />
+          {showEmailLogin ? <EmailSignInForm next={next ?? `/${locale}`} /> : null}
         </CardContent>
       </Card>
     </main>

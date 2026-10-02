@@ -1,7 +1,7 @@
-import type { Neighborhood, PublicListing } from "@/lib/types/database.types";
+import type { GenderPref, Neighborhood, PublicListing } from "@/lib/types/database.types";
 import type { createClient } from "@/lib/supabase/server";
 import type { FilterState } from "@/features/search/params";
-import type { Bounds, BrowseResponse, ListingPin } from "../types";
+import type { Bounds, BrowseResponse, ListingPin, PosterListing } from "../types";
 
 export type Db = Awaited<ReturnType<typeof createClient>>;
 
@@ -65,6 +65,12 @@ export async function getPublicListings(
     pins = pins.eq("neighborhood", hoodName);
     cards = cards.eq("neighborhood", hoodName);
   }
+  if (filters.gender) {
+    // Listings that accept this gender: open to anyone, or asking for it.
+    const accepted: GenderPref[] = ["any", filters.gender];
+    pins = pins.in("preferred_gender", accepted);
+    cards = cards.in("preferred_gender", accepted);
+  }
   if (filters.billsIncluded) {
     pins = pins.eq("bills_included", true);
     cards = cards.eq("bills_included", true);
@@ -121,8 +127,8 @@ export async function getPublicListingById(
   return data;
 }
 
-/** Owner/admin view of any listing regardless of status (RLS enforced). */
-export async function getListingForOwnerOrAdmin(supabase: Db, id: string) {
+/** Admin view of any listing regardless of status (RLS enforced). */
+export async function getListingForAdmin(supabase: Db, id: string) {
   const { data, error } = await supabase
     .from("listings")
     .select("*")
@@ -132,15 +138,18 @@ export async function getListingForOwnerOrAdmin(supabase: Db, id: string) {
   return data;
 }
 
-export async function getOwnListings(supabase: Db, ownerId: string) {
-  const { data, error } = await supabase
-    .from("listings")
-    .select("*")
-    .eq("owner_id", ownerId)
-    .neq("status", "deleted")
-    .order("created_at", { ascending: false });
+/** Poster view of their own listing, authorised by the edit token hash. */
+export async function getListingByToken(
+  supabase: Db,
+  id: string,
+  tokenHash: string,
+): Promise<PosterListing | null> {
+  const { data, error } = await supabase.rpc("get_listing_by_token", {
+    p_id: id,
+    p_token_hash: tokenHash,
+  });
   if (error) throw error;
-  return data;
+  return (data as PosterListing | null) ?? null;
 }
 
 export async function getPublicProfile(supabase: Db, id: string) {

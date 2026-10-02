@@ -41,11 +41,7 @@ export async function SiteHeader({
           avatarUrl={profile.profile?.avatar_url ?? null}
           isAdmin={profile.profile?.is_admin ?? false}
         />
-      ) : (
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/${locale}/login`}>{t("common.login")}</Link>
-        </Button>
-      )}
+      ) : null}
     </header>
   );
 }

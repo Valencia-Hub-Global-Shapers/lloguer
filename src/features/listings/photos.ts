@@ -8,9 +8,11 @@ export function photoUrl(path: string): string {
   return `${base}/storage/v1/object/public/${LISTING_PHOTOS_BUCKET}/${path}`;
 }
 
-/** storage path convention: <owner_id>/<listing_id|draft>/<file>.webp */
-export function photoPath(ownerId: string, folder: string, fileName: string): string {
-  return `${ownerId}/${folder}/${fileName}`;
+/** Anonymous uploads live under a shared prefix: anon/<draft-id>/<file>.webp */
+export const ANON_PHOTO_PREFIX = "anon";
+
+export function photoPath(folder: string, fileName: string): string {
+  return `${ANON_PHOTO_PREFIX}/${folder}/${fileName}`;
 }
 
 /**

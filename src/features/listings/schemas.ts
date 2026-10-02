@@ -12,8 +12,7 @@ const optionalUrl = z
   .transform((v) => (v ? v : null))
   .pipe(z.string().url().nullable());
 
-export const listingFormSchema = z
-  .object({
+const listingShape = {
     type: z.enum(["room", "full_flat"]),
     lat: z.number().min(38.9, "validation").max(40.1, "validation"),
     lng: z.number().min(-1.3, "validation").max(0.3, "validation"),
@@ -52,24 +51,57 @@ export const listingFormSchema = z
       ),
     contact_external: optionalUrl,
     photos: z
-      .array(z.string().min(1).max(300))
+      .array(
+        z
+          .string()
+          .min(1)
+          .max(300)
+          .startsWith("anon/")
+          .refine((v) => !v.includes(".."), "validation"),
+      )
       .min(1, "firstPhotoRequired")
       .max(8, "tooManyPhotos"),
-  })
-  .superRefine((val, ctx) => {
-    if (val.type === "room" && !val.room_type) {
-      ctx.addIssue({ code: "custom", path: ["room_type"], message: "validation" });
-    }
-    if (val.type === "full_flat" && !val.bedrooms) {
-      ctx.addIssue({ code: "custom", path: ["bedrooms"], message: "validation" });
-    }
-    if (!val.contact_whatsapp && !val.contact_external) {
-      ctx.addIssue({ code: "custom", path: ["contact_whatsapp"], message: "validation" });
-    }
-  });
+};
+
+const listingObject = z.object(listingShape);
+
+function refineListing(val: z.infer<typeof listingObject>, ctx: z.RefinementCtx) {
+  if (val.type === "room" && !val.room_type) {
+    ctx.addIssue({ code: "custom", path: ["room_type"], message: "validation" });
+  }
+  if (val.type === "full_flat" && !val.bedrooms) {
+    ctx.addIssue({ code: "custom", path: ["bedrooms"], message: "validation" });
+  }
+  if (!val.contact_whatsapp && !val.contact_external) {
+    ctx.addIssue({ code: "custom", path: ["contact_whatsapp"], message: "validation" });
+  }
+}
+
+/** Listing content (what the poster can edit). */
+export const listingFormSchema = listingObject.superRefine(refineListing);
 
 export type ListingFormInput = z.infer<typeof listingFormSchema>;
 export type ListingFormValues = z.input<typeof listingFormSchema>;
+
+/** New anonymous submission: listing content + contact email + anti-abuse fields. */
+export const submissionSchema = z
+  .object({
+    ...listingShape,
+    contact_email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .max(200, "validation")
+      .email("validation"),
+    accept_terms: z.literal(true, { errorMap: () => ({ message: "validation" }) }),
+    /** Honeypot: real users never fill it. */
+    website: z.string().max(200).optional(),
+    captcha_token: z.string().max(4096).optional(),
+  })
+  .superRefine(refineListing);
+
+export type SubmissionInput = z.infer<typeof submissionSchema>;
+export type SubmissionValues = z.input<typeof submissionSchema>;
 
 export const rejectSchema = z.object({
   comment: z.string().trim().min(3, "validation").max(1000, "validation"),

@@ -5,7 +5,6 @@
     "publish": "Publica",
     "login": "Inicia sessió",
     "logout": "Tanca sessió",
-    "myListings": "Els meus anuncis",
     "admin": "Administració",
     "moderation": "Moderació",
     "allListings": "Tots els anuncis",
@@ -45,7 +44,9 @@
     "flatmates": "Companyes de pis màx.",
     "availableBefore": "Disponible abans de",
     "apply": "Aplica",
-    "reset": "Esborra"
+    "reset": "Esborra",
+    "gender": "El meu gènere",
+    "genderHint": "Només anuncis que m'accepten"
   },
   "listing": {
     "perMonth": "€/mes",
@@ -78,7 +79,6 @@
     "whatsappCta": "Escriu per WhatsApp",
     "externalCta": "Vore contacte extern",
     "views": "{count} visites",
-    "publishedBy": "Publicat per {name}",
     "notFound": "Este anunci no està disponible.",
     "statusDraft": "Esborrany",
     "statusPending": "En revisió",
@@ -126,13 +126,18 @@
     "submit": "Envia a revisió",
     "submitEdit": "Guarda i torna a enviar",
     "successTitle": "Anunci enviat!",
-    "successDescription": "El teu anunci està en revisió. Es publicarà quan siga aprovat.",
-    "goToMyListings": "Vés als meus anuncis"
-  },
-  "myListings": {
-    "title": "Els meus anuncis",
-    "empty": "Encara no tens cap anunci.",
-    "publishFirst": "Publica el primer"
+    "successDescription": "El revisarem manualment i apareixerà al mapa quan l'aprovem. Es desactivarà sol als 10 dies.",
+    "stepEmail": "Contacte intern i enviament",
+    "email": "El teu correu",
+    "emailHint": "No es publica. T'enviem un enllaç privat per editar, desactivar o esborrar el teu anunci.",
+    "contactPublicHint": "El WhatsApp o enllaç que posis ací serà visible per a qualsevol persona que veja l'anunci.",
+    "acceptTerms": "He llegit i accepte l'avís legal.",
+    "editLinkTitle": "El teu enllaç privat de gestió",
+    "editLinkEmailed": "També te l'hem enviat per correu. Guarda'l: és l'única manera d'editar el teu anunci.",
+    "editLinkSaveIt": "Guarda'l ara: és l'única manera d'editar, desactivar o esborrar el teu anunci.",
+    "copyLink": "Copiar enllaç",
+    "linkCopied": "Enllaç copiat",
+    "manageListing": "Gestionar anunci"
   },
   "auth": {
     "loginTitle": "Inicia sessió",
@@ -150,9 +155,9 @@
     "rejectComment": "Motiu del rebuig",
     "history": "Historial",
     "status": "Estat",
-    "owner": "Propietari",
     "createdAt": "Creat",
-    "pendingCount": "{count} pendents"
+    "pendingCount": "{count} pendents",
+    "contactEmail": "Correu de contacte"
   },
   "moderationAction": {
     "submitted": "Enviat",
@@ -172,7 +177,8 @@
     "photoTooLarge": "La foto supera els 5 MB.",
     "photoInvalidType": "Format d'imatge no admés.",
     "tooManyPhotos": "Màxim 8 fotos.",
-    "firstPhotoRequired": "La primera foto és obligatòria."
+    "firstPhotoRequired": "La primera foto és obligatòria.",
+    "captcha": "No hem pogut verificar que ets una persona. Torna-ho a provar."
   },
   "legal": {
     "title": "Avís legal i privacitat",
@@ -183,5 +189,13 @@
     "contentBody": "Els anuncis són responsabilitat exclusiva de qui els publica. Moderem els anuncis abans de la publicació, però no n-garantim la veracitat.",
     "contactTitle": "Contacte",
     "contactBody": "Per a qualsevol consulta pots escriure'ns a hola@mylloguer.example."
+  },
+  "manage": {
+    "title": "Gestiona el teu anunci",
+    "saved": "Canvis guardats. Tornarem a revisar l'anunci.",
+    "liveUntil": "Visible fins al {date}.",
+    "pendingHint": "Pendent de revisió. Apareixerà al mapa quan l'aprovem.",
+    "expiredHint": "Aquest anunci ha caducat. Pots tornar a publicar-lo i el revisarem de nou.",
+    "rejectedHint": "Corregeix el que s'indica i torna a publicar-lo."
   }
 }

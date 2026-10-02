@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { LISTING_TTL_DAYS } from "@/lib/constants";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { err, ok, type Result } from "@/lib/result";
 import { moderationDecisionSchema, rejectDecisionSchema } from "../schemas";
@@ -34,7 +35,7 @@ export async function approveListing(
   if (!parsed.success) return err("errors.validation");
 
   const now = new Date();
-  const expires = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+  const expires = new Date(now.getTime() + LISTING_TTL_DAYS * 24 * 60 * 60 * 1000);
 
   const { error } = await supabase
     .from("listings")
