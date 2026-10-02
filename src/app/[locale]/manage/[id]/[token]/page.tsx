@@ -28,7 +28,6 @@ export default async function ManageListingPage({
   const listing = await getListingByToken(supabase, id, hashEditToken(token)).catch(() => null);
   if (!listing) notFound();
 
-
   const defaults: SubmissionValues = {
     type: listing.type,
     lat: listing.lat ?? VALENCIA_CENTER[1],
@@ -66,12 +65,7 @@ export default async function ManageListingPage({
         expiresAt={listing.expires_at}
         rejectionComment={listing.rejection_comment}
       />
-      <ListingForm
-        mode="edit"
-        listingId={listing.id}
-        token={token}
-        defaults={defaults}
-      />
+      <ListingForm mode="edit" listingId={listing.id} token={token} defaults={defaults} />
     </div>
   );
 }

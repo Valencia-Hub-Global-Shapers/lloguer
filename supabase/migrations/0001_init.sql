@@ -320,7 +320,8 @@ create policy listing_views_select on listing_views
 
 -- Public-safe views ----------------------------------------------------------
 -- Security definer on purpose: expose only safe columns and bypass RLS.
--- Exact location, contact_email and edit_token_hash are NEVER included.
+-- Exact location, internal_email and edit_token_hash are NEVER included.
+-- contact_email is the poster's public contact and is shown on purpose.
 create or replace view public.public_listings
 with (security_invoker = false) as
 select
@@ -420,8 +421,10 @@ as $$
   cells as (
     select
       f.*,
-      -- Latitude cells shrink with cos(lat) so they look square on a Web Mercator map
-      floor(f.lat / nullif(p_cell * cos(radians((p_min_lat + p_max_lat) / 2)), 0)) as cy,
+      -- Latitude cells shrink with cos(lat) so they look square on a Web Mercator
+      -- map. The latitude is rounded to 5 degrees so the grid does not shift
+      -- while the user pans.
+      floor(f.lat / nullif(p_cell * cos(radians(round(((p_min_lat + p_max_lat) / 2)::numeric / 5) * 5)), 0)) as cy,
       floor(f.lng / nullif(p_cell, 0)) as cx
     from f
   ),
@@ -440,6 +443,7 @@ as $$
     where p_cell > 0 and c.n > 1
     group by c.cy, c.cx
   )
+  order by count desc
   limit p_limit;
 $$;
 
@@ -683,6 +687,7 @@ declare
   new_photos text[] := array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb)));
   removed text[];
   new_email text := nullif(lower(trim(p_payload ->> 'contact_email')), '');
+  new_whatsapp text := nullif(trim(p_payload ->> 'contact_whatsapp'), '');
   photo text;
 begin
   perform public.check_submit_gate(p_gate);
@@ -695,6 +700,9 @@ begin
 
   if new_email is not null and new_email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' then
     raise exception 'invalid_email';
+  end if;
+  if new_email is null and new_whatsapp is null then
+    raise exception 'contact_required';
   end if;
 
   for photo in select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb)) loop
@@ -723,8 +731,8 @@ begin
     smokers = coalesce((p_payload ->> 'smokers')::boolean, false),
     tenant_pref = coalesce((p_payload ->> 'tenant_pref')::tenant_pref, 'any'),
     contact_external = p_payload ->> 'contact_external',
-    contact_whatsapp = nullif(trim(p_payload ->> 'contact_whatsapp'), ''),
-    contact_email = nullif(lower(trim(p_payload ->> 'contact_email')), ''),
+    contact_whatsapp = new_whatsapp,
+    contact_email = new_email,
     bathrooms = (p_payload ->> 'bathrooms')::int,
     bedrooms = (p_payload ->> 'bedrooms')::int,
     photos = new_photos,

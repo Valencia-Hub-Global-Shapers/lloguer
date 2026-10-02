@@ -49,5 +49,8 @@ export async function getModerationHistory(supabase: Db, listingId: string) {
     : { data: [] };
 
   const actorById = new Map((actors ?? []).map((a) => [a.id, a.full_name]));
-  return events.map((e) => ({ ...e, actor_name: e.actor_id ? (actorById.get(e.actor_id) ?? null) : null }));
+  return events.map((e) => ({
+    ...e,
+    actor_name: e.actor_id ? (actorById.get(e.actor_id) ?? null) : null,
+  }));
 }

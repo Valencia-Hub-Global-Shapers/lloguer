@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { Bounds, ListingPin } from "@/features/listings/types";
+import { useI18n } from "@/i18n/client";
 import { VALENCIA_CENTER } from "@/lib/utils";
 import { formatCount } from "../clustering";
 
@@ -34,6 +35,7 @@ export function ExplorerMap({
   initialBounds,
   focusBounds,
 }: Props) {
+  const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
@@ -124,7 +126,7 @@ export function ExplorerMap({
         if (pin.count > 1 || pin.id == null) {
           el.className = "map-cluster";
           el.textContent = formatCount(pin.count);
-          el.setAttribute("aria-label", `${pin.count} listings`);
+          el.setAttribute("aria-label", t("home.clusterLabel", { count: pin.count }));
           el.addEventListener("click", () => {
             map.easeTo({
               center: [pin.lng, pin.lat],
@@ -152,6 +154,7 @@ export function ExplorerMap({
     const map = mapRef.current;
     if (map?.isStyleLoaded()) draw();
     else map?.once("load", draw);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pins]);
 
   // Highlight active pill

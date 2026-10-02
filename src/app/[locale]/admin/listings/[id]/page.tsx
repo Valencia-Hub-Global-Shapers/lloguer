@@ -31,7 +31,7 @@ export default async function AdminListingDetailPage({
     <>
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <h1 className="text-xl font-bold tracking-tight">
-          {listing.price} € — {listing.neighborhood ?? listing.municipality}
+          {listing.price} € · {listing.neighborhood ?? listing.municipality}
         </h1>
         <StatusBadge status={listing.status} />
         <div className="ml-auto">
@@ -58,15 +58,15 @@ export default async function AdminListingDetailPage({
               k={dict.filters.neighborhood}
               v={listing.neighborhood ?? listing.municipality}
             />
-            <Row k={dict.admin.contactEmail} v={listing.contact_email ?? "—"} />
-            <Row k={dict.admin.internalEmail} v={listing.internal_email ?? "—"} />
+            <Row k={dict.admin.contactEmail} v={listing.contact_email ?? "-"} />
+            <Row k={dict.admin.internalEmail} v={listing.internal_email ?? "-"} />
             <Row k={dict.listing.views.replace("{count}", "")} v={String(listing.views_count)} />
-            <Row k="WhatsApp" v={listing.contact_whatsapp ?? "—"} />
-            <Row k={dict.publish.contactExternal} v={listing.contact_external ?? "—"} />
+            <Row k="WhatsApp" v={listing.contact_whatsapp ?? "-"} />
+            <Row k={dict.publish.contactExternal} v={listing.contact_external ?? "-"} />
             <Row k={dict.admin.createdAt} v={formatDate(listing.created_at, locale)} />
             <Row
               k="Expira"
-              v={listing.expires_at ? formatDate(listing.expires_at, locale) : "—"}
+              v={listing.expires_at ? formatDate(listing.expires_at, locale) : "-"}
             />
             <Row k="v" v={String(listing.published_version)} />
             <Row
@@ -91,7 +91,7 @@ export default async function AdminListingDetailPage({
               />
             ))}
             {listing.photos.length === 0 ? (
-              <p className="text-muted-foreground col-span-4 text-sm">—</p>
+              <p className="text-muted-foreground col-span-4 text-sm">-</p>
             ) : null}
           </div>
         </section>
@@ -101,7 +101,7 @@ export default async function AdminListingDetailPage({
 
       <h2 className="mb-3 font-semibold">{dict.admin.history}</h2>
       {history.length === 0 ? (
-        <p className="text-muted-foreground text-sm">—</p>
+        <p className="text-muted-foreground text-sm">-</p>
       ) : (
         <ol className="grid gap-2">
           {history.map((event) => (

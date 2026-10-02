@@ -29,6 +29,7 @@
     "emptyTitle": "Nothing here",
     "emptyDescription": "Move the map or widen the filters to see more listings.",
     "emptyReset": "Clear filters",
+    "clusterLabel": "{count} listings in this area",
     "results": "{count} listings",
     "loadError": "Listings could not be loaded."
   },
