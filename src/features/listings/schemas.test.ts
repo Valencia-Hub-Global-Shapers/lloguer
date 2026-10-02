@@ -22,7 +22,7 @@ const validRoom = {
   bedrooms: null,
   contact_whatsapp: "+34 600 123 456",
   contact_external: "",
-  show_email: false,
+  contact_email: "",
   photos: ["anon/draft/photo1.webp"],
 };
 
@@ -36,25 +36,32 @@ describe("listingFormSchema", () => {
     }
   });
 
-  it("accepts a full flat that shows an email instead of WhatsApp", () => {
+  it("accepts a full flat with only an email as contact", () => {
     const result = listingFormSchema.safeParse({
       ...validRoom,
       type: "full_flat",
       room_type: null,
       bedrooms: 3,
       contact_whatsapp: "",
-      show_email: true,
+      contact_email: " Poster@Example.com ",
     });
     expect(result.success).toBe(true);
+    if (result.success) expect(result.data.contact_email).toBe("poster@example.com");
   });
 
-  it("requires WhatsApp or a shown email; an external link alone is not enough", () => {
-    const none = { ...validRoom, contact_whatsapp: "", show_email: false };
+  it("requires WhatsApp or email; an external link alone is not enough", () => {
+    const none = { ...validRoom, contact_whatsapp: "", contact_email: "" };
     expect(listingFormSchema.safeParse(none).success).toBe(false);
     expect(
       listingFormSchema.safeParse({ ...none, contact_external: "https://example.com/anuncio" })
         .success,
     ).toBe(false);
+  });
+
+  it("rejects a malformed email even when WhatsApp is given", () => {
+    expect(listingFormSchema.safeParse({ ...validRoom, contact_email: "nope" }).success).toBe(
+      false,
+    );
   });
 
   it("treats the external link as optional", () => {
@@ -156,23 +163,27 @@ describe("listing location", () => {
 });
 
 describe("submissionSchema", () => {
-  const submission = {
-    ...validRoom,
-    contact_email: "  Poster@Example.com ",
-    accept_terms: true,
-  };
+  const submission = { ...validRoom, accept_terms: true };
 
-  it("accepts an anonymous submission and normalises the email", () => {
-    const result = submissionSchema.safeParse(submission);
+  it("accepts an anonymous submission with WhatsApp only", () => {
+    expect(submissionSchema.safeParse(submission).success).toBe(true);
+  });
+
+  it("accepts an anonymous submission with email only", () => {
+    const result = submissionSchema.safeParse({
+      ...submission,
+      contact_whatsapp: "",
+      contact_email: "  Poster@Example.com ",
+    });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.contact_email).toBe("poster@example.com");
   });
 
-  it("requires an email", () => {
-    expect(submissionSchema.safeParse({ ...submission, contact_email: "" }).success).toBe(false);
-    expect(submissionSchema.safeParse({ ...submission, contact_email: "nope" }).success).toBe(
-      false,
-    );
+  it("needs at least one of WhatsApp or email", () => {
+    expect(
+      submissionSchema.safeParse({ ...submission, contact_whatsapp: "", contact_email: "" })
+        .success,
+    ).toBe(false);
   });
 
   it("requires accepting the terms", () => {

@@ -77,10 +77,9 @@ create table listings (
   bedrooms int check (bedrooms >= 0),
   views_count int not null default 0,
   photos text[] not null default '{}',
-  -- Private by default: the poster's email is only used to send the edit link.
-  -- It is shown publicly (as public_email) only when show_email is true.
+  -- Public contact (like WhatsApp). Also where the edit link is emailed, when given.
   contact_email text,
-  show_email boolean not null default false,
+  -- Private: sha256 of the poster's edit token.
   edit_token_hash text,
   expires_at timestamptz,
   approved_at timestamptz,
@@ -95,10 +94,9 @@ create table listings (
     (st_y(location::geometry) between 35.1 and 43.9 and st_x(location::geometry) between -9.6 and 4.5)
     or (st_y(location::geometry) between 27.4 and 29.6 and st_x(location::geometry) between -18.4 and -13.2)
   ),
-  -- At least one public way to get in touch: WhatsApp or a shown email.
+  -- At least one public way to get in touch: WhatsApp or email.
   -- contact_external (a link) is always optional.
-  constraint listings_contact_required check (contact_whatsapp is not null or show_email),
-  constraint listings_show_email_needs_email check (not show_email or contact_email is not null),
+  constraint listings_contact_required check (contact_whatsapp is not null or contact_email is not null),
   constraint listings_bedrooms_required_for_flat check (type = 'room' or bedrooms is not null),
   constraint listings_room_type_required_for_room check (type = 'full_flat' or room_type is not null)
 );
@@ -333,7 +331,7 @@ select
   tenant_pref,
   contact_external,
   contact_whatsapp,
-  case when show_email then contact_email end as public_email,
+  contact_email,
   bathrooms,
   bedrooms,
   views_count,
@@ -515,7 +513,8 @@ set search_path = public
 as $$
 declare
   new_id uuid;
-  email text := lower(trim(p_payload ->> 'contact_email'));
+  email text := nullif(lower(trim(p_payload ->> 'contact_email')), '');
+  whatsapp text := nullif(trim(p_payload ->> 'contact_whatsapp'), '');
   photo text;
 begin
   perform public.check_submit_gate(p_gate);
@@ -523,8 +522,11 @@ begin
   if p_token_hash is null or length(p_token_hash) <> 64 then
     raise exception 'invalid_token';
   end if;
-  if email is null or email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' then
+  if email is not null and email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' then
     raise exception 'invalid_email';
+  end if;
+  if email is null and whatsapp is null then
+    raise exception 'contact_required';
   end if;
 
   -- Anonymous photos may only reference the shared anonymous upload folder
@@ -534,9 +536,11 @@ begin
     end if;
   end loop;
 
-  -- Per-email throttle (the app also rate limits per IP)
+  -- Per-contact throttle (the app also rate limits per IP)
   if (select count(*) from listings
-      where contact_email = email and created_at > now() - interval '1 day') >= 5 then
+      where created_at > now() - interval '1 day'
+        and ((email is not null and contact_email = email)
+          or (whatsapp is not null and contact_whatsapp = whatsapp))) >= 5 then
     raise exception 'rate_limited';
   end if;
 
@@ -544,7 +548,7 @@ begin
     type, status, price, neighborhood, municipality, location,
     flatmates, preferred_gender, description, available_from, bills_included,
     deposit, room_type, pets, smokers, tenant_pref, contact_external,
-    contact_whatsapp, bathrooms, bedrooms, photos, contact_email, show_email, edit_token_hash
+    contact_whatsapp, bathrooms, bedrooms, photos, contact_email, edit_token_hash
   ) values (
     (p_payload ->> 'type')::listing_type,
     'pending',
@@ -565,12 +569,11 @@ begin
     coalesce((p_payload ->> 'smokers')::boolean, false),
     coalesce((p_payload ->> 'tenant_pref')::tenant_pref, 'any'),
     p_payload ->> 'contact_external',
-    p_payload ->> 'contact_whatsapp',
+    whatsapp,
     (p_payload ->> 'bathrooms')::int,
     (p_payload ->> 'bedrooms')::int,
     array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb))),
     email,
-    coalesce((p_payload ->> 'show_email')::boolean, false),
     p_token_hash
   )
   returning id into new_id;
@@ -624,6 +627,7 @@ set search_path = public
 as $$
 declare
   old_status listing_status;
+  new_email text := nullif(lower(trim(p_payload ->> 'contact_email')), '');
   photo text;
 begin
   perform public.check_submit_gate(p_gate);
@@ -633,6 +637,10 @@ begin
     and status <> 'deleted';
   if not found then
     raise exception 'not_found';
+  end if;
+
+  if new_email is not null and new_email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' then
+    raise exception 'invalid_email';
   end if;
 
   for photo in select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb)) loop
@@ -661,8 +669,8 @@ begin
     smokers = coalesce((p_payload ->> 'smokers')::boolean, false),
     tenant_pref = coalesce((p_payload ->> 'tenant_pref')::tenant_pref, 'any'),
     contact_external = p_payload ->> 'contact_external',
-    contact_whatsapp = p_payload ->> 'contact_whatsapp',
-    show_email = coalesce((p_payload ->> 'show_email')::boolean, false),
+    contact_whatsapp = nullif(trim(p_payload ->> 'contact_whatsapp'), ''),
+    contact_email = nullif(lower(trim(p_payload ->> 'contact_email')), ''),
     bathrooms = (p_payload ->> 'bathrooms')::int,
     bedrooms = (p_payload ->> 'bedrooms')::int,
     photos = array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb))),

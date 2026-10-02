@@ -49,7 +49,6 @@ export default async function ManageListingPage({
     bathrooms: listing.bathrooms,
     bedrooms: listing.bedrooms,
     contact_whatsapp: listing.contact_whatsapp ?? "",
-    show_email: listing.show_email,
     contact_external: listing.contact_external ?? "",
     photos: listing.photos,
     contact_email: listing.contact_email ?? "",

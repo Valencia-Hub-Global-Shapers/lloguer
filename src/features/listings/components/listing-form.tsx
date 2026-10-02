@@ -457,34 +457,21 @@ export function ListingForm({
               {fieldError(errors.contact_whatsapp?.message)}
             </div>
 
-            {mode === "create" ? (
-              <div className="grid gap-1.5">
-                <FieldLabel htmlFor="contact_email" required>
-                  {t("publish.email")}
-                </FieldLabel>
-                <Input
-                  id="contact_email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  {...register("contact_email")}
-                />
-                <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
-                {fieldError(errors.contact_email?.message)}
-              </div>
-            ) : null}
-
-            <div className="flex items-center justify-between gap-3 rounded-lg border p-3">
-              <FieldLabel htmlFor="show_email" note={t("publish.oneOfTwo")} className="text-sm">
-                {t("publish.showEmail")}
+            <div className="grid gap-1.5">
+              <FieldLabel htmlFor="contact_email" note={t("publish.oneOfTwo")}>
+                {t("publish.email")}
               </FieldLabel>
-              <Switch
-                id="show_email"
-                checked={Boolean(watch("show_email"))}
-                onCheckedChange={(checked) =>
-                  setValue("show_email", checked, { shouldValidate: true })
-                }
+              <Input
+                id="contact_email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...register("contact_email")}
               />
+              {mode === "create" ? (
+                <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
+              ) : null}
+              {fieldError(errors.contact_email?.message)}
             </div>
           </fieldset>
 
@@ -580,7 +567,6 @@ export const createDefaults: SubmissionValues = {
   bedrooms: null,
   contact_whatsapp: "",
   contact_external: "",
-  show_email: false,
   photos: [],
   contact_email: "",
   accept_terms: false as unknown as true,

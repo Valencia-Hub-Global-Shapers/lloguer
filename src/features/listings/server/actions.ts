@@ -44,7 +44,7 @@ function listingPayload(values: ListingFormInput): Json {
     tenant_pref: values.tenant_pref,
     contact_external: values.contact_external || null,
     contact_whatsapp: values.contact_whatsapp || null,
-    show_email: values.show_email,
+    contact_email: values.contact_email || null,
     bathrooms: values.bathrooms ?? null,
     bedrooms: values.type === "full_flat" ? (values.bedrooms ?? null) : null,
     photos: values.photos,
@@ -54,6 +54,7 @@ function listingPayload(values: ListingFormInput): Json {
 function mapDbError(message: string): string {
   if (message.includes("rate_limited")) return "errors.rateLimited";
   if (message.includes("not_found")) return "errors.notFound";
+  if (message.includes("contact_required")) return "errors.contactRequired";
   if (message.includes("invalid_status_transition")) return "errors.unauthorized";
   return "errors.generic";
 }
@@ -87,10 +88,7 @@ export async function createListing(
   const { data: id, error } = await supabase.rpc("submit_listing", {
     p_gate: submitGate(),
     p_token_hash: hashEditToken(token),
-    p_payload: {
-      ...(listingPayload(parsed.data) as Record<string, Json>),
-      contact_email: parsed.data.contact_email,
-    },
+    p_payload: listingPayload(parsed.data),
   });
 
   if (error || !id) {
@@ -98,10 +96,15 @@ export async function createListing(
     return err(mapDbError(error?.message ?? ""));
   }
 
-  const safeLocale = isLocale(locale) ? locale : defaultLocale;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const mail = editLinkEmail(safeLocale, `${siteUrl}/${safeLocale}/manage/${id}/${token}`);
-  const emailed = await sendEmail({ to: parsed.data.contact_email, ...mail });
+  // The edit link is emailed only when the poster gave an email; it is always
+  // shown on screen too.
+  let emailed = false;
+  if (parsed.data.contact_email) {
+    const safeLocale = isLocale(locale) ? locale : defaultLocale;
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const mail = editLinkEmail(safeLocale, `${siteUrl}/${safeLocale}/manage/${id}/${token}`);
+    emailed = await sendEmail({ to: parsed.data.contact_email, ...mail });
+  }
 
   return ok({ id, token, emailed });
 }

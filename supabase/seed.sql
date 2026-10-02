@@ -91,7 +91,7 @@ insert into listings (
   flatmates, preferred_gender, description, available_from, bills_included, deposit,
   room_type, pets, smokers, tenant_pref, contact_external, contact_whatsapp,
   bathrooms, bedrooms, views_count, photos, approved_at, expires_at, created_at,
-  contact_email, show_email
+  contact_email
 )
 select
   case when i % 3 = 0 then 'full_flat'::listing_type else 'room'::listing_type end,
@@ -132,8 +132,7 @@ select
     when i % 10 not in (8, 9) then now() + ((10 - i % 10) || ' days')::interval
   end,
   now() - ((i % 60) || ' days')::interval,
-  'anuncio' || i || '@example.com',
-  (i % 4 = 0)
+  case when i % 4 = 0 then 'anuncio' || i || '@example.com' end
 from generate_series(1, 40) as g(i)
 join n on n.rn = (g.i % n.total) + 1;
 

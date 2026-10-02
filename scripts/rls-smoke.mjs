@@ -63,8 +63,8 @@ const anon = rest(ANON);
   );
   const { json: view } = await anon("public_listings?select=id");
   check(`anon public_listings = live listings (${view.length} = ${live.length})`, view.length === live.length);
-  const hidden = await anon("public_listings?select=contact_email");
-  check(`public view does not expose contact_email (http ${hidden.status})`, hidden.status >= 400);
+  const hidden = await anon("public_listings?select=edit_token_hash");
+  check(`public view does not expose edit_token_hash (http ${hidden.status})`, hidden.status >= 400);
   const settings = await anon("private_settings?select=*");
   check(`anon cannot read private_settings (http ${settings.status})`, settings.status >= 400);
 }
@@ -101,7 +101,6 @@ const anon = rest(ANON);
     description: "Habitación de prueba para el smoke test anónimo",
     room_type: "single",
     contact_whatsapp: "+34600000000",
-    show_email: false,
     contact_email: email,
     photos: [],
   };

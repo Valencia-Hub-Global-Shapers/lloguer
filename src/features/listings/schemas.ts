@@ -50,8 +50,16 @@ const listingShape = {
           .regex(/^\+?[0-9][0-9 ]{6,20}$/, "validation")
           .nullable(),
       ),
-    /** Show the poster's email on the listing as a public contact. */
-    show_email: z.boolean(),
+    /** Public contact email (also receives the private edit link). Optional. */
+    contact_email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .max(200, "validation")
+      .optional()
+      .nullable()
+      .transform((v) => (v ? v : null))
+      .pipe(z.string().email("validation").nullable()),
     contact_external: optionalUrl,
     photos: z
       .array(
@@ -78,8 +86,8 @@ function refineListing(val: z.infer<typeof listingObject>, ctx: z.RefinementCtx)
   if (val.type === "full_flat" && !val.bedrooms) {
     ctx.addIssue({ code: "custom", path: ["bedrooms"], message: "validation" });
   }
-  // At least one public contact: WhatsApp or the poster's email. The external link is optional.
-  if (!val.contact_whatsapp && !val.show_email) {
+  // At least one public contact: WhatsApp or email. The external link is optional.
+  if (!val.contact_whatsapp && !val.contact_email) {
     ctx.addIssue({ code: "custom", path: ["contact_whatsapp"], message: "contactRequired" });
   }
 }
@@ -94,12 +102,6 @@ export type ListingFormValues = z.input<typeof listingFormSchema>;
 export const submissionSchema = z
   .object({
     ...listingShape,
-    contact_email: z
-      .string()
-      .trim()
-      .toLowerCase()
-      .max(200, "validation")
-      .email("validation"),
     accept_terms: z.literal(true, { errorMap: () => ({ message: "validation" }) }),
     /** Honeypot: real users never fill it. */
     website: z.string().max(200).optional(),

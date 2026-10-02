@@ -176,9 +176,9 @@ export function ListingDetail({
             </a>
           </Button>
         ) : null}
-        {listing.public_email ? (
+        {listing.contact_email ? (
           <Button asChild variant={whatsappDigits ? "outline" : "default"} size="lg">
-            <a href={`mailto:${listing.public_email}`}>
+            <a href={`mailto:${listing.contact_email}`}>
               <Mail />
               {t("listing.emailCta")}
             </a>
