@@ -14,6 +14,13 @@ function parseBounds(params: URLSearchParams): Bounds | null {
   return { minLat, minLng, maxLat, maxLng };
 }
 
+function parseZoom(params: URLSearchParams): number | undefined {
+  const raw = params.get("zoom");
+  if (raw == null) return undefined;
+  const zoom = Number(raw);
+  return Number.isFinite(zoom) ? Math.min(Math.max(zoom, 0), 24) : undefined;
+}
+
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const bounds = parseBounds(params);
@@ -25,7 +32,7 @@ export async function GET(request: Request) {
   const supabase = await createClient();
 
   try {
-    const result = await getPublicListings(supabase, bounds, filters);
+    const result = await getPublicListings(supabase, bounds, filters, parseZoom(params));
     return NextResponse.json(result, {
       headers: { "Cache-Control": "private, max-age=15" },
     });

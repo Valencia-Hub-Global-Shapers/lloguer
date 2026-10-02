@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicListings, getPublicPlaces } from "@/features/listings/server/queries";
 import { parseFilters } from "@/features/search/params";
+import { zoomForBounds } from "@/features/map/clustering";
 import { placeBounds } from "@/features/search/places";
 import { MapExplorer } from "@/features/map/components/map-explorer";
 import { VALENCIA_BOUNDS } from "@/lib/utils";
@@ -36,7 +37,7 @@ export default async function HomePage({
     places = await getPublicPlaces(supabase);
     // A shared link with a place filter opens on that place
     bounds = placeBounds(places, filters) ?? DEFAULT_BOUNDS;
-    data = await getPublicListings(supabase, bounds, filters);
+    data = await getPublicListings(supabase, bounds, filters, zoomForBounds(bounds));
   } catch (e) {
     // Supabase not reachable (e.g. local stack not started): render the shell
     console.error("initial listings fetch failed:", e);

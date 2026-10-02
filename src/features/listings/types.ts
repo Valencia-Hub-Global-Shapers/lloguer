@@ -12,13 +12,17 @@ export type Bounds = {
   maxLng: number;
 };
 
-/** Minimal fields for map markers. */
+/**
+ * Map marker. A single listing has an id, type and price; a cluster of several
+ * listings (count > 1) has none of them and sits at the cluster centroid.
+ */
 export type ListingPin = {
-  id: string;
-  type: ListingType;
-  price: number;
+  id: string | null;
+  type: ListingType | null;
+  price: number | null;
   lat: number;
   lng: number;
+  count: number;
 };
 
 /** Fields rendered in result cards. */

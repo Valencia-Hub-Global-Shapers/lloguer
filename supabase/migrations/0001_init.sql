@@ -353,6 +353,79 @@ from listings
 where status = 'approved' and (expires_at is null or expires_at > now())
 group by municipality, neighborhood;
 
+-- Map pins for a viewport, clustered on a fixed grid so the payload stays small
+-- however many listings exist. p_cell is the grid cell size in degrees of
+-- longitude (0 = return every listing as its own pin). Cells holding a single
+-- listing come back as that listing; busier cells come back as one row with
+-- id = null and count = number of listings. Reads only public_listings, so it
+-- is security invoker and exposes nothing new.
+create or replace function public.browse_pins(
+  p_min_lat float8,
+  p_min_lng float8,
+  p_max_lat float8,
+  p_max_lng float8,
+  p_cell float8 default 0,
+  p_type listing_type default null,
+  p_min_price int default null,
+  p_max_price int default null,
+  p_city text default null,
+  p_hood text default null,
+  p_gender gender_pref default null,
+  p_bills boolean default null,
+  p_pets boolean default null,
+  p_smokers boolean default null,
+  p_max_flatmates int default null,
+  p_avail date default null,
+  p_limit int default 1000
+)
+returns table (id uuid, type listing_type, price int, lat float8, lng float8, count int)
+language sql
+stable
+set search_path = public
+as $$
+  with f as (
+    select l.id, l.type, l.price, l.public_lat::float8 as lat, l.public_lng::float8 as lng
+    from public_listings l
+    where l.public_lat between p_min_lat and p_max_lat
+      and l.public_lng between p_min_lng and p_max_lng
+      and (p_type is null or l.type = p_type)
+      and (p_min_price is null or l.price >= p_min_price)
+      and (p_max_price is null or l.price <= p_max_price)
+      and (p_city is null or l.municipality = p_city)
+      and (p_hood is null or l.neighborhood = p_hood)
+      and (p_gender is null or l.preferred_gender in ('any', p_gender))
+      and (p_bills is not true or l.bills_included)
+      and (p_pets is not true or l.pets)
+      and (p_smokers is not true or l.smokers)
+      and (p_max_flatmates is null or l.flatmates <= p_max_flatmates)
+      and (p_avail is null or l.available_from is null or l.available_from <= p_avail)
+  ),
+  cells as (
+    select
+      f.*,
+      -- Latitude cells shrink with cos(lat) so they look square on a Web Mercator map
+      floor(f.lat / nullif(p_cell * cos(radians((p_min_lat + p_max_lat) / 2)), 0)) as cy,
+      floor(f.lng / nullif(p_cell, 0)) as cx
+    from f
+  ),
+  counted as (
+    select c.*, count(*) over (partition by c.cy, c.cx) as n from cells c
+  )
+  (
+    select c.id, c.type, c.price, c.lat, c.lng, 1 as count
+    from counted c
+    where p_cell <= 0 or c.n = 1
+  )
+  union all
+  (
+    select null::uuid, null::listing_type, null::int, avg(c.lat), avg(c.lng), count(*)::int
+    from counted c
+    where p_cell > 0 and c.n > 1
+    group by c.cy, c.cx
+  )
+  limit p_limit;
+$$;
+
 create or replace view public.public_profiles
 with (security_invoker = false) as
 select id, full_name, avatar_url
@@ -366,6 +439,7 @@ grant usage on schema public to anon, authenticated;
 grant select on public.public_listings to anon, authenticated;
 grant select on public.public_profiles to anon, authenticated;
 grant select on public.public_places to anon, authenticated;
+grant execute on function public.browse_pins to anon, authenticated;
 
 grant select, insert, update on listings to authenticated;
 grant select, update on profiles to authenticated;

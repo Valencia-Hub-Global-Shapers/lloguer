@@ -9,6 +9,7 @@ import { useI18n } from "@/i18n/client";
 import type { PublicPlace } from "@/lib/types/database.types";
 import { parseFilters } from "@/features/search/params";
 import { placeBounds } from "@/features/search/places";
+import { zoomForBounds } from "../clustering";
 import { ListingCard } from "@/features/listings/components/listing-card";
 import { FilterBar } from "@/features/search/components/filter-bar";
 import type { Bounds, BrowseResponse } from "@/features/listings/types";
@@ -111,10 +112,11 @@ export function MapExplorer({ initialData, initialBounds, places }: Props) {
   const [focusBounds, setFocusBounds] = useState<Bounds | null>(null);
 
   const boundsRef = useRef<Bounds | null>(null);
+  const zoomRef = useRef<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const fetchData = useCallback(async (bounds: Bounds) => {
+  const fetchData = useCallback(async (bounds: Bounds, zoom: number) => {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -126,6 +128,7 @@ export function MapExplorer({ initialData, initialBounds, places }: Props) {
       qs.set("minLng", String(bounds.minLng));
       qs.set("maxLat", String(bounds.maxLat));
       qs.set("maxLng", String(bounds.maxLng));
+      qs.set("zoom", String(zoom));
       const res = await fetch(`/api/listings?${qs.toString()}`, {
         signal: controller.signal,
       });
@@ -140,13 +143,19 @@ export function MapExplorer({ initialData, initialBounds, places }: Props) {
   }, []);
 
   const onBoundsChange = useCallback(
-    (bounds: Bounds) => {
+    (bounds: Bounds, zoom: number) => {
       boundsRef.current = bounds;
+      zoomRef.current = zoom;
       if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => fetchData(bounds), 300);
+      timerRef.current = setTimeout(() => fetchData(bounds, zoom), 300);
     },
     [fetchData],
   );
+
+  const refetchCurrentView = useCallback(() => {
+    const bounds = boundsRef.current ?? initialBounds;
+    fetchData(bounds, zoomRef.current ?? zoomForBounds(bounds));
+  }, [fetchData, initialBounds]);
 
   // Refetch when filters (URL) change
   const firstRun = useRef(true);
@@ -166,11 +175,11 @@ export function MapExplorer({ initialData, initialBounds, places }: Props) {
     const target = placeChanged ? placeBounds(places, filters) : null;
     if (target) {
       setFocusBounds(target);
-      fetchData(target);
+      fetchData(target, zoomForBounds(target));
       return;
     }
-    fetchData(boundsRef.current ?? initialBounds);
-  }, [searchKey, fetchData, initialBounds, places]);
+    refetchCurrentView();
+  }, [searchKey, fetchData, refetchCurrentView, places]);
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
@@ -179,10 +188,7 @@ export function MapExplorer({ initialData, initialBounds, places }: Props) {
     [router, locale],
   );
 
-  const retry = useCallback(
-    () => fetchData(boundsRef.current ?? initialBounds),
-    [fetchData, initialBounds],
-  );
+  const retry = refetchCurrentView;
 
   const list = (
     <ResultsList

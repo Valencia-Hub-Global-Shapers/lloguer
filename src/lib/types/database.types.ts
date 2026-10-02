@@ -228,6 +228,35 @@ export type Database = {
       };
       expire_listings: { Args: Record<string, never>; Returns: number };
       is_admin: { Args: Record<string, never>; Returns: boolean };
+      browse_pins: {
+        Args: {
+          p_min_lat: number;
+          p_min_lng: number;
+          p_max_lat: number;
+          p_max_lng: number;
+          p_cell?: number;
+          p_type?: ListingType | null;
+          p_min_price?: number | null;
+          p_max_price?: number | null;
+          p_city?: string | null;
+          p_hood?: string | null;
+          p_gender?: GenderPref | null;
+          p_bills?: boolean | null;
+          p_pets?: boolean | null;
+          p_smokers?: boolean | null;
+          p_max_flatmates?: number | null;
+          p_avail?: string | null;
+          p_limit?: number;
+        };
+        Returns: {
+          id: string | null;
+          type: ListingType | null;
+          price: number | null;
+          lat: number;
+          lng: number;
+          count: number;
+        }[];
+      };
       submit_listing: {
         Args: { p_gate: string; p_token_hash: string; p_payload: Json };
         Returns: string;
