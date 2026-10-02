@@ -6,7 +6,7 @@ Mapa primero: habitaciones y pisos entre particulares en toda España. El mapa a
 
 ## Stack
 
-Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase (Postgres/PostGIS, Auth, Storage) · MapLibre GL + OpenStreetMap · i18n es/ca/en
+Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase (Postgres/PostGIS, Auth, Storage) · MapLibre GL + OpenStreetMap (sin API key) · i18n es/ca/en
 
 ## Arranque local
 
@@ -57,5 +57,9 @@ Cualquiera puede publicar un anuncio sin registrarse (`/publish`). Cada anuncio 
    y `SUBMIT_GATE_SECRET=<secreto>` en el hosting. Si no hay fila en `private_settings`, las funciones quedan abiertas (útil en local).
 4. Marca tu usuario como admin: `update profiles set is_admin = true where email = '<tu email>';`
 5. No ejecutes `supabase/seed.sql` en producción (crea usuarios demo con contraseña conocida).
+
+### Mapa y OpenStreetMap
+
+El mapa usa MapLibre GL con las teselas públicas de OpenStreetMap y Nominatim para obtener municipio y barrio al colocar el pin: no hace falta cuenta ni clave. Son servicios de uso ligero (Nominatim: máximo 1 petición por segundo; consulta la [política de teselas](https://operations.osmfoundation.org/policies/tiles/)). Si el tráfico crece, cambia la URL de teselas en `src/features/map/style.ts` por la de un proveedor (MapTiler, Stadia, Protomaps...) o por teselas propias. La atribución «© OpenStreetMap» debe seguir visible en el mapa.
 
 Más detalles para agentes en [AGENTS.md](AGENTS.md).
