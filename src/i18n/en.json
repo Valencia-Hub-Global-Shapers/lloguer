@@ -159,9 +159,13 @@
   },
   "auth": {
     "loginTitle": "Sign in",
-    "loginDescription": "Sign in with Google to publish or manage your listings.",
-    "loginWithGoogle": "Continue with Google",
-    "loginRequired": "You must sign in to continue."
+    "loginDescription": "Admins sign in with a link sent to their email.",
+    "loginRequired": "You must sign in to continue.",
+    "email": "Email",
+    "sendLink": "Send sign-in link",
+    "linkSent": "Check {email} for a sign-in link. You can close this tab.",
+    "linkError": "We could not send the link. Check the address and try again.",
+    "linkInvalid": "That sign-in link has expired or was already used. Request a new one."
   },
   "admin": {
     "queueTitle": "Moderation queue",

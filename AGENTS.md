@@ -22,7 +22,7 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 1. Apply migrations to the cloud project (one time, or after adding migrations):
    `npx supabase link --project-ref oivdjumiwtppxuvpirab && npx supabase db push`
 2. Optional demo data: run `supabase/seed.sql` in the dashboard SQL Editor (creates the demo admin user from `seed.sql` and 40 listings).
-3. In the cloud dashboard (Authentication → URL Configuration) add `http://localhost:3000/auth/callback` to redirect URLs for Google OAuth. The email login form on `/login` only works if the seed users exist.
+3. In the cloud dashboard (Authentication → URL Configuration) add `http://localhost:3000/auth/callback` to the redirect URLs so magic links work. Supabase's built-in mailer only delivers to organization members at a very low rate, so locally the dev password form on `/login` (needs the seed users) is easier.
 4. `npm run dev`.
 5. The Docker-based local stack (`npm run supabase:start`, `db:reset`, `test:rls`) still works but is optional; `test:rls` assumes the local stack.
 
@@ -45,6 +45,7 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 - Rate limiting (Upstash) in `src/lib/rate-limit.ts`, keyed by IP for posters: publish 5/day, edits 20/day, views 30/min. No-ops when env vars are empty (local dev). Fail closed on mutations, fail open on views. Also: Turnstile captcha (`src/lib/captcha.ts`, skipped without keys), honeypot field, and 5 submissions/email/day inside `submit_listing`.
 - Contact rules: two independent things. (1) Public contact: WhatsApp and/or a public email (`contact_email`), at least one required, both shown on the listing; the external link is always optional. (2) `internal_email`: mandatory, private, never in public views, and the only place the edit link is emailed; it can differ from the public email. The 5/day throttle in `submit_listing` is per internal email or WhatsApp. Enforced by the zod schema and the `listings_contact_required` constraint. Every form field is marked required (`*`) or optional via `FieldLabel`; keep that when adding fields.
 - Erasure (GDPR): a poster's "delete" is a real delete. `set_listing_status_by_token('delete')` removes the `listings` row (moderation events and view counts cascade) and queues its photo paths in `photo_deletion_queue`; dropping a photo in an edit queues it too. Only the Storage API really deletes a file (SQL deletes on `storage.objects` leave the blob), and there is no service-role key, so the server action calls `storage.remove()` for the returned paths, which a narrow storage policy (`photo_pending_deletion`) allows for queued paths only, then `ack_photo_deletion()` clears the queue. If the Storage call fails, the paths stay queued. Known gaps: there is no retry job for queued paths, no sweeper for photos uploaded but never submitted, and nothing yet purges old expired listings.
+- Admin login is a passwordless magic link (`MagicLinkForm` -> `signInWithOtp` -> `/auth/callback` code exchange); there is no Google/OAuth. Signing in only creates an auth user (and a `profiles` row via trigger); admin rights exist solely as `profiles.is_admin`, set by hand in the SQL Editor, never through the app. Production needs custom SMTP (e.g. Resend) in Supabase Auth settings, since the built-in mailer only reaches organization members.
 - Photos: Supabase Storage bucket `listing-photos` (public read, anonymous writes only under `anon/<draft-uuid>/<file>.webp`), ≤8 photos, ≤5 MB, client downscales to ≤1600 px WebP. Anonymous uploads cannot be deleted by posters; removed photos are just unreferenced.
 
 ## Conventions
@@ -63,4 +64,4 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 - Detail page is a full page, not the panel overlay from the UX blueprint (still deep-linkable).
 - Admin notifications = pending-count badge on the moderation nav link. Admins sign in at `/login` (no header link); the demo email login form only shows outside production unless `ENABLE_EMAIL_LOGIN=1`.
 - pg_cron is optional locally; public reads also filter `expires_at` as belt-and-braces. `expire_listings()` can be called manually.
-- Email sign-in form on `/login` exists for local dev/demo accounts; production login (admins only) is Google-only.
+- The email + password form on `/login` exists for local dev/demo accounts only; production login (admins only) is the magic link.

@@ -19,7 +19,7 @@ npx supabase db push              # aplica las migraciones al proyecto cloud
 npm run dev                       # http://localhost:3000
 ```
 
-Datos demo opcionales: ejecuta `supabase/seed.sql` en el SQL Editor del dashboard (crea el usuario admin demo de `seed.sql` y 40 anuncios). Para Google OAuth en local, añade `http://localhost:3000/auth/callback` en Authentication → URL Configuration del dashboard.
+Datos demo opcionales: ejecuta `supabase/seed.sql` en el SQL Editor del dashboard (crea el usuario admin demo de `seed.sql` y 40 anuncios). Para el acceso con enlace mágico en local, añade `http://localhost:3000/auth/callback` en Authentication → URL Configuration del dashboard (o usa el formulario demo con contraseña, que solo aparece en desarrollo).
 
 El stack local con Docker (`npm run supabase:start`, `db:reset`, `test:rls`) sigue disponible pero es opcional.
 
@@ -42,7 +42,7 @@ Cualquiera puede publicar un anuncio sin registrarse (`/publish`). Cada anuncio 
 - Contacto público: WhatsApp y/o correo (al menos uno); el enlace externo es opcional. El correo privado es obligatorio y nunca se publica.
 - Antiabuso: captcha Cloudflare Turnstile, honeypot, límite por IP (Upstash) y máximo 5 envíos al día por correo privado o WhatsApp en la base de datos.
 - El esquema vive en una única migración de referencia (`0001_init.sql`); mientras no haya despliegue se edita ahí en lugar de apilar migraciones.
-- Los admins siguen entrando con Google en `/login` (no hay enlace en la cabecera).
+- Los admins entran con un **enlace mágico** por correo en `/login` (no hay enlace en la cabecera ni cuentas de Google). Iniciar sesión solo crea la cuenta; no da ningún permiso hasta que se marca como admin en la base de datos (paso 4 de abajo).
 
 ### Puesta en producción
 
@@ -55,8 +55,9 @@ Cualquiera puede publicar un anuncio sin registrarse (`/publish`). Cada anuncio 
    ```
 
    y `SUBMIT_GATE_SECRET=<secreto>` en el hosting. Si no hay fila en `private_settings`, las funciones quedan abiertas (útil en local).
-4. Marca tu usuario como admin: `update profiles set is_admin = true where email = '<tu email>';`
-5. No ejecutes `supabase/seed.sql` en producción (crea usuarios demo con contraseña conocida).
+4. Correo de acceso de los admins: el servicio de correo integrado de Supabase solo envía a miembros de la organización y con un límite muy bajo. En Authentication → Emails → SMTP Settings configura tu propio SMTP (por ejemplo Resend, el mismo que usas para los enlaces de edición). En Authentication → URL Configuration pon la URL del sitio y añade `https://<tu-dominio>/auth/callback` a las redirecciones.
+5. Da de alta a un admin: la persona entra en `/login`, pide el enlace y lo abre (verá la cuenta creada pero sin acceso). Después, en el SQL Editor: `update profiles set is_admin = true where email = '<su email>';`. Para quitarlo, `is_admin = false`. El cambio se aplica en su siguiente carga de página.
+6. No ejecutes `supabase/seed.sql` en producción (crea usuarios demo con contraseña conocida).
 
 ### Mapa y OpenStreetMap
 

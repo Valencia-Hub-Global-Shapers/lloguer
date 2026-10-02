@@ -159,9 +159,13 @@
   },
   "auth": {
     "loginTitle": "Inicia sessió",
-    "loginDescription": "Inicia sessió amb Google per a publicar o gestionar els teus anuncis.",
-    "loginWithGoogle": "Continua amb Google",
-    "loginRequired": "Has d'iniciar sessió per a continuar."
+    "loginDescription": "Els admins inicien sessió amb un enllaç enviat al seu correu.",
+    "loginRequired": "Has d'iniciar sessió per a continuar.",
+    "email": "Correu electrònic",
+    "sendLink": "Envia l'enllaç d'accés",
+    "linkSent": "Revisa {email}: t'hem enviat un enllaç d'accés. Pots tancar esta pestanya.",
+    "linkError": "No hem pogut enviar l'enllaç. Revisa l'adreça i torna-ho a provar.",
+    "linkInvalid": "Eixe enllaç ha caducat o ja s'ha usat. Demana'n un de nou."
   },
   "admin": {
     "queueTitle": "Cua de moderació",

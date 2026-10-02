@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getDictionary, interpolate } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/config";
 import { getCurrentProfile } from "@/features/auth/server/session";
-import { GoogleSignInButton } from "@/features/auth/components/google-signin-button";
+import { MagicLinkForm } from "@/features/auth/components/magic-link-form";
 import { EmailSignInForm } from "@/features/auth/components/email-signin-form";
 
 export const dynamic = "force-dynamic";
@@ -17,10 +17,10 @@ export default async function LoginPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; error?: string }>;
 }) {
   const { locale } = await params;
-  const { next } = await searchParams;
+  const { next, error } = await searchParams;
   const dict = await getDictionary(locale);
 
   const current = await getCurrentProfile();
@@ -34,7 +34,12 @@ export default async function LoginPage({
           <CardDescription>{interpolate(dict.auth.loginDescription)}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <GoogleSignInButton next={next ?? `/${locale}`} label={dict.auth.loginWithGoogle} />
+          {error === "link_invalid" ? (
+            <p role="alert" className="text-destructive text-sm">
+              {dict.auth.linkInvalid}
+            </p>
+          ) : null}
+          <MagicLinkForm next={next ?? `/${locale}`} />
           {showEmailLogin ? <EmailSignInForm next={next ?? `/${locale}`} /> : null}
         </CardContent>
       </Card>
