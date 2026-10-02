@@ -63,7 +63,11 @@ export function ListingForm({
   // Edit mode only validates the listing content (no email/terms/captcha)
   const schema = mode === "create" ? submissionSchema : listingFormSchema;
   const form = useForm<SubmissionValues, unknown, SubmissionInput>({
-    resolver: zodResolver(schema) as unknown as Resolver<SubmissionValues, unknown, SubmissionInput>,
+    resolver: zodResolver(schema) as unknown as Resolver<
+      SubmissionValues,
+      unknown,
+      SubmissionInput
+    >,
     defaultValues: defaults,
     mode: "onBlur",
   });
@@ -116,7 +120,10 @@ export function ListingForm({
         toast.error(t("errors.captcha"));
         return;
       }
-      const result = await createListing({ ...values, captcha_token: captchaToken ?? undefined }, locale);
+      const result = await createListing(
+        { ...values, captcha_token: captchaToken ?? undefined },
+        locale,
+      );
       if (!result.ok) {
         toast.error(t(result.error));
         return;
@@ -138,7 +145,9 @@ export function ListingForm({
   const fieldError = (key: string | undefined) =>
     key ? (
       <p className="text-destructive text-xs">
-        {t(key === "validation" ? "errors.fieldInvalid" : key.includes(".") ? key : `errors.${key}`)}
+        {t(
+          key === "validation" ? "errors.fieldInvalid" : key.includes(".") ? key : `errors.${key}`,
+        )}
       </p>
     ) : null;
 
@@ -229,12 +238,16 @@ export function ListingForm({
             {fieldError(errors.lat?.message || errors.lng?.message)}
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-1.5">
-                <FieldLabel htmlFor="municipality" required>{t("publish.municipality")}</FieldLabel>
+                <FieldLabel htmlFor="municipality" required>
+                  {t("publish.municipality")}
+                </FieldLabel>
                 <Input id="municipality" autoComplete="off" {...register("municipality")} />
                 {fieldError(errors.municipality?.message)}
               </div>
               <div className="grid gap-1.5">
-                <FieldLabel htmlFor="neighborhood" optional>{t("publish.neighborhood")}</FieldLabel>
+                <FieldLabel htmlFor="neighborhood" optional>
+                  {t("publish.neighborhood")}
+                </FieldLabel>
                 <Input id="neighborhood" autoComplete="off" {...register("neighborhood")} />
                 {fieldError(errors.neighborhood?.message)}
               </div>
@@ -260,19 +273,25 @@ export function ListingForm({
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <FieldLabel htmlFor="price" required>{t("publish.price")}</FieldLabel>
+              <FieldLabel htmlFor="price" required>
+                {t("publish.price")}
+              </FieldLabel>
               <Input id="price" type="number" min={0} inputMode="numeric" {...register("price")} />
               {fieldError(errors.price?.message)}
             </div>
             <div className="grid gap-1.5">
-              <FieldLabel htmlFor="available_from" optional>{t("publish.availableFrom")}</FieldLabel>
+              <FieldLabel htmlFor="available_from" optional>
+                {t("publish.availableFrom")}
+              </FieldLabel>
               <Input id="available_from" type="date" {...register("available_from")} />
               {fieldError(errors.available_from?.message)}
             </div>
           </div>
 
           <div className="grid gap-1.5">
-            <FieldLabel htmlFor="description" required>{t("publish.description")}</FieldLabel>
+            <FieldLabel htmlFor="description" required>
+              {t("publish.description")}
+            </FieldLabel>
             <Textarea
               id="description"
               rows={5}
@@ -307,7 +326,9 @@ export function ListingForm({
                   {fieldError(errors.room_type?.message)}
                 </div>
                 <div className="grid gap-1.5">
-                  <FieldLabel htmlFor="flatmates" optional>{t("publish.flatmates")}</FieldLabel>
+                  <FieldLabel htmlFor="flatmates" optional>
+                    {t("publish.flatmates")}
+                  </FieldLabel>
                   <Input
                     id="flatmates"
                     type="number"
@@ -319,7 +340,9 @@ export function ListingForm({
               </>
             ) : (
               <div className="grid gap-1.5">
-                <FieldLabel htmlFor="bedrooms" required>{t("publish.bedrooms")}</FieldLabel>
+                <FieldLabel htmlFor="bedrooms" required>
+                  {t("publish.bedrooms")}
+                </FieldLabel>
                 <Input
                   id="bedrooms"
                   type="number"
@@ -331,7 +354,9 @@ export function ListingForm({
               </div>
             )}
             <div className="grid gap-1.5">
-              <FieldLabel htmlFor="bathrooms" optional>{t("publish.bathrooms")}</FieldLabel>
+              <FieldLabel htmlFor="bathrooms" optional>
+                {t("publish.bathrooms")}
+              </FieldLabel>
               <Input
                 id="bathrooms"
                 type="number"
@@ -366,9 +391,7 @@ export function ListingForm({
               <FieldLabel optional>{t("publish.tenantPref")}</FieldLabel>
               <Select
                 value={watch("tenant_pref")}
-                onValueChange={(v) =>
-                  setValue("tenant_pref", v as SubmissionValues["tenant_pref"])
-                }
+                onValueChange={(v) => setValue("tenant_pref", v as SubmissionValues["tenant_pref"])}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -384,7 +407,9 @@ export function ListingForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <FieldLabel htmlFor="deposit" optional>{t("publish.deposit")}</FieldLabel>
+              <FieldLabel htmlFor="deposit" optional>
+                {t("publish.deposit")}
+              </FieldLabel>
               <Input
                 id="deposit"
                 type="number"
@@ -406,7 +431,10 @@ export function ListingForm({
                 ["smokers", "publish.smokers"],
               ] as const
             ).map(([key, labelKey]) => (
-              <div key={key} className="flex items-center justify-between gap-3 rounded-lg border p-3">
+              <div
+                key={key}
+                className="flex items-center justify-between gap-3 rounded-lg border p-3"
+              >
                 <Label htmlFor={`form-${key}`} className="text-xs">
                   {t(labelKey)}
                 </Label>
@@ -493,8 +521,8 @@ export function ListingForm({
         <Card>
           <CardHeader>
             <CardTitle>
-            <SectionEyebrow index={4}>{t("publish.stepSubmit")}</SectionEyebrow>
-          </CardTitle>
+              <SectionEyebrow index={4}>{t("publish.stepSubmit")}</SectionEyebrow>
+            </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-1.5">

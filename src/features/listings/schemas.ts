@@ -1,8 +1,7 @@
 import { z } from "zod";
 import { isInSpain } from "@/lib/geo";
 
-const optionalInt = (max: number) =>
-  z.coerce.number().int().min(0).max(max).optional().nullable();
+const optionalInt = (max: number) => z.coerce.number().int().min(0).max(max).optional().nullable();
 
 const optionalUrl = z
   .string()
@@ -14,64 +13,64 @@ const optionalUrl = z
   .pipe(z.string().url().nullable());
 
 const listingShape = {
-    type: z.enum(["room", "full_flat"]),
-    lat: z.number().min(-90, "validation").max(90, "validation"),
-    lng: z.number().min(-180, "validation").max(180, "validation"),
-    neighborhood: z.string().trim().max(100, "validation").optional().nullable(),
-    municipality: z.string().trim().min(1, "validation").max(100, "validation"),
-    price: z.coerce.number().int().min(50, "validation").max(20000, "validation"),
-    description: z.string().trim().min(20, "validation").max(2000, "validation"),
-    available_from: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, "validation")
-      .optional()
-      .nullable()
-      .or(z.literal("").transform(() => null)),
-    bills_included: z.boolean(),
-    deposit: optionalInt(100000),
-    flatmates: optionalInt(30),
-    preferred_gender: z.enum(["any", "female", "male", "non_binary"]),
-    room_type: z.enum(["single", "double", "shared"]).optional().nullable(),
-    pets: z.boolean(),
-    smokers: z.boolean(),
-    tenant_pref: z.enum(["any", "students", "workers"]),
-    bathrooms: optionalInt(10),
-    bedrooms: optionalInt(20),
-    contact_whatsapp: z
-      .string()
-      .trim()
-      .max(25)
-      .optional()
-      .nullable()
-      .transform((v) => (v ? v : null))
-      .pipe(
-        z
-          .string()
-          .regex(/^\+?[0-9][0-9 ]{6,20}$/, "validation")
-          .nullable(),
-      ),
-    /** Public contact email, shown on the listing. Optional. */
-    contact_email: z
-      .string()
-      .trim()
-      .toLowerCase()
-      .max(200, "validation")
-      .optional()
-      .nullable()
-      .transform((v) => (v ? v : null))
-      .pipe(z.string().email("validation").nullable()),
-    contact_external: optionalUrl,
-    photos: z
-      .array(
-        z
-          .string()
-          .min(1)
-          .max(300)
-          .startsWith("anon/")
-          .refine((v) => !v.includes(".."), "validation"),
-      )
-      .min(1, "firstPhotoRequired")
-      .max(8, "tooManyPhotos"),
+  type: z.enum(["room", "full_flat"]),
+  lat: z.number().min(-90, "validation").max(90, "validation"),
+  lng: z.number().min(-180, "validation").max(180, "validation"),
+  neighborhood: z.string().trim().max(100, "validation").optional().nullable(),
+  municipality: z.string().trim().min(1, "validation").max(100, "validation"),
+  price: z.coerce.number().int().min(50, "validation").max(20000, "validation"),
+  description: z.string().trim().min(20, "validation").max(2000, "validation"),
+  available_from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "validation")
+    .optional()
+    .nullable()
+    .or(z.literal("").transform(() => null)),
+  bills_included: z.boolean(),
+  deposit: optionalInt(100000),
+  flatmates: optionalInt(30),
+  preferred_gender: z.enum(["any", "female", "male", "non_binary"]),
+  room_type: z.enum(["single", "double", "shared"]).optional().nullable(),
+  pets: z.boolean(),
+  smokers: z.boolean(),
+  tenant_pref: z.enum(["any", "students", "workers"]),
+  bathrooms: optionalInt(10),
+  bedrooms: optionalInt(20),
+  contact_whatsapp: z
+    .string()
+    .trim()
+    .max(25)
+    .optional()
+    .nullable()
+    .transform((v) => (v ? v : null))
+    .pipe(
+      z
+        .string()
+        .regex(/^\+?[0-9][0-9 ]{6,20}$/, "validation")
+        .nullable(),
+    ),
+  /** Public contact email, shown on the listing. Optional. */
+  contact_email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .max(200, "validation")
+    .optional()
+    .nullable()
+    .transform((v) => (v ? v : null))
+    .pipe(z.string().email("validation").nullable()),
+  contact_external: optionalUrl,
+  photos: z
+    .array(
+      z
+        .string()
+        .min(1)
+        .max(300)
+        .startsWith("anon/")
+        .refine((v) => !v.includes(".."), "validation"),
+    )
+    .min(1, "firstPhotoRequired")
+    .max(8, "tooManyPhotos"),
 };
 
 const listingObject = z.object(listingShape);
@@ -103,12 +102,7 @@ export const submissionSchema = z
   .object({
     ...listingShape,
     /** Private: where the edit link is sent. Independent from the public contact. */
-    internal_email: z
-      .string()
-      .trim()
-      .toLowerCase()
-      .max(200, "validation")
-      .email("validation"),
+    internal_email: z.string().trim().toLowerCase().max(200, "validation").email("validation"),
     accept_terms: z.literal(true, { errorMap: () => ({ message: "validation" }) }),
     /** Honeypot: real users never fill it. */
     website: z.string().max(200).optional(),

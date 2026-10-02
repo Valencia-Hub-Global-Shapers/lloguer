@@ -29,6 +29,7 @@
     "emptyTitle": "No hay nada aquí",
     "emptyDescription": "Mueve el mapa o amplía los filtros para ver más anuncios.",
     "emptyReset": "Borrar filtros",
+    "clusterLabel": "{count} anuncios en esta zona",
     "results": "{count} anuncios",
     "loadError": "No se han podido cargar los anuncios."
   },

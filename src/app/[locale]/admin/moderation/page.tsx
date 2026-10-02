@@ -44,7 +44,7 @@ export default async function ModerationPage({
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold">
-                    {listing.price} € — {listing.neighborhood ?? listing.municipality}
+                    {listing.price} € · {listing.neighborhood ?? listing.municipality}
                   </p>
                   <p className="text-muted-foreground truncate text-sm">
                     {listing.type === "room" ? dict.listing.typeRoom : dict.listing.typeFullFlat}

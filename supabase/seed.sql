@@ -3,7 +3,9 @@
 -- Reproducible via `supabase db reset`.
 -- ---------------------------------------------------------------------------
 
--- Demo users (password: password123). Profiles are created by trigger.
+-- Demo admin (password: globalsh4pers!). DEMO ONLY: never seed a production
+-- database with it; rotate the password or delete this user before going live.
+-- The profile is created by trigger.
 insert into auth.users (
   id, instance_id, aud, role, email, encrypted_password, email_confirmed_at,
   raw_app_meta_data, raw_user_meta_data, created_at, updated_at,

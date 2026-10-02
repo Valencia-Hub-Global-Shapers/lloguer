@@ -55,6 +55,7 @@ function mapDbError(message: string): string {
   if (message.includes("rate_limited")) return "errors.rateLimited";
   if (message.includes("not_found")) return "errors.notFound";
   if (message.includes("contact_required")) return "errors.contactRequired";
+  if (message.includes("invalid_email") || message.includes("invalid_photo")) return "errors.fieldInvalid";
   if (message.includes("invalid_status_transition")) return "errors.unauthorized";
   return "errors.generic";
 }

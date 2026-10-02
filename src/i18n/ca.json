@@ -29,6 +29,7 @@
     "emptyTitle": "No hi ha res ací",
     "emptyDescription": "Mou el mapa o amplia els filtres per a vore més anuncis.",
     "emptyReset": "Esborra els filtres",
+    "clusterLabel": "{count} anuncis en aquesta zona",
     "results": "{count} anuncis",
     "loadError": "No s'han pogut carregar els anuncis."
   },
