@@ -135,7 +135,7 @@ export function FilterBar({ places }: { places: PublicPlace[] }) {
         }}
       >
         <PopoverTrigger asChild>
-          <Button variant="outline" size="sm" className="rounded-full">
+          <Button variant="outline" size="sm" >
             {filters.minPrice != null || filters.maxPrice != null
               ? `${filters.minPrice ?? 0}–${filters.maxPrice ?? "∞"} €`
               : t("filters.price")}
@@ -184,7 +184,7 @@ export function FilterBar({ places }: { places: PublicPlace[] }) {
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
+          <Button variant="outline" size="sm" className="gap-1.5">
             <SlidersHorizontal className="size-3.5" />
             {t("filters.title")}
             {activeCount > 0 ? <Badge variant="accent">{activeCount}</Badge> : null}

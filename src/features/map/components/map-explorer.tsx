@@ -9,6 +9,7 @@ import { useI18n } from "@/i18n/client";
 import type { PublicPlace } from "@/lib/types/database.types";
 import { parseFilters } from "@/features/search/params";
 import { placeBounds } from "@/features/search/places";
+import { HUB_SITE_URL } from "@/lib/brand";
 import { zoomForBounds } from "../clustering";
 import { ListingCard } from "@/features/listings/components/listing-card";
 import { FilterBar } from "@/features/search/components/filter-bar";
@@ -89,9 +90,17 @@ function ResultsList({
           onHover={onHover}
         />
       ))}
-      <p className="text-muted-foreground p-2 text-center text-xs">
+      <p className="text-muted-foreground flex flex-wrap justify-center gap-x-3 p-2 text-center text-xs">
         <a href={`/${locale}/legal`} className="hover:underline">
           {t("common.legal")}
+        </a>
+        <a
+          href={HUB_SITE_URL}
+          target="_blank"
+          rel="noopener"
+          className="text-brand hover:underline"
+        >
+          {t("footer.initiative")}
         </a>
       </p>
     </div>

@@ -26,7 +26,7 @@ export function ListingMiniMap({ lat, lng }: { lat: number; lng: number }) {
 
     const el = document.createElement("div");
     el.style.cssText =
-      "width:56px;height:56px;border-radius:50%;background:rgba(232,89,12,.25);border:2px solid #e8590c";
+      "width:56px;height:56px;border-radius:50%;background:rgba(214,82,29,.25);border:2px solid #d6521d";
     new mapboxgl.Marker({ element: el }).setLngLat([lng, lat]).addTo(map);
 
     return () => map.remove();

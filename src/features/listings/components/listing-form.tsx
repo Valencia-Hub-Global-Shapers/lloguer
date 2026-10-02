@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { SectionEyebrow } from "@/components/section-eyebrow";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -180,7 +181,9 @@ export function ListingForm({
       {/* 1. Type + location */}
       <Card>
         <CardHeader>
-          <CardTitle>1 · {t("publish.stepLocation")}</CardTitle>
+          <CardTitle>
+            <SectionEyebrow index={1}>{t("publish.stepLocation")}</SectionEyebrow>
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-1.5">
@@ -244,7 +247,9 @@ export function ListingForm({
       {/* 2. Details */}
       <Card>
         <CardHeader>
-          <CardTitle>2 · {t("publish.stepDetails")}</CardTitle>
+          <CardTitle>
+            <SectionEyebrow index={2}>{t("publish.stepDetails")}</SectionEyebrow>
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
@@ -410,7 +415,9 @@ export function ListingForm({
       {/* 3. Photos + contact */}
       <Card>
         <CardHeader>
-          <CardTitle>3 · {t("publish.stepPhotos")}</CardTitle>
+          <CardTitle>
+            <SectionEyebrow index={3}>{t("publish.stepPhotos")}</SectionEyebrow>
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-1.5">
@@ -451,7 +458,9 @@ export function ListingForm({
       {mode === "create" ? (
         <Card>
           <CardHeader>
-            <CardTitle>4 · {t("publish.stepEmail")}</CardTitle>
+            <CardTitle>
+            <SectionEyebrow index={4}>{t("publish.stepEmail")}</SectionEyebrow>
+          </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-1.5">
@@ -487,7 +496,7 @@ export function ListingForm({
               />
               <Label htmlFor="accept_terms" className="text-sm leading-snug font-normal">
                 {t("publish.acceptTerms")}{" "}
-                <Link href={`/${locale}/legal`} target="_blank" className="text-primary underline">
+                <Link href={`/${locale}/legal`} target="_blank" className="text-brand underline">
                   {t("common.legal")}
                 </Link>
               </Label>

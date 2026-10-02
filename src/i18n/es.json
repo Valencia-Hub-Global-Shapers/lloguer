@@ -191,7 +191,7 @@
     "contentTitle": "Contenido",
     "contentBody": "Los anuncios son responsabilidad exclusiva de quien los publica. Moderamos los anuncios antes de su publicación, pero no garantizamos su veracidad.",
     "contactTitle": "Contacto",
-    "contactBody": "Para cualquier consulta puedes escribirnos a hola@mylloguer.example."
+    "contactBody": "Para cualquier consulta puedes escribirnos a valencia.globalshapers@gmail.com."
   },
   "manage": {
     "title": "Gestiona tu anuncio",
@@ -200,5 +200,17 @@
     "pendingHint": "Pendiente de revisión. Aparecerá en el mapa cuando lo aprobemos.",
     "expiredHint": "Este anuncio ha caducado. Puedes volver a publicarlo y lo revisaremos de nuevo.",
     "rejectedHint": "Corrige lo indicado y vuelve a publicarlo."
+  },
+  "footer": {
+    "about": "MyLloguer es una iniciativa sin ánimo de lucro del Hub Valencia de Global Shapers: un directorio abierto de pisos y habitaciones compartidas para que encontrar casa deje de depender de mil grupos de WhatsApp.",
+    "exploreTitle": "Explora",
+    "hubSite": "Global Shapers Valencia",
+    "publish": "Publicar un anuncio",
+    "contactTitle": "Contacto",
+    "contactEmail": "valencia.globalshapers@gmail.com",
+    "contactCity": "Valencia, España",
+    "membershipNote": "Global Shapers Valencia es un hub independiente y de voluntariado de la Global Shapers Community, una iniciativa del Foro Económico Mundial. No es una entidad legal ni financieramente afiliada al Foro Económico Mundial.",
+    "rights": "Hub Valencia de Global Shapers. Construido por la comunidad, gestionado por voluntarios.",
+    "initiative": "Una iniciativa de Global Shapers Valencia"
   }
 }

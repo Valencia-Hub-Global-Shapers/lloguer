@@ -191,7 +191,7 @@
     "contentTitle": "Content",
     "contentBody": "Listings are the sole responsibility of their publishers. We moderate listings before publication but cannot guarantee their accuracy.",
     "contactTitle": "Contact",
-    "contactBody": "For any enquiry you can write to hola@mylloguer.example."
+    "contactBody": "For any question you can write to us at valencia.globalshapers@gmail.com."
   },
   "manage": {
     "title": "Manage your listing",
@@ -200,5 +200,17 @@
     "pendingHint": "Waiting for review. It will show on the map once approved.",
     "expiredHint": "This listing has expired. You can republish it and we will review it again.",
     "rejectedHint": "Fix what is mentioned and republish it."
+  },
+  "footer": {
+    "about": "MyLloguer is a non-profit initiative of the Global Shapers Valencia Hub: an open directory of shared flats and rooms, so finding a home stops depending on a thousand WhatsApp groups.",
+    "exploreTitle": "Explore",
+    "hubSite": "Global Shapers Valencia",
+    "publish": "Post a listing",
+    "contactTitle": "Contact",
+    "contactEmail": "valencia.globalshapers@gmail.com",
+    "contactCity": "Valencia, Spain",
+    "membershipNote": "Global Shapers Valencia is an independent, volunteer-led hub of the Global Shapers Community, a World Economic Forum initiative. It is not a legal or financial affiliate of the World Economic Forum.",
+    "rights": "Global Shapers Valencia Hub. Community-built, volunteer-run.",
+    "initiative": "An initiative of Global Shapers Valencia"
   }
 }

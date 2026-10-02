@@ -40,7 +40,7 @@ export function PinPickerMap({
 
     const el = document.createElement("div");
     el.style.cssText =
-      "width:22px;height:22px;border-radius:50%;background:#e8590c;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:grab";
+      "width:22px;height:22px;border-radius:50%;background:#d6521d;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:grab";
 
     const marker = new mapboxgl.Marker({ element: el, draggable: true })
       .setLngLat(lng != null && lat != null ? [lng, lat] : VALENCIA_CENTER)

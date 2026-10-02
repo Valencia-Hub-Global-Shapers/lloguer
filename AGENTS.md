@@ -31,7 +31,8 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 - `src/app` — routing only (thin). Locale segment `[locale]` (es default, ca = "Valencià", en). Pages/layouts are RSC; `"use client"` only at leaves (map, filters, forms, sheets).
 - `src/features/<name>/{components,server,schemas.ts,types.ts}` — features never import each other's `server/` modules; shared code lives in `src/lib`.
 - `src/lib/supabase/{server,client,middleware}.ts` — single entry points. **No service-role key anywhere**; privileged work runs in security-definer DB functions.
-- `src/components/ui` — shadcn-style primitives (Tailwind v4, CSS vars in `globals.css`). Accent color `#E8590C` reserved for CTAs/price/active markers.
+- `src/components/ui` — shadcn-style primitives (Tailwind v4, CSS vars in `globals.css`).
+- Branding follows the Global Shapers Valencia Hub site (valencia-hub-global-shapers.github.io): warm paper ground (`--background`), flat brand blue (`--brand`, from the official mark) for the wordmark, links, badges, clusters and the footer, and ONE burnt-orange accent (`--primary` `#d6521d`) reserved for CTAs, prices and active markers. Hairline borders instead of shadows, 3px corners, Newsreader (display, headings) + Work Sans (text) loaded from Google Fonts in `src/app/layout.tsx`. Logos live in `public/brand/` (copied from the hub site) and hub URLs in `src/lib/brand.ts`. Global element styles go in `@layer base` so Tailwind utilities can override them. Numbered form sections use `SectionEyebrow`. The footer shows on every page except the full-screen map home.
 - Server actions return `Result<T>` (`src/lib/result.ts`) with i18n error keys — never throw to the client. Validate with the Zod schema from `features/*/schemas.ts` (same schema shared with react-hook-form).
 
 ## Data & security (critical invariants)
