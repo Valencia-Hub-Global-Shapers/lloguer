@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LogoMark } from "@/components/logo-mark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { UserMenu } from "@/features/auth/components/user-menu";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -20,9 +21,12 @@ export async function SiteHeader({
     <header className="bg-background sticky top-0 z-40 flex h-14 items-center gap-3 border-b px-4">
       <Link
         href={`/${locale}`}
-        className="font-logo text-foreground text-[1.6rem] leading-none font-semibold tracking-tight"
+        className="font-logo text-foreground flex items-center gap-2 text-[1.6rem] leading-none font-semibold tracking-tight"
       >
-        My<span className="text-primary">Lloguer</span>
+        <LogoMark className="size-8 shrink-0" />
+        <span>
+          My<span className="text-primary">Lloguer</span>
+        </span>
       </Link>
 
       <div className="flex-1" />
