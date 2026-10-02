@@ -19,7 +19,7 @@ npx supabase db push              # aplica las migraciones al proyecto cloud
 npm run dev                       # http://localhost:3000
 ```
 
-Datos demo opcionales: ejecuta `supabase/seed.sql` en el SQL Editor del dashboard (crea `admin@mylloguer.dev` / `publisher@mylloguer.dev`, password `password123`, y 40 anuncios). Para Google OAuth en local, añade `http://localhost:3000/auth/callback` en Authentication → URL Configuration del dashboard.
+Datos demo opcionales: ejecuta `supabase/seed.sql` en el SQL Editor del dashboard (crea el usuario admin demo de `seed.sql` y 40 anuncios). Para Google OAuth en local, añade `http://localhost:3000/auth/callback` en Authentication → URL Configuration del dashboard.
 
 El stack local con Docker (`npm run supabase:start`, `db:reset`, `test:rls`) sigue disponible pero es opcional.
 
@@ -40,11 +40,12 @@ Cualquiera puede publicar un anuncio sin registrarse (`/publish`). Cada anuncio 
 - Al publicar se genera un **enlace privado de gestión** (`/manage/<id>/<token>`) que se muestra en pantalla y se envía por email (Resend). Con él se edita, desactiva, republica o borra el anuncio. En la base de datos solo se guarda el hash sha256 del token. Editar un anuncio aprobado lo devuelve a revisión.
 - La escritura anónima pasa solo por funciones `security definer` (`submit_listing`, `update_listing_by_token`, `set_listing_status_by_token`, `get_listing_by_token`). `anon` no tiene permisos sobre las tablas.
 - Antiabuso: captcha Cloudflare Turnstile, honeypot, límite por IP (Upstash) y máximo 5 envíos por email al día en la base de datos.
+- El esquema vive en una única migración de referencia (`0001_init.sql`); mientras no haya despliegue se edita ahí en lugar de apilar migraciones.
 - Los admins siguen entrando con Google en `/login` (no hay enlace en la cabecera).
 
 ### Puesta en producción
 
-1. Aplica las migraciones (`npx supabase db push`).
+1. Aplica las migraciones sobre un proyecto Supabase nuevo (`npx supabase db push`).
 2. Rellena las variables de `.env.example` (Turnstile, Resend, Upstash, `NEXT_PUBLIC_SITE_URL`).
 3. Cierra la puerta directa a la API: elige un secreto y guárdalo en los dos sitios para que solo el servidor pueda enviar anuncios.
 

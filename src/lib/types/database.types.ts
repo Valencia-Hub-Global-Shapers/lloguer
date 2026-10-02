@@ -25,7 +25,6 @@ export type ProfileRow = {
   full_name: string | null;
   avatar_url: string | null;
   is_admin: boolean;
-  role_hint: "publisher" | "seeker" | null;
   created_at: string;
 }
 export type ProfileInsert = {
@@ -34,15 +33,12 @@ export type ProfileInsert = {
   full_name?: string | null;
   avatar_url?: string | null;
   is_admin?: boolean;
-  role_hint?: "publisher" | "seeker" | null;
   created_at?: string;
 }
 export type ProfileUpdate = Partial<Omit<ProfileInsert, "id">>;
 
 export type ListingRow = {
   id: string;
-  /** Null for anonymous submissions (ownership is proven by the edit token). */
-  owner_id: string | null;
   type: ListingType;
   status: ListingStatus;
   price: number;
@@ -68,8 +64,6 @@ export type ListingRow = {
   bedrooms: number | null;
   views_count: number;
   photos: string[];
-  publisher_kind: "private" | "agency";
-  agency_label: string | null;
   /** Private: poster email, never exposed by public views. */
   contact_email: string | null;
   /** Private: sha256 of the poster's edit token. */
@@ -83,7 +77,6 @@ export type ListingRow = {
 }
 export type ListingInsert = {
   id?: string;
-  owner_id?: string | null;
   type: ListingType;
   status?: ListingStatus;
   price: number;
@@ -107,13 +100,11 @@ export type ListingInsert = {
   bathrooms?: number | null;
   bedrooms?: number | null;
   photos?: string[];
-  publisher_kind?: "private" | "agency";
-  agency_label?: string | null;
   contact_email?: string | null;
   edit_token_hash?: string | null;
 }
 export type ListingUpdate = Partial<
-  Omit<ListingInsert, "owner_id"> & {
+  ListingInsert & {
     status: ListingStatus;
     approved_at: string | null;
     expires_at: string | null;
@@ -180,9 +171,6 @@ export type PublicListingRow = {
   bedrooms: number | null;
   views_count: number;
   photos: string[];
-  publisher_kind: "private" | "agency";
-  agency_label: string | null;
-  owner_id: string | null;
   published_version: number;
   created_at: string;
 }

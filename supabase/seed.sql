@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- Seed: neighborhoods, demo users (admin + publisher), ~40 realistic listings
+-- Seed: neighborhoods, demo admin user, ~40 realistic listings
 -- Reproducible via `supabase db reset`.
 -- ---------------------------------------------------------------------------
 
@@ -43,17 +43,12 @@ insert into auth.users (
 ) values
   ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000',
    'authenticated', 'authenticated', 'admin@mylloguer.com', crypt('globalsh4pers!', gen_salt('bf')), now(),
-   '{"provider":"email","providers":["email"]}', '{"full_name":"Admin MyLloguer"}', now(), now(), '', '', ''),
-  ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000',
-   'authenticated', 'authenticated', 'casero@mylloguer.com', crypt('globalsh4pers!', gen_salt('bf')), now(),
-   '{"provider":"email","providers":["email"]}', '{"full_name":"Publisher MyLloguer"}', now(), now(), '', '', '');
+   '{"provider":"email","providers":["email"]}', '{"full_name":"Admin MyLloguer"}', now(), now(), '', '', '');
 
 insert into auth.identities (id, user_id, provider_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
 values
   (gen_random_uuid(), '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001',
-   '{"sub":"00000000-0000-0000-0000-000000000001","email":"admin@mylloguer.com"}', 'email', now(), now(), now()),
-  (gen_random_uuid(), '00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002',
-   '{"sub":"00000000-0000-0000-0000-000000000002","email":"casero@mylloguer.com"}', 'email', now(), now(), now());
+   '{"sub":"00000000-0000-0000-0000-000000000001","email":"admin@mylloguer.com"}', 'email', now(), now(), now());
 
 -- GoTrue scans these columns as non-nullable strings/ints
 update auth.users set
@@ -81,13 +76,12 @@ with n as (
   from neighborhoods
 )
 insert into listings (
-  owner_id, type, status, price, neighborhood, municipality, location, public_lat, public_lng,
+  type, status, price, neighborhood, municipality, location, public_lat, public_lng,
   flatmates, preferred_gender, description, available_from, bills_included, deposit,
   room_type, pets, smokers, tenant_pref, contact_external, contact_whatsapp,
   bathrooms, bedrooms, views_count, photos, approved_at, expires_at, created_at
 )
 select
-  '00000000-0000-0000-0000-000000000002',
   case when i % 3 = 0 then 'full_flat'::listing_type else 'room'::listing_type end,
   case
     when i % 10 = 8 then 'pending'::listing_status
@@ -136,5 +130,5 @@ select id, '00000000-0000-0000-0000-000000000001', 'rejected',
 from listings where status = 'rejected';
 
 insert into moderation_events (listing_id, actor_id, action)
-select id, '00000000-0000-0000-0000-000000000002', 'submitted'
+select id, null, 'submitted'
 from listings where status in ('pending', 'rejected');

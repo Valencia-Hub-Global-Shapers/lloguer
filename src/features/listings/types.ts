@@ -77,7 +77,7 @@ export function parseGeoPoint(location: unknown): { lat: number; lng: number } |
 }
 
 /** Poster view returned by get_listing_by_token(): exact coords, no hash/owner. */
-export type PosterListing = Omit<Listing, "location" | "edit_token_hash" | "owner_id"> & {
+export type PosterListing = Omit<Listing, "location" | "edit_token_hash"> & {
   lat: number;
   lng: number;
   rejection_comment: string | null;
