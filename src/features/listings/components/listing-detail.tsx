@@ -44,7 +44,7 @@ export function ListingDetail({
   /** admin preview of a non-public listing */
   isPreview: boolean;
 }) {
-  const { locale, t } = useI18n();
+  const { locale, t, plural } = useI18n();
 
   // Fire-and-forget view count (deduped server-side per day)
   useEffect(() => {
@@ -126,13 +126,13 @@ export function ListingDetail({
           <Attr icon={<Wallet />} label={t("listing.deposit", { amount: listing.deposit })} />
         ) : null}
         {listing.type === "room" && listing.flatmates != null ? (
-          <Attr icon={<Users />} label={t("listing.flatmates", { count: listing.flatmates })} />
+          <Attr icon={<Users />} label={plural("listing.flatmates", listing.flatmates)} />
         ) : null}
         {listing.type === "full_flat" && listing.bedrooms != null ? (
-          <Attr icon={<BedDouble />} label={t("listing.bedrooms", { count: listing.bedrooms })} />
+          <Attr icon={<BedDouble />} label={plural("listing.bedrooms", listing.bedrooms)} />
         ) : null}
         {listing.bathrooms != null ? (
-          <Attr icon={<Bath />} label={t("listing.bathrooms", { count: listing.bathrooms })} />
+          <Attr icon={<Bath />} label={plural("listing.bathrooms", listing.bathrooms)} />
         ) : null}
         <Attr icon={<PawPrint />} label={listing.pets ? t("listing.petsYes") : t("listing.petsNo")} />
         <Attr
@@ -151,7 +151,7 @@ export function ListingDetail({
             `listing.tenant${listing.tenant_pref === "any" ? "Any" : listing.tenant_pref === "students" ? "Students" : "Workers"}`,
           )}
         />
-        <Attr icon={<Eye />} label={t("listing.views", { count: listing.views_count })} />
+        <Attr icon={<Eye />} label={plural("listing.views", listing.views_count)} />
       </div>
 
       <Separator className="my-4" />

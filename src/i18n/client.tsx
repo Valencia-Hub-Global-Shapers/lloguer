@@ -4,12 +4,18 @@ import { createContext, useCallback, useContext } from "react";
 import type { Locale } from "./config";
 import type { Dictionary } from "./types";
 import { interpolate } from "./interpolate";
+import { pluralKey } from "./plural";
 
 type TFn = (key: string, vars?: Record<string, string | number>) => string;
+/** Like t(), with {count} filled in; uses `${key}One` when count is 1 and that key exists. */
+type PluralFn = (key: string, count: number, vars?: Record<string, string | number>) => string;
 
-const I18nContext = createContext<{ locale: Locale; dict: Dictionary; t: TFn } | null>(
-  null,
-);
+const I18nContext = createContext<{
+  locale: Locale;
+  dict: Dictionary;
+  t: TFn;
+  plural: PluralFn;
+} | null>(null);
 
 function resolve(dict: unknown, path: string): string {
   let node = dict as Record<string, unknown>;
@@ -30,8 +36,15 @@ export function I18nProvider({
   children: React.ReactNode;
 }) {
   const t = useCallback<TFn>((key, vars) => interpolate(resolve(dict, key), vars), [dict]);
+  const plural = useCallback<PluralFn>(
+    (key, count, vars) => {
+      const chosen = pluralKey(key, count, (k) => resolve(dict, k) !== k);
+      return interpolate(resolve(dict, chosen), { count, ...vars });
+    },
+    [dict],
+  );
   return (
-    <I18nContext.Provider value={{ locale, dict, t }}>{children}</I18nContext.Provider>
+    <I18nContext.Provider value={{ locale, dict, t, plural }}>{children}</I18nContext.Provider>
   );
 }
 

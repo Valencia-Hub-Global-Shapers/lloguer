@@ -31,7 +31,8 @@
     "emptyReset": "Clear filters",
     "clusterLabel": "{count} listings in this area",
     "results": "{count} listings",
-    "loadError": "Listings could not be loaded."
+    "loadError": "Listings could not be loaded.",
+    "resultsOne": "{count} listing"
   },
   "filters": {
     "title": "Filters",
@@ -97,7 +98,11 @@
     "deleteConfirmDescription": "The listing, its photos and your contact details will be erased permanently. This cannot be undone.",
     "deactivateConfirmTitle": "Deactivate listing?",
     "deactivateConfirmDescription": "The listing will stop being visible until you republish it.",
-    "emailCta": "Send an email"
+    "emailCta": "Send an email",
+    "flatmatesOne": "{count} flatmate",
+    "bathroomsOne": "{count} bathroom",
+    "bedroomsOne": "{count} bedroom",
+    "viewsOne": "{count} view"
   },
   "publish": {
     "title": "Publish your listing",

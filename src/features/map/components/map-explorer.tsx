@@ -36,7 +36,7 @@ function ResultsList({
   onHover: (id: string | null) => void;
   onRetry: () => void;
 }) {
-  const { locale, t } = useI18n();
+  const { locale, t, plural } = useI18n();
 
   if (loading && data.cards.length === 0) {
     return (
@@ -78,7 +78,7 @@ function ResultsList({
   return (
     <div className="grid gap-3 p-3">
       <p className="text-muted-foreground px-1 text-xs" aria-live="polite">
-        {t("home.results", { count: data.cards.length })}
+        {plural("home.results", data.cards.length)}
         {loading ? " · " + t("common.loading") : ""}
       </p>
       {data.cards.map((listing) => (

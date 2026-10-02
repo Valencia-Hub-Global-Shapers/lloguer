@@ -31,7 +31,8 @@
     "emptyReset": "Esborra els filtres",
     "clusterLabel": "{count} anuncis en aquesta zona",
     "results": "{count} anuncis",
-    "loadError": "No s'han pogut carregar els anuncis."
+    "loadError": "No s'han pogut carregar els anuncis.",
+    "resultsOne": "{count} anunci"
   },
   "filters": {
     "title": "Filtres",
@@ -97,7 +98,11 @@
     "deleteConfirmDescription": "S'esborraran de forma permanent l'anunci, les seues fotos i les teues dades de contacte. No es pot desfer.",
     "deactivateConfirmTitle": "Desactivar l'anunci?",
     "deactivateConfirmDescription": "L'anunci deixarà de ser visible fins que el torns a publicar.",
-    "emailCta": "Escriure per correu"
+    "emailCta": "Escriure per correu",
+    "flatmatesOne": "{count} company de pis",
+    "bathroomsOne": "{count} bany",
+    "bedroomsOne": "{count} habitació",
+    "viewsOne": "{count} visita"
   },
   "publish": {
     "title": "Publica el teu anunci",

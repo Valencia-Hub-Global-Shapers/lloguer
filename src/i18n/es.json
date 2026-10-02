@@ -31,7 +31,8 @@
     "emptyReset": "Borrar filtros",
     "clusterLabel": "{count} anuncios en esta zona",
     "results": "{count} anuncios",
-    "loadError": "No se han podido cargar los anuncios."
+    "loadError": "No se han podido cargar los anuncios.",
+    "resultsOne": "{count} anuncio"
   },
   "filters": {
     "title": "Filtros",
@@ -97,7 +98,11 @@
     "deleteConfirmDescription": "Se borrarán de forma permanente el anuncio, sus fotos y tus datos de contacto. No se puede deshacer.",
     "deactivateConfirmTitle": "¿Desactivar el anuncio?",
     "deactivateConfirmDescription": "El anuncio dejará de ser visible hasta que lo vuelvas a publicar.",
-    "emailCta": "Escribir por correo"
+    "emailCta": "Escribir por correo",
+    "flatmatesOne": "{count} compañero de piso",
+    "bathroomsOne": "{count} baño",
+    "bedroomsOne": "{count} habitación",
+    "viewsOne": "{count} visita"
   },
   "publish": {
     "title": "Publica tu anuncio",
