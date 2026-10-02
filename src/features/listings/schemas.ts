@@ -50,7 +50,7 @@ const listingShape = {
           .regex(/^\+?[0-9][0-9 ]{6,20}$/, "validation")
           .nullable(),
       ),
-    /** Public contact email (also receives the private edit link). Optional. */
+    /** Public contact email, shown on the listing. Optional. */
     contact_email: z
       .string()
       .trim()
@@ -102,6 +102,13 @@ export type ListingFormValues = z.input<typeof listingFormSchema>;
 export const submissionSchema = z
   .object({
     ...listingShape,
+    /** Private: where the edit link is sent. Independent from the public contact. */
+    internal_email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .max(200, "validation")
+      .email("validation"),
     accept_terms: z.literal(true, { errorMap: () => ({ message: "validation" }) }),
     /** Honeypot: real users never fill it. */
     website: z.string().max(200).optional(),

@@ -59,6 +59,7 @@ export default async function AdminListingDetailPage({
               v={listing.neighborhood ?? listing.municipality}
             />
             <Row k={dict.admin.contactEmail} v={listing.contact_email ?? "—"} />
+            <Row k={dict.admin.internalEmail} v={listing.internal_email ?? "—"} />
             <Row k={dict.listing.views.replace("{count}", "")} v={String(listing.views_count)} />
             <Row k="WhatsApp" v={listing.contact_whatsapp ?? "—"} />
             <Row k={dict.publish.contactExternal} v={listing.contact_external ?? "—"} />

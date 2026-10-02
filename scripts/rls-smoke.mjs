@@ -101,7 +101,7 @@ const anon = rest(ANON);
     description: "Habitación de prueba para el smoke test anónimo",
     room_type: "single",
     contact_whatsapp: "+34600000000",
-    contact_email: email,
+    internal_email: email,
     photos: [],
   };
 

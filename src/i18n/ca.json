@@ -129,13 +129,13 @@
     "submitEdit": "Guarda i torna a enviar",
     "successTitle": "Anunci enviat!",
     "successDescription": "El revisarem manualment i apareixerà al mapa quan l'aprovem. Es desactivarà sol als 10 dies.",
-    "email": "Correu electrònic",
-    "emailHint": "Si l'indiques, també t'enviem l'enllaç privat per editar, desactivar o esborrar el teu anunci.",
+    "email": "Correu de contacte",
+    "emailHint": "Es mostrarà a l'anunci, igual que el WhatsApp.",
     "contactPublicHint": "L'enllaç extern (per exemple, el teu anunci en una altra web) és opcional.",
     "acceptTerms": "He llegit i accepte",
     "editLinkTitle": "El teu enllaç privat de gestió",
     "editLinkEmailed": "També te l'hem enviat per correu. Guarda'l: és l'única manera d'editar el teu anunci.",
-    "editLinkSaveIt": "No has indicat cap correu, així que no podem enviar-te'l. Guarda'l ara: és l'única manera d'editar, desactivar o esborrar el teu anunci.",
+    "editLinkSaveIt": "Guarda'l ara: és l'única manera d'editar, desactivar o esborrar el teu anunci.",
     "copyLink": "Copiar enllaç",
     "linkCopied": "Enllaç copiat",
     "manageListing": "Gestionar anunci",
@@ -145,10 +145,12 @@
     "requiredNote": "Els camps amb asterisc són obligatoris; la resta són opcionals.",
     "extras": "Extres",
     "contactGroupTitle": "Com poden contactar-te",
-    "contactAtLeastOne": "Indica almenys una via: WhatsApp o correu electrònic. El que poses ací ho veurà qualsevol persona que veja l'anunci.",
+    "contactAtLeastOne": "Indica almenys una via de contacte públic: WhatsApp o correu. El que poses ací ho veurà qualsevol persona que veja l'anunci.",
     "oneOfTwo": "almenys un dels dos",
     "stepSubmit": "Revisió i enviament",
-    "legalLink": "l'avís legal i la privacitat"
+    "legalLink": "l'avís legal i la privacitat",
+    "internalEmail": "El teu correu privat",
+    "internalEmailHint": "No es publica i pot ser diferent del de contacte. T'enviem ací l'enllaç privat per editar, desactivar o esborrar el teu anunci."
   },
   "auth": {
     "loginTitle": "Inicia sessió",
@@ -168,7 +170,8 @@
     "status": "Estat",
     "createdAt": "Creat",
     "pendingCount": "{count} pendents",
-    "contactEmail": "Correu de contacte"
+    "contactEmail": "Correu públic",
+    "internalEmail": "Correu privat"
   },
   "moderationAction": {
     "submitted": "Enviat",
@@ -198,7 +201,7 @@
     "title": "Avís legal i privacitat",
     "intro": "MyLloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
     "dataTitle": "Dades personals",
-    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci, inclosos el WhatsApp i el correu electrònic de contacte que indiques (són públics), i un identificador xifrat de l'enllaç de gestió. Si indiques un correu, també l'usem per enviar-te aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió.",
+    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci, inclosos el WhatsApp i el correu de contacte que indiques (són públics); el teu correu privat (només per enviar-te l'enllaç de gestió, no es publica i pot ser diferent del de contacte); i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió.",
     "contentTitle": "Contingut",
     "contentBody": "Els anuncis són responsabilitat exclusiva de qui els publica. Moderem els anuncis abans de la publicació, però no n-garantim la veracitat.",
     "contactTitle": "Contacte",

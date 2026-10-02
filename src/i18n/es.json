@@ -129,13 +129,13 @@
     "submitEdit": "Guardar y reenviar",
     "successTitle": "¡Anuncio enviado!",
     "successDescription": "Lo revisaremos manualmente y aparecerá en el mapa cuando lo aprobemos. Se desactivará solo a los 10 días.",
-    "email": "Correo electrónico",
-    "emailHint": "Si lo indicas, también te enviamos el enlace privado para editar, desactivar o borrar tu anuncio.",
+    "email": "Correo de contacto",
+    "emailHint": "Se mostrará en el anuncio, igual que el WhatsApp.",
     "contactPublicHint": "El enlace externo (por ejemplo, tu anuncio en otra web) es opcional.",
     "acceptTerms": "He leído y acepto",
     "editLinkTitle": "Tu enlace privado de gestión",
     "editLinkEmailed": "Te lo hemos enviado también por email. Guárdalo: es la única forma de editar tu anuncio.",
-    "editLinkSaveIt": "No has indicado correo, así que no podemos enviártelo. Guárdalo ahora: es la única forma de editar, desactivar o borrar tu anuncio.",
+    "editLinkSaveIt": "Guárdalo ahora: es la única forma de editar, desactivar o borrar tu anuncio.",
     "copyLink": "Copiar enlace",
     "linkCopied": "Enlace copiado",
     "manageListing": "Gestionar anuncio",
@@ -145,10 +145,12 @@
     "requiredNote": "Los campos con asterisco son obligatorios; el resto son opcionales.",
     "extras": "Extras",
     "contactGroupTitle": "Cómo pueden contactarte",
-    "contactAtLeastOne": "Indica al menos una vía: WhatsApp o correo electrónico. Lo que pongas aquí lo verá cualquiera que vea el anuncio.",
+    "contactAtLeastOne": "Indica al menos una vía de contacto público: WhatsApp o correo. Lo que pongas aquí lo verá cualquiera que vea el anuncio.",
     "oneOfTwo": "al menos uno de los dos",
     "stepSubmit": "Revisión y envío",
-    "legalLink": "el aviso legal y la privacidad"
+    "legalLink": "el aviso legal y la privacidad",
+    "internalEmail": "Tu correo privado",
+    "internalEmailHint": "No se publica y puede ser distinto del de contacto. Te enviamos aquí el enlace privado para editar, desactivar o borrar tu anuncio."
   },
   "auth": {
     "loginTitle": "Inicia sesión",
@@ -168,7 +170,8 @@
     "status": "Estado",
     "createdAt": "Creado",
     "pendingCount": "{count} pendientes",
-    "contactEmail": "Email de contacto"
+    "contactEmail": "Correo público",
+    "internalEmail": "Correo privado"
   },
   "moderationAction": {
     "submitted": "Enviado",
@@ -198,7 +201,7 @@
     "title": "Aviso legal y privacidad",
     "intro": "MyLloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
     "dataTitle": "Datos personales",
-    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio, incluidos el WhatsApp y el correo electrónico de contacto que indiques (son públicos), y un identificador cifrado del enlace de gestión. Si indicas un correo, lo usamos también para enviarte ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión.",
+    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio, incluidos el WhatsApp y el correo de contacto que indiques (son públicos); tu correo privado (solo para enviarte el enlace de gestión, no se publica y puede ser distinto del de contacto); y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión.",
     "contentTitle": "Contenido",
     "contentBody": "Los anuncios son responsabilidad exclusiva de quien los publica. Moderamos los anuncios antes de su publicación, pero no garantizamos su veracidad.",
     "contactTitle": "Contacto",

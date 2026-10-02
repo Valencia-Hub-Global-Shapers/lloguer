@@ -52,6 +52,7 @@ export default async function ManageListingPage({
     contact_external: listing.contact_external ?? "",
     photos: listing.photos,
     contact_email: listing.contact_email ?? "",
+    internal_email: listing.internal_email ?? "",
     accept_terms: true,
     website: "",
   };

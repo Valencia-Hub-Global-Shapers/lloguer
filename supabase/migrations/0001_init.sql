@@ -77,8 +77,11 @@ create table listings (
   bedrooms int check (bedrooms >= 0),
   views_count int not null default 0,
   photos text[] not null default '{}',
-  -- Public contact (like WhatsApp). Also where the edit link is emailed, when given.
+  -- Public contact email, shown on the listing like the WhatsApp number. Optional.
   contact_email text,
+  -- Private and independent from the public contact: where the poster's edit
+  -- link is sent. Never exposed by public views.
+  internal_email text,
   -- Private: sha256 of the poster's edit token.
   edit_token_hash text,
   expires_at timestamptz,
@@ -104,7 +107,7 @@ create table listings (
 create index listings_public_idx on listings (status, expires_at) where status = 'approved';
 create index listings_location_gix on listings using gist (location);
 create index listings_edit_token_idx on listings (id, edit_token_hash);
-create index listings_contact_email_idx on listings (contact_email, created_at);
+create index listings_internal_email_idx on listings (internal_email, created_at);
 
 -- Moderation history (append-only). actor_id is null for anonymous posters.
 create table moderation_events (
@@ -513,6 +516,7 @@ set search_path = public
 as $$
 declare
   new_id uuid;
+  internal text := nullif(lower(trim(p_payload ->> 'internal_email')), '');
   email text := nullif(lower(trim(p_payload ->> 'contact_email')), '');
   whatsapp text := nullif(trim(p_payload ->> 'contact_whatsapp'), '');
   photo text;
@@ -521,6 +525,10 @@ begin
 
   if p_token_hash is null or length(p_token_hash) <> 64 then
     raise exception 'invalid_token';
+  end if;
+  -- The private email (edit link) is mandatory; the public one is optional.
+  if internal is null or internal !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' then
+    raise exception 'invalid_email';
   end if;
   if email is not null and email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' then
     raise exception 'invalid_email';
@@ -536,10 +544,10 @@ begin
     end if;
   end loop;
 
-  -- Per-contact throttle (the app also rate limits per IP)
+  -- Per-poster throttle (the app also rate limits per IP)
   if (select count(*) from listings
       where created_at > now() - interval '1 day'
-        and ((email is not null and contact_email = email)
+        and (internal_email = internal
           or (whatsapp is not null and contact_whatsapp = whatsapp))) >= 5 then
     raise exception 'rate_limited';
   end if;
@@ -548,7 +556,7 @@ begin
     type, status, price, neighborhood, municipality, location,
     flatmates, preferred_gender, description, available_from, bills_included,
     deposit, room_type, pets, smokers, tenant_pref, contact_external,
-    contact_whatsapp, bathrooms, bedrooms, photos, contact_email, edit_token_hash
+    contact_whatsapp, bathrooms, bedrooms, photos, contact_email, internal_email, edit_token_hash
   ) values (
     (p_payload ->> 'type')::listing_type,
     'pending',
@@ -574,6 +582,7 @@ begin
     (p_payload ->> 'bedrooms')::int,
     array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb))),
     email,
+    internal,
     p_token_hash
   )
   returning id into new_id;

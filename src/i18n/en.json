@@ -129,13 +129,13 @@
     "submitEdit": "Save and resubmit",
     "successTitle": "Listing submitted!",
     "successDescription": "We will review it manually and it will show on the map once approved. It switches off by itself after 10 days.",
-    "email": "Email",
-    "emailHint": "If you give one, we also email you the private link to edit, deactivate or delete your listing.",
+    "email": "Contact email",
+    "emailHint": "It will be shown on the listing, like the WhatsApp number.",
     "contactPublicHint": "The external link (for example, your ad on another site) is optional.",
     "acceptTerms": "I have read and accept",
     "editLinkTitle": "Your private management link",
     "editLinkEmailed": "We also emailed it to you. Keep it: it is the only way to edit your listing.",
-    "editLinkSaveIt": "You did not give an email, so we cannot send it to you. Save it now: it is the only way to edit, deactivate or delete your listing.",
+    "editLinkSaveIt": "Save it now: it is the only way to edit, deactivate or delete your listing.",
     "copyLink": "Copy link",
     "linkCopied": "Link copied",
     "manageListing": "Manage listing",
@@ -145,10 +145,12 @@
     "requiredNote": "Fields marked with an asterisk are required; the rest are optional.",
     "extras": "Extras",
     "contactGroupTitle": "How people can reach you",
-    "contactAtLeastOne": "Give at least one: WhatsApp or email. Whatever you put here is visible to anyone viewing the listing.",
+    "contactAtLeastOne": "Give at least one public way to reach you: WhatsApp or email. Whatever you put here is visible to anyone viewing the listing.",
     "oneOfTwo": "at least one of the two",
     "stepSubmit": "Review and submit",
-    "legalLink": "the legal notice and privacy policy"
+    "legalLink": "the legal notice and privacy policy",
+    "internalEmail": "Your private email",
+    "internalEmailHint": "It is not published and can differ from the contact email. We send the private link to edit, deactivate or delete your listing here."
   },
   "auth": {
     "loginTitle": "Sign in",
@@ -168,7 +170,8 @@
     "status": "Status",
     "createdAt": "Created",
     "pendingCount": "{count} pending",
-    "contactEmail": "Contact email"
+    "contactEmail": "Public email",
+    "internalEmail": "Private email"
   },
   "moderationAction": {
     "submitted": "Submitted",
@@ -198,7 +201,7 @@
     "title": "Legal notice & privacy",
     "intro": "MyLloguer is a non-profit classifieds platform for private rentals and shared flats across Spain, run by Global Shapers Valencia.",
     "dataTitle": "Personal data",
-    "dataBody": "We only process what the service needs: your listing content, including the WhatsApp number and contact email you give (both public), and an encrypted identifier of the management link. If you give an email we also use it to send you that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link.",
+    "dataBody": "We only process what the service needs: your listing content, including the WhatsApp number and contact email you give (both public); your private email (only used to send you the management link, never published, and it can differ from the contact email); and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link.",
     "contentTitle": "Content",
     "contentBody": "Listings are the sole responsibility of their publishers. We moderate listings before publication but cannot guarantee their accuracy.",
     "contactTitle": "Contact",

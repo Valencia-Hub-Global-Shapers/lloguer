@@ -37,10 +37,10 @@ El stack local con Docker (`npm run supabase:start`, `db:reset`, `test:rls`) sig
 
 Cualquiera puede publicar un anuncio sin registrarse (`/publish`). Cada anuncio entra en `pending` y un admin lo revisa a mano; al aprobarlo se activa **10 días** y después caduca solo.
 
-- Al publicar se genera un **enlace privado de gestión** (`/manage/<id>/<token>`) que se muestra en pantalla y, si el anuncio lleva correo de contacto, también se envía por email (Resend). Con él se edita, desactiva, republica o borra el anuncio. En la base de datos solo se guarda el hash sha256 del token. Editar un anuncio aprobado lo devuelve a revisión.
+- Al publicar se genera un **enlace privado de gestión** (`/manage/<id>/<token>`) que se muestra en pantalla y se envía por email (Resend) al **correo privado** del anuncio, que es independiente del correo de contacto público. Con él se edita, desactiva, republica o borra el anuncio. En la base de datos solo se guarda el hash sha256 del token. Editar un anuncio aprobado lo devuelve a revisión.
 - La escritura anónima pasa solo por funciones `security definer` (`submit_listing`, `update_listing_by_token`, `set_listing_status_by_token`, `get_listing_by_token`). `anon` no tiene permisos sobre las tablas.
-- Contacto público: WhatsApp y/o correo (al menos uno); el enlace externo es opcional.
-- Antiabuso: captcha Cloudflare Turnstile, honeypot, límite por IP (Upstash) y máximo 5 envíos al día por email o WhatsApp en la base de datos.
+- Contacto público: WhatsApp y/o correo (al menos uno); el enlace externo es opcional. El correo privado es obligatorio y nunca se publica.
+- Antiabuso: captcha Cloudflare Turnstile, honeypot, límite por IP (Upstash) y máximo 5 envíos al día por correo privado o WhatsApp en la base de datos.
 - El esquema vive en una única migración de referencia (`0001_init.sql`); mientras no haya despliegue se edita ahí en lugar de apilar migraciones.
 - Los admins siguen entrando con Google en `/login` (no hay enlace en la cabecera).
 

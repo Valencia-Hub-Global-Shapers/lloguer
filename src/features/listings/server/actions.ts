@@ -88,7 +88,10 @@ export async function createListing(
   const { data: id, error } = await supabase.rpc("submit_listing", {
     p_gate: submitGate(),
     p_token_hash: hashEditToken(token),
-    p_payload: listingPayload(parsed.data),
+    p_payload: {
+      ...(listingPayload(parsed.data) as Record<string, Json>),
+      internal_email: parsed.data.internal_email,
+    },
   });
 
   if (error || !id) {
@@ -96,15 +99,12 @@ export async function createListing(
     return err(mapDbError(error?.message ?? ""));
   }
 
-  // The edit link is emailed only when the poster gave an email; it is always
-  // shown on screen too.
-  let emailed = false;
-  if (parsed.data.contact_email) {
-    const safeLocale = isLocale(locale) ? locale : defaultLocale;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-    const mail = editLinkEmail(safeLocale, `${siteUrl}/${safeLocale}/manage/${id}/${token}`);
-    emailed = await sendEmail({ to: parsed.data.contact_email, ...mail });
-  }
+  // The edit link goes to the private internal email (not the public contact),
+  // and is always shown on screen too.
+  const safeLocale = isLocale(locale) ? locale : defaultLocale;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const mail = editLinkEmail(safeLocale, `${siteUrl}/${safeLocale}/manage/${id}/${token}`);
+  const emailed = await sendEmail({ to: parsed.data.internal_email, ...mail });
 
   return ok({ id, token, emailed });
 }

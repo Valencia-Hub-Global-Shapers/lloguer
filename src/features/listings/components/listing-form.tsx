@@ -468,9 +468,7 @@ export function ListingForm({
                 placeholder="you@example.com"
                 {...register("contact_email")}
               />
-              {mode === "create" ? (
-                <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
-              ) : null}
+              <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
               {fieldError(errors.contact_email?.message)}
             </div>
           </fieldset>
@@ -499,6 +497,21 @@ export function ListingForm({
           </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
+            <div className="grid gap-1.5">
+              <FieldLabel htmlFor="internal_email" required>
+                {t("publish.internalEmail")}
+              </FieldLabel>
+              <Input
+                id="internal_email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...register("internal_email")}
+              />
+              <p className="text-muted-foreground text-xs">{t("publish.internalEmailHint")}</p>
+              {fieldError(errors.internal_email?.message)}
+            </div>
+
             {/* Honeypot: invisible to people, tempting to bots */}
             <input
               type="text"
@@ -569,6 +582,7 @@ export const createDefaults: SubmissionValues = {
   contact_external: "",
   photos: [],
   contact_email: "",
+  internal_email: "",
   accept_terms: false as unknown as true,
   website: "",
 };

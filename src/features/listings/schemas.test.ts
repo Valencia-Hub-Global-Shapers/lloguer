@@ -163,27 +163,37 @@ describe("listing location", () => {
 });
 
 describe("submissionSchema", () => {
-  const submission = { ...validRoom, accept_terms: true };
+  const submission = { ...validRoom, accept_terms: true, internal_email: "  Private@Example.com " };
 
-  it("accepts an anonymous submission with WhatsApp only", () => {
-    expect(submissionSchema.safeParse(submission).success).toBe(true);
-  });
-
-  it("accepts an anonymous submission with email only", () => {
-    const result = submissionSchema.safeParse({
-      ...submission,
-      contact_whatsapp: "",
-      contact_email: "  Poster@Example.com ",
-    });
+  it("accepts an anonymous submission and normalises the private email", () => {
+    const result = submissionSchema.safeParse(submission);
     expect(result.success).toBe(true);
-    if (result.success) expect(result.data.contact_email).toBe("poster@example.com");
+    if (result.success) expect(result.data.internal_email).toBe("private@example.com");
   });
 
-  it("needs at least one of WhatsApp or email", () => {
+  it("requires a valid private email, independent from the public contact", () => {
+    expect(submissionSchema.safeParse({ ...submission, internal_email: "" }).success).toBe(false);
+    expect(submissionSchema.safeParse({ ...submission, internal_email: "nope" }).success).toBe(
+      false,
+    );
+    // The public contact email is a different field and may differ or be empty
+    expect(
+      submissionSchema.safeParse({ ...submission, contact_email: "public@example.com" }).success,
+    ).toBe(true);
+  });
+
+  it("still needs a public contact (WhatsApp or email) besides the private email", () => {
     expect(
       submissionSchema.safeParse({ ...submission, contact_whatsapp: "", contact_email: "" })
         .success,
     ).toBe(false);
+    expect(
+      submissionSchema.safeParse({
+        ...submission,
+        contact_whatsapp: "",
+        contact_email: "public@example.com",
+      }).success,
+    ).toBe(true);
   });
 
   it("requires accepting the terms", () => {

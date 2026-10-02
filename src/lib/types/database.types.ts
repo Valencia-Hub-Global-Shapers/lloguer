@@ -64,8 +64,10 @@ export type ListingRow = {
   bedrooms: number | null;
   views_count: number;
   photos: string[];
-  /** Public contact email; the edit link is also emailed here when given. */
+  /** Public contact email, shown on the listing. */
   contact_email: string | null;
+  /** Private: where the poster's edit link is sent. Never in public views. */
+  internal_email: string | null;
   /** Private: sha256 of the poster's edit token. */
   edit_token_hash: string | null;
   expires_at: string | null;
@@ -101,6 +103,7 @@ export type ListingInsert = {
   bedrooms?: number | null;
   photos?: string[];
   contact_email?: string | null;
+  internal_email?: string | null;
   edit_token_hash?: string | null;
 }
 export type ListingUpdate = Partial<
