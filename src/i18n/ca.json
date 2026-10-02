@@ -88,13 +88,12 @@
     "statusApproved": "Actiu",
     "statusRejected": "Rebutjat",
     "statusExpired": "Caducat",
-    "statusDeleted": "Eliminat",
     "moderatorComment": "Comentari del moderador",
     "editAndResubmit": "Edita i torna a enviar",
     "deactivate": "Desactiva",
     "republish": "Torna a publicar",
-    "deleteConfirmTitle": "Eliminar l'anunci?",
-    "deleteConfirmDescription": "L'anunci s'eliminarà i no es podrà recuperar.",
+    "deleteConfirmTitle": "Eliminar l'anunci definitivament?",
+    "deleteConfirmDescription": "S'esborraran de forma permanent l'anunci, les seues fotos i les teues dades de contacte. No es pot desfer.",
     "deactivateConfirmTitle": "Desactivar l'anunci?",
     "deactivateConfirmDescription": "L'anunci deixarà de ser visible fins que el torns a publicar.",
     "emailCta": "Escriure per correu"
@@ -179,7 +178,6 @@
     "rejected": "Rebutjat",
     "edited": "Editat",
     "deactivated": "Desactivat",
-    "deleted": "Eliminat",
     "republished": "Republicat"
   },
   "errors": {
@@ -201,7 +199,7 @@
     "title": "Avís legal i privacitat",
     "intro": "MyLloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
     "dataTitle": "Dades personals",
-    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci, inclosos el WhatsApp i el correu de contacte que indiques (són públics); el teu correu privat (només per enviar-te l'enllaç de gestió, no es publica i pot ser diferent del de contacte); i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió.",
+    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci, inclosos el WhatsApp i el correu de contacte que indiques (són públics); el teu correu privat (només per enviar-te l'enllaç de gestió, no es publica i pot ser diferent del de contacte); i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió: s'eliminen de forma definitiva l'anunci, les seues fotos i les teues dades.",
     "contentTitle": "Contingut",
     "contentBody": "Els anuncis són responsabilitat exclusiva de qui els publica. Moderem els anuncis abans de la publicació, però no n-garantim la veracitat.",
     "contactTitle": "Contacte",

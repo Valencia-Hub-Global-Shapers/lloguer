@@ -15,7 +15,6 @@ const STATUSES: ListingStatus[] = [
   "rejected",
   "expired",
   "draft",
-  "deleted",
 ];
 
 const STATUS_LABEL_KEYS: Record<ListingStatus, keyof import("@/i18n/types").Dictionary["listing"]> = {
@@ -24,7 +23,6 @@ const STATUS_LABEL_KEYS: Record<ListingStatus, keyof import("@/i18n/types").Dict
   approved: "statusApproved",
   rejected: "statusRejected",
   expired: "statusExpired",
-  deleted: "statusDeleted",
 };
 
 export default async function AdminListingsPage({

@@ -13,7 +13,6 @@ const VARIANTS: Record<
   approved: "default",
   rejected: "destructive",
   expired: "secondary",
-  deleted: "outline",
 };
 
 const KEYS: Record<ListingStatus, string> = {
@@ -22,7 +21,6 @@ const KEYS: Record<ListingStatus, string> = {
   approved: "listing.statusApproved",
   rejected: "listing.statusRejected",
   expired: "listing.statusExpired",
-  deleted: "listing.statusDeleted",
 };
 
 export function StatusBadge({ status }: { status: ListingStatus }) {

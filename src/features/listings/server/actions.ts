@@ -16,6 +16,7 @@ import {
   type ListingFormInput,
   type SubmissionValues,
 } from "../schemas";
+import { LISTING_PHOTOS_BUCKET } from "../photos";
 import { editLinkEmail } from "./emails";
 
 /**
@@ -57,6 +58,25 @@ function mapDbError(message: string): string {
   if (message.includes("contact_required")) return "errors.contactRequired";
   if (message.includes("invalid_status_transition")) return "errors.unauthorized";
   return "errors.generic";
+}
+
+type Db = Awaited<ReturnType<typeof createClient>>;
+
+/**
+ * Removes photo files from Storage. The database has already queued the paths
+ * and a storage policy allows deleting exactly the queued ones. Failures are
+ * logged, not surfaced: the listing data is already gone and the paths stay
+ * queued, so nothing is lost or skipped.
+ */
+async function erasePhotoFiles(supabase: Db, paths: string[] | null) {
+  if (!paths || paths.length === 0) return;
+  const { error } = await supabase.storage.from(LISTING_PHOTOS_BUCKET).remove(paths);
+  if (error) {
+    console.error("erasePhotoFiles failed:", error);
+    return;
+  }
+  const { error: ackError } = await supabase.rpc("ack_photo_deletion");
+  if (ackError) console.error("ack_photo_deletion failed:", ackError);
 }
 
 export type CreatedListing = {
@@ -122,7 +142,7 @@ export async function updateListing(
   if (!(await checkRateLimit("edit", await getClientIp()))) return err("errors.rateLimited");
 
   const supabase = await createClient();
-  const { error } = await supabase.rpc("update_listing_by_token", {
+  const { data: removedPhotos, error } = await supabase.rpc("update_listing_by_token", {
     p_gate: submitGate(),
     p_id: id,
     p_token_hash: hashEditToken(token),
@@ -133,6 +153,9 @@ export async function updateListing(
     console.error("updateListing failed:", error);
     return err(mapDbError(error.message));
   }
+
+  // Photos the poster dropped are deleted for real, not just unlinked
+  await erasePhotoFiles(supabase, removedPhotos);
 
   revalidatePath("/[locale]", "page");
   return ok({ id });
@@ -150,7 +173,7 @@ export async function setListingStatus(
   if (!(await checkRateLimit("edit", await getClientIp()))) return err("errors.rateLimited");
 
   const supabase = await createClient();
-  const { error } = await supabase.rpc("set_listing_status_by_token", {
+  const { data: erasedPhotos, error } = await supabase.rpc("set_listing_status_by_token", {
     p_gate: submitGate(),
     p_id: id,
     p_token_hash: hashEditToken(token),
@@ -161,6 +184,9 @@ export async function setListingStatus(
     console.error(`setListingStatus ${action} failed:`, error);
     return err(mapDbError(error.message));
   }
+
+  // "delete" erased the listing; now delete its photo files too
+  if (action === "delete") await erasePhotoFiles(supabase, erasedPhotos);
 
   revalidatePath("/[locale]", "page");
   return ok(null);

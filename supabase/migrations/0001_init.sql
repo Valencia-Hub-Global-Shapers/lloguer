@@ -31,11 +31,11 @@ end $$;
 
 -- Enums ----------------------------------------------------------------------
 create type listing_type as enum ('room', 'full_flat');
-create type listing_status as enum ('draft', 'pending', 'approved', 'rejected', 'expired', 'deleted');
+create type listing_status as enum ('draft', 'pending', 'approved', 'rejected', 'expired');
 create type gender_pref as enum ('any', 'female', 'male', 'non_binary');
 create type room_type as enum ('single', 'double', 'shared');
 create type tenant_pref as enum ('any', 'students', 'workers');
-create type moderation_action as enum ('submitted', 'approved', 'rejected', 'edited', 'deactivated', 'deleted', 'republished');
+create type moderation_action as enum ('submitted', 'approved', 'rejected', 'edited', 'deactivated', 'republished');
 
 -- Tables ---------------------------------------------------------------------
 
@@ -89,7 +89,6 @@ create table listings (
   published_version int not null default 1,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  deleted_at timestamptz,
 
   -- Spain only: mainland + Balearics + Ceuta/Melilla box, or the Canary Islands box.
   -- Keep in sync with src/lib/geo.ts.
@@ -137,6 +136,16 @@ create unique index listing_views_dedupe_idx on listing_views (listing_id, viewe
 create table private_settings (
   key text primary key,
   value text not null
+);
+
+-- Photo files waiting to be removed from Storage. Only the Storage API really
+-- deletes a file (deleting storage.objects rows in SQL leaves the blob behind),
+-- and this project has no service-role key. So erasing a listing queues its
+-- photo paths here and a narrow storage policy lets the server delete exactly
+-- these files. RLS on, no policies: only the functions below touch it.
+create table photo_deletion_queue (
+  path text primary key,
+  queued_at timestamptz not null default now()
 );
 
 -- Helpers and triggers -------------------------------------------------------
@@ -278,6 +287,7 @@ alter table listings enable row level security;
 alter table moderation_events enable row level security;
 alter table listing_views enable row level security;
 alter table private_settings enable row level security;
+alter table photo_deletion_queue enable row level security;
 
 -- profiles: self + admin. Public display data goes through public_profiles.
 create policy profiles_select on profiles
@@ -481,6 +491,40 @@ create policy listing_photos_anon_insert on storage.objects
 create policy listing_photos_admin_delete on storage.objects
   for delete using (bucket_id = 'listing-photos' and public.is_admin());
 
+-- Photos of erased listings (or removed during an edit) can be deleted by the
+-- server through the Storage API. Security definer so the policy can read the
+-- queue, which anon cannot.
+create or replace function public.photo_pending_deletion(p_name text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (select 1 from photo_deletion_queue where path = p_name);
+$$;
+
+create policy listing_photos_pending_delete on storage.objects
+  for delete to anon, authenticated
+  using (bucket_id = 'listing-photos' and public.photo_pending_deletion(name));
+
+-- Forget queued paths whose files are really gone from Storage. A path whose
+-- file still exists stays queued, so calling this does not skip any deletion.
+create or replace function public.ack_photo_deletion()
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  delete from photo_deletion_queue q
+  where not exists (
+    select 1 from storage.objects o where o.bucket_id = 'listing-photos' and o.name = q.path
+  );
+$$;
+
+grant execute on function public.photo_pending_deletion(text) to anon, authenticated;
+grant execute on function public.ack_photo_deletion() to anon, authenticated;
+
 -- Anonymous submission API ---------------------------------------------------
 
 -- Raises 'forbidden' unless p_gate matches the configured submit gate.
@@ -594,7 +638,7 @@ begin
 end;
 $$;
 
--- Poster view of their own listing (any status except deleted), including the
+-- Poster view of their own listing (any status), including the
 -- exact coordinates and the latest rejection comment.
 create or replace function public.get_listing_by_token(p_id uuid, p_token_hash text)
 returns jsonb
@@ -617,8 +661,7 @@ as $$
   from listings l
   where l.id = p_id
     and l.edit_token_hash is not null
-    and l.edit_token_hash = p_token_hash
-    and l.status <> 'deleted';
+    and l.edit_token_hash = p_token_hash;
 $$;
 
 -- Edit content. Always returns the listing to moderation (pending) and clears
@@ -629,21 +672,23 @@ create or replace function public.update_listing_by_token(
   p_token_hash text,
   p_payload jsonb
 )
-returns void
+returns text[]
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
   old_status listing_status;
+  old_photos text[];
+  new_photos text[] := array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb)));
+  removed text[];
   new_email text := nullif(lower(trim(p_payload ->> 'contact_email')), '');
   photo text;
 begin
   perform public.check_submit_gate(p_gate);
 
-  select status into old_status from listings
-  where id = p_id and edit_token_hash is not null and edit_token_hash = p_token_hash
-    and status <> 'deleted';
+  select status, photos into old_status, old_photos from listings
+  where id = p_id and edit_token_hash is not null and edit_token_hash = p_token_hash;
   if not found then
     raise exception 'not_found';
   end if;
@@ -682,7 +727,7 @@ begin
     contact_email = nullif(lower(trim(p_payload ->> 'contact_email')), ''),
     bathrooms = (p_payload ->> 'bathrooms')::int,
     bedrooms = (p_payload ->> 'bedrooms')::int,
-    photos = array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb))),
+    photos = new_photos,
     approved_at = null,
     expires_at = null,
     published_version = published_version + 1
@@ -694,30 +739,37 @@ begin
     null,
     (case when old_status in ('draft', 'rejected', 'expired') then 'republished' else 'edited' end)::moderation_action
   );
+
+  -- Photos the poster dropped are no longer referenced: queue them for deletion
+  removed := array(select unnest(old_photos) except select unnest(new_photos));
+  insert into photo_deletion_queue (path) select unnest(removed) on conflict do nothing;
+  return removed;
 end;
 $$;
 
 -- deactivate: approved -> draft      republish: draft/rejected/expired -> pending
--- delete: any -> deleted (soft delete)
+-- delete: ERASES the listing (contact data, moderation history, view counts) and
+-- queues its photos for deletion. Returns the photo paths the caller must now
+-- remove through the Storage API (empty for the other actions).
 create or replace function public.set_listing_status_by_token(
   p_gate text,
   p_id uuid,
   p_token_hash text,
   p_action text
 )
-returns void
+returns text[]
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
   old_status listing_status;
+  old_photos text[];
 begin
   perform public.check_submit_gate(p_gate);
 
-  select status into old_status from listings
-  where id = p_id and edit_token_hash is not null and edit_token_hash = p_token_hash
-    and status <> 'deleted';
+  select status, photos into old_status, old_photos from listings
+  where id = p_id and edit_token_hash is not null and edit_token_hash = p_token_hash;
   if not found then
     raise exception 'not_found';
   end if;
@@ -732,11 +784,14 @@ begin
     where id = p_id;
     insert into moderation_events (listing_id, actor_id, action) values (p_id, null, 'republished');
   elsif p_action = 'delete' then
-    update listings set status = 'deleted', deleted_at = now() where id = p_id;
-    insert into moderation_events (listing_id, actor_id, action) values (p_id, null, 'deleted');
+    insert into photo_deletion_queue (path) select unnest(old_photos) on conflict do nothing;
+    -- moderation_events and listing_views go with it (on delete cascade)
+    delete from listings where id = p_id;
+    return old_photos;
   else
     raise exception 'invalid_status_transition';
   end if;
+  return '{}';
 end;
 $$;
 

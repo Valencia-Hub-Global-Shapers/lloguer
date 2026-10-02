@@ -154,6 +154,14 @@ const anon = rest(ANON);
     body: JSON.stringify({ p_gate: "", p_id: id, p_token_hash: hash, p_action: "delete" }),
   });
   check(`poster can delete with the token (http ${del.status})`, del.status < 300);
+
+  const gone = await anon("rpc/get_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_id: id, p_token_hash: hash }),
+  });
+  check(`deleted listing is erased, not just hidden`, gone.json === null);
+  const { json: adminRows } = await admin(`listings?id=eq.${id}&select=id`);
+  check(`no row left for admins either`, adminRows.length === 0);
 }
 
 process.exit(failures ? 1 : 0);

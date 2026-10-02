@@ -88,13 +88,12 @@
     "statusApproved": "Live",
     "statusRejected": "Rejected",
     "statusExpired": "Expired",
-    "statusDeleted": "Deleted",
     "moderatorComment": "Moderator comment",
     "editAndResubmit": "Edit and resubmit",
     "deactivate": "Deactivate",
     "republish": "Republish",
-    "deleteConfirmTitle": "Delete listing?",
-    "deleteConfirmDescription": "The listing will be deleted and cannot be recovered.",
+    "deleteConfirmTitle": "Delete the listing permanently?",
+    "deleteConfirmDescription": "The listing, its photos and your contact details will be erased permanently. This cannot be undone.",
     "deactivateConfirmTitle": "Deactivate listing?",
     "deactivateConfirmDescription": "The listing will stop being visible until you republish it.",
     "emailCta": "Send an email"
@@ -179,7 +178,6 @@
     "rejected": "Rejected",
     "edited": "Edited",
     "deactivated": "Deactivated",
-    "deleted": "Deleted",
     "republished": "Republished"
   },
   "errors": {
@@ -201,7 +199,7 @@
     "title": "Legal notice & privacy",
     "intro": "MyLloguer is a non-profit classifieds platform for private rentals and shared flats across Spain, run by Global Shapers Valencia.",
     "dataTitle": "Personal data",
-    "dataBody": "We only process what the service needs: your listing content, including the WhatsApp number and contact email you give (both public); your private email (only used to send you the management link, never published, and it can differ from the contact email); and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link.",
+    "dataBody": "We only process what the service needs: your listing content, including the WhatsApp number and contact email you give (both public); your private email (only used to send you the management link, never published, and it can differ from the contact email); and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link: the listing, its photos and your data are erased permanently.",
     "contentTitle": "Content",
     "contentBody": "Listings are the sole responsibility of their publishers. We moderate listings before publication but cannot guarantee their accuracy.",
     "contactTitle": "Contact",

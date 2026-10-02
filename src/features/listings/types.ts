@@ -54,7 +54,6 @@ export const LISTING_STATUSES: ListingStatus[] = [
   "rejected",
   "expired",
   "draft",
-  "deleted",
 ];
 
 export const STATUS_I18N_KEYS: Record<ListingStatus, string> = {
@@ -63,7 +62,6 @@ export const STATUS_I18N_KEYS: Record<ListingStatus, string> = {
   approved: "listing.statusApproved",
   rejected: "listing.statusRejected",
   expired: "listing.statusExpired",
-  deleted: "listing.statusDeleted",
 };
 
 /** PostgREST returns geography columns as GeoJSON. */

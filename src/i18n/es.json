@@ -88,13 +88,12 @@
     "statusApproved": "Activo",
     "statusRejected": "Rechazado",
     "statusExpired": "Caducado",
-    "statusDeleted": "Eliminado",
     "moderatorComment": "Comentario del moderador",
     "editAndResubmit": "Editar y reenviar",
     "deactivate": "Desactivar",
     "republish": "Republicar",
-    "deleteConfirmTitle": "¿Eliminar el anuncio?",
-    "deleteConfirmDescription": "El anuncio se eliminará y no se podrá recuperar.",
+    "deleteConfirmTitle": "¿Eliminar el anuncio definitivamente?",
+    "deleteConfirmDescription": "Se borrarán de forma permanente el anuncio, sus fotos y tus datos de contacto. No se puede deshacer.",
     "deactivateConfirmTitle": "¿Desactivar el anuncio?",
     "deactivateConfirmDescription": "El anuncio dejará de ser visible hasta que lo vuelvas a publicar.",
     "emailCta": "Escribir por correo"
@@ -179,7 +178,6 @@
     "rejected": "Rechazado",
     "edited": "Editado",
     "deactivated": "Desactivado",
-    "deleted": "Eliminado",
     "republished": "Republicado"
   },
   "errors": {
@@ -201,7 +199,7 @@
     "title": "Aviso legal y privacidad",
     "intro": "MyLloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
     "dataTitle": "Datos personales",
-    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio, incluidos el WhatsApp y el correo de contacto que indiques (son públicos); tu correo privado (solo para enviarte el enlace de gestión, no se publica y puede ser distinto del de contacto); y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión.",
+    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio, incluidos el WhatsApp y el correo de contacto que indiques (son públicos); tu correo privado (solo para enviarte el enlace de gestión, no se publica y puede ser distinto del de contacto); y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión: se eliminan de forma definitiva el anuncio, sus fotos y tus datos.",
     "contentTitle": "Contenido",
     "contentBody": "Los anuncios son responsabilidad exclusiva de quien los publica. Moderamos los anuncios antes de su publicación, pero no garantizamos su veracidad.",
     "contactTitle": "Contacto",

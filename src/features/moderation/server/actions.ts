@@ -43,7 +43,6 @@ export async function approveListing(
       status: "approved",
       approved_at: now.toISOString(),
       expires_at: expires.toISOString(),
-      deleted_at: null,
     })
     .eq("id", listingId);
 

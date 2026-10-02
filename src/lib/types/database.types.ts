@@ -6,7 +6,7 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type ListingType = "room" | "full_flat";
-export type ListingStatus = "draft" | "pending" | "approved" | "rejected" | "expired" | "deleted";
+export type ListingStatus = "draft" | "pending" | "approved" | "rejected" | "expired";
 export type GenderPref = "any" | "female" | "male" | "non_binary";
 export type RoomType = "single" | "double" | "shared";
 export type TenantPref = "any" | "students" | "workers";
@@ -16,7 +16,6 @@ export type ModerationAction =
   | "rejected"
   | "edited"
   | "deactivated"
-  | "deleted"
   | "republished";
 
 export type ProfileRow = {
@@ -75,7 +74,6 @@ export type ListingRow = {
   published_version: number;
   created_at: string;
   updated_at: string;
-  deleted_at: string | null;
 }
 export type ListingInsert = {
   id?: string;
@@ -111,7 +109,6 @@ export type ListingUpdate = Partial<
     status: ListingStatus;
     approved_at: string | null;
     expires_at: string | null;
-    deleted_at: string | null;
   }
 >;
 
@@ -271,12 +268,15 @@ export type Database = {
       };
       update_listing_by_token: {
         Args: { p_gate: string; p_id: string; p_token_hash: string; p_payload: Json };
-        Returns: undefined;
+        /** Photo paths the caller must now remove from Storage. */
+        Returns: string[];
       };
       set_listing_status_by_token: {
         Args: { p_gate: string; p_id: string; p_token_hash: string; p_action: string };
-        Returns: undefined;
+        /** For "delete": the erased listing's photo paths to remove from Storage. */
+        Returns: string[];
       };
+      ack_photo_deletion: { Args: Record<string, never>; Returns: undefined };
     };
     Enums: {
       listing_type: ListingType;
