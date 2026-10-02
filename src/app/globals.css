@@ -71,6 +71,8 @@
   --font-sans: "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  /* Wordmark only */
+  --font-logo: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
 /* Base layer, so Tailwind utilities (font-sans, border-*, ...) can override it */

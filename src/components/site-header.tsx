@@ -20,9 +20,9 @@ export async function SiteHeader({
     <header className="bg-background sticky top-0 z-40 flex h-14 items-center gap-3 border-b px-4">
       <Link
         href={`/${locale}`}
-        className="font-display text-foreground text-[1.65rem] leading-none tracking-tight"
+        className="font-logo text-foreground text-[1.6rem] leading-none font-semibold tracking-tight"
       >
-        My<span className="text-brand">Lloguer</span>
+        My<span className="text-primary">Lloguer</span>
       </Link>
 
       <div className="flex-1" />
