@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FieldLabel } from "@/components/field-label";
 import { SectionEyebrow } from "@/components/section-eyebrow";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -136,7 +137,9 @@ export function ListingForm({
 
   const fieldError = (key: string | undefined) =>
     key ? (
-      <p className="text-destructive text-xs">{t(key.includes(".") ? key : `errors.${key}`)}</p>
+      <p className="text-destructive text-xs">
+        {t(key === "validation" ? "errors.fieldInvalid" : key.includes(".") ? key : `errors.${key}`)}
+      </p>
     ) : null;
 
   if (created) {
@@ -177,6 +180,9 @@ export function ListingForm({
       <h1 className="text-2xl font-bold tracking-tight">
         {mode === "create" ? t("publish.title") : t("publish.editTitle")}
       </h1>
+      <p className="text-muted-foreground -mt-3 text-sm">
+        <span className="text-primary">*</span> {t("publish.requiredNote")}
+      </p>
 
       {/* 1. Type + location */}
       <Card>
@@ -187,7 +193,7 @@ export function ListingForm({
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-1.5">
-            <Label>{t("publish.type")}</Label>
+            <FieldLabel required>{t("publish.type")}</FieldLabel>
             <ToggleGroup
               type="single"
               value={type}
@@ -201,7 +207,7 @@ export function ListingForm({
           </div>
 
           <div className="grid gap-1.5">
-            <Label>{t("publish.dropPin")}</Label>
+            <FieldLabel required>{t("publish.dropPin")}</FieldLabel>
             {hasMapboxToken ? (
               <PinPickerMap lat={lat} lng={lng} onChange={onPin} />
             ) : (
@@ -223,12 +229,12 @@ export function ListingForm({
             {fieldError(errors.lat?.message || errors.lng?.message)}
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-1.5">
-                <Label htmlFor="municipality">{t("publish.municipality")}</Label>
+                <FieldLabel htmlFor="municipality" required>{t("publish.municipality")}</FieldLabel>
                 <Input id="municipality" autoComplete="off" {...register("municipality")} />
                 {fieldError(errors.municipality?.message)}
               </div>
               <div className="grid gap-1.5">
-                <Label htmlFor="neighborhood">{t("publish.neighborhood")}</Label>
+                <FieldLabel htmlFor="neighborhood" optional>{t("publish.neighborhood")}</FieldLabel>
                 <Input id="neighborhood" autoComplete="off" {...register("neighborhood")} />
                 {fieldError(errors.neighborhood?.message)}
               </div>
@@ -254,19 +260,19 @@ export function ListingForm({
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <Label htmlFor="price">{t("publish.price")}</Label>
+              <FieldLabel htmlFor="price" required>{t("publish.price")}</FieldLabel>
               <Input id="price" type="number" min={0} inputMode="numeric" {...register("price")} />
               {fieldError(errors.price?.message)}
             </div>
             <div className="grid gap-1.5">
-              <Label htmlFor="available_from">{t("publish.availableFrom")}</Label>
+              <FieldLabel htmlFor="available_from" optional>{t("publish.availableFrom")}</FieldLabel>
               <Input id="available_from" type="date" {...register("available_from")} />
               {fieldError(errors.available_from?.message)}
             </div>
           </div>
 
           <div className="grid gap-1.5">
-            <Label htmlFor="description">{t("publish.description")}</Label>
+            <FieldLabel htmlFor="description" required>{t("publish.description")}</FieldLabel>
             <Textarea
               id="description"
               rows={5}
@@ -280,7 +286,7 @@ export function ListingForm({
             {type === "room" ? (
               <>
                 <div className="grid gap-1.5">
-                  <Label>{t("publish.roomType")}</Label>
+                  <FieldLabel required>{t("publish.roomType")}</FieldLabel>
                   <Select
                     value={watch("room_type") ?? ""}
                     onValueChange={(v) =>
@@ -301,7 +307,7 @@ export function ListingForm({
                   {fieldError(errors.room_type?.message)}
                 </div>
                 <div className="grid gap-1.5">
-                  <Label htmlFor="flatmates">{t("publish.flatmates")}</Label>
+                  <FieldLabel htmlFor="flatmates" optional>{t("publish.flatmates")}</FieldLabel>
                   <Input
                     id="flatmates"
                     type="number"
@@ -313,7 +319,7 @@ export function ListingForm({
               </>
             ) : (
               <div className="grid gap-1.5">
-                <Label htmlFor="bedrooms">{t("publish.bedrooms")}</Label>
+                <FieldLabel htmlFor="bedrooms" required>{t("publish.bedrooms")}</FieldLabel>
                 <Input
                   id="bedrooms"
                   type="number"
@@ -325,7 +331,7 @@ export function ListingForm({
               </div>
             )}
             <div className="grid gap-1.5">
-              <Label htmlFor="bathrooms">{t("publish.bathrooms")}</Label>
+              <FieldLabel htmlFor="bathrooms" optional>{t("publish.bathrooms")}</FieldLabel>
               <Input
                 id="bathrooms"
                 type="number"
@@ -338,7 +344,7 @@ export function ListingForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <Label>{t("publish.preferredGender")}</Label>
+              <FieldLabel optional>{t("publish.preferredGender")}</FieldLabel>
               <Select
                 value={watch("preferred_gender")}
                 onValueChange={(v) =>
@@ -357,7 +363,7 @@ export function ListingForm({
               </Select>
             </div>
             <div className="grid gap-1.5">
-              <Label>{t("publish.tenantPref")}</Label>
+              <FieldLabel optional>{t("publish.tenantPref")}</FieldLabel>
               <Select
                 value={watch("tenant_pref")}
                 onValueChange={(v) =>
@@ -378,7 +384,7 @@ export function ListingForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <Label htmlFor="deposit">{t("publish.deposit")}</Label>
+              <FieldLabel htmlFor="deposit" optional>{t("publish.deposit")}</FieldLabel>
               <Input
                 id="deposit"
                 type="number"
@@ -389,7 +395,10 @@ export function ListingForm({
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-1.5">
+            <FieldLabel optional>{t("publish.extras")}</FieldLabel>
+          </div>
+          <div className="-mt-2 grid gap-3 sm:grid-cols-3">
             {(
               [
                 ["bills_included", "publish.billsIncluded"],
@@ -421,7 +430,7 @@ export function ListingForm({
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-1.5">
-            <Label>{t("publish.photos")}</Label>
+            <FieldLabel required>{t("publish.photos")}</FieldLabel>
             <PhotoUploader
               value={watch("photos") ?? []}
               onChange={(paths) => setValue("photos", paths, { shouldValidate: true })}
@@ -429,9 +438,16 @@ export function ListingForm({
             {fieldError(errors.photos?.message as string | undefined)}
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <fieldset className="grid gap-4 rounded-lg border p-4">
+            <legend className="px-1 text-sm font-semibold">
+              {t("publish.contactGroupTitle")} <span className="text-primary">*</span>
+            </legend>
+            <p className="text-muted-foreground -mt-2 text-xs">{t("publish.contactAtLeastOne")}</p>
+
             <div className="grid gap-1.5">
-              <Label htmlFor="contact_whatsapp">{t("publish.contactWhatsapp")}</Label>
+              <FieldLabel htmlFor="contact_whatsapp" note={t("publish.oneOfTwo")}>
+                {t("publish.contactWhatsapp")}
+              </FieldLabel>
               <Input
                 id="contact_whatsapp"
                 type="tel"
@@ -440,16 +456,49 @@ export function ListingForm({
               />
               {fieldError(errors.contact_whatsapp?.message)}
             </div>
-            <div className="grid gap-1.5">
-              <Label htmlFor="contact_external">{t("publish.contactExternal")}</Label>
-              <Input
-                id="contact_external"
-                type="url"
-                placeholder="https://…"
-                {...register("contact_external")}
+
+            {mode === "create" ? (
+              <div className="grid gap-1.5">
+                <FieldLabel htmlFor="contact_email" required>
+                  {t("publish.email")}
+                </FieldLabel>
+                <Input
+                  id="contact_email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  {...register("contact_email")}
+                />
+                <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
+                {fieldError(errors.contact_email?.message)}
+              </div>
+            ) : null}
+
+            <div className="flex items-center justify-between gap-3 rounded-lg border p-3">
+              <FieldLabel htmlFor="show_email" note={t("publish.oneOfTwo")} className="text-sm">
+                {t("publish.showEmail")}
+              </FieldLabel>
+              <Switch
+                id="show_email"
+                checked={Boolean(watch("show_email"))}
+                onCheckedChange={(checked) =>
+                  setValue("show_email", checked, { shouldValidate: true })
+                }
               />
-              {fieldError(errors.contact_external?.message)}
             </div>
+          </fieldset>
+
+          <div className="grid gap-1.5">
+            <FieldLabel htmlFor="contact_external" optional>
+              {t("publish.contactExternal")}
+            </FieldLabel>
+            <Input
+              id="contact_external"
+              type="url"
+              placeholder="https://…"
+              {...register("contact_external")}
+            />
+            {fieldError(errors.contact_external?.message)}
           </div>
           <p className="text-muted-foreground text-xs">{t("publish.contactPublicHint")}</p>
         </CardContent>
@@ -459,23 +508,10 @@ export function ListingForm({
         <Card>
           <CardHeader>
             <CardTitle>
-            <SectionEyebrow index={4}>{t("publish.stepEmail")}</SectionEyebrow>
+            <SectionEyebrow index={4}>{t("publish.stepSubmit")}</SectionEyebrow>
           </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <div className="grid gap-1.5">
-              <Label htmlFor="contact_email">{t("publish.email")}</Label>
-              <Input
-                id="contact_email"
-                type="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                {...register("contact_email")}
-              />
-              <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
-              {fieldError(errors.contact_email?.message)}
-            </div>
-
             {/* Honeypot: invisible to people, tempting to bots */}
             <input
               type="text"
@@ -497,8 +533,12 @@ export function ListingForm({
               <Label htmlFor="accept_terms" className="text-sm leading-snug font-normal">
                 {t("publish.acceptTerms")}{" "}
                 <Link href={`/${locale}/legal`} target="_blank" className="text-brand underline">
-                  {t("common.legal")}
+                  {t("publish.legalLink")}
                 </Link>
+                <span aria-hidden className="text-primary ml-0.5">
+                  *
+                </span>
+                <span className="sr-only"> ({t("common.required")})</span>
               </Label>
             </div>
             {fieldError(errors.accept_terms?.message)}
@@ -540,6 +580,7 @@ export const createDefaults: SubmissionValues = {
   bedrooms: null,
   contact_whatsapp: "",
   contact_external: "",
+  show_email: false,
   photos: [],
   contact_email: "",
   accept_terms: false as unknown as true,

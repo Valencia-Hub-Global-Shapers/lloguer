@@ -21,7 +21,9 @@
     "any": "Qualsevol",
     "legal": "Avís legal i privacitat",
     "language": "Idioma",
-    "view": "Vore"
+    "view": "Vore",
+    "required": "obligatori",
+    "optional": "opcional"
   },
   "home": {
     "emptyTitle": "No hi ha res ací",
@@ -94,7 +96,8 @@
     "deleteConfirmTitle": "Eliminar l'anunci?",
     "deleteConfirmDescription": "L'anunci s'eliminarà i no es podrà recuperar.",
     "deactivateConfirmTitle": "Desactivar l'anunci?",
-    "deactivateConfirmDescription": "L'anunci deixarà de ser visible fins que el torns a publicar."
+    "deactivateConfirmDescription": "L'anunci deixarà de ser visible fins que el torns a publicar.",
+    "emailCta": "Escriure per correu"
   },
   "publish": {
     "title": "Publica el teu anunci",
@@ -121,16 +124,15 @@
     "photos": "Fotos",
     "photosHint": "Fins a 8 fotos. La primera és obligatòria.",
     "contactWhatsapp": "Telèfon de WhatsApp",
-    "contactExternal": "Enllaç extern de contacte (opcional)",
+    "contactExternal": "Enllaç extern de contacte",
     "submit": "Envia a revisió",
     "submitEdit": "Guarda i torna a enviar",
     "successTitle": "Anunci enviat!",
     "successDescription": "El revisarem manualment i apareixerà al mapa quan l'aprovem. Es desactivarà sol als 10 dies.",
-    "stepEmail": "Contacte intern i enviament",
     "email": "El teu correu",
-    "emailHint": "No es publica. T'enviem un enllaç privat per editar, desactivar o esborrar el teu anunci.",
-    "contactPublicHint": "El WhatsApp o enllaç que posis ací serà visible per a qualsevol persona que veja l'anunci.",
-    "acceptTerms": "He llegit i accepte l'avís legal.",
+    "emailHint": "T'enviem l'enllaç privat per editar, desactivar o esborrar el teu anunci. No es publica tret que actives «Mostrar el meu correu a l'anunci».",
+    "contactPublicHint": "L'enllaç extern (per exemple, el teu anunci en una altra web) és opcional.",
+    "acceptTerms": "He llegit i accepte",
     "editLinkTitle": "El teu enllaç privat de gestió",
     "editLinkEmailed": "També te l'hem enviat per correu. Guarda'l: és l'única manera d'editar el teu anunci.",
     "editLinkSaveIt": "Guarda'l ara: és l'única manera d'editar, desactivar o esborrar el teu anunci.",
@@ -138,8 +140,16 @@
     "linkCopied": "Enllaç copiat",
     "manageListing": "Gestionar anunci",
     "municipality": "Municipi",
-    "neighborhood": "Barri (opcional)",
-    "placeHint": "S'omplin sols segons el marcador. Pots corregir-los."
+    "neighborhood": "Barri",
+    "placeHint": "S'omplin sols segons el marcador. Pots corregir-los.",
+    "requiredNote": "Els camps amb asterisc són obligatoris; la resta són opcionals.",
+    "extras": "Extres",
+    "contactGroupTitle": "Com poden contactar-te",
+    "contactAtLeastOne": "Indica almenys una via: WhatsApp o el teu correu. El que mostres ací ho veurà qualsevol persona que veja l'anunci.",
+    "oneOfTwo": "almenys un dels dos",
+    "showEmail": "Mostrar el meu correu a l'anunci",
+    "stepSubmit": "Revisió i enviament",
+    "legalLink": "l'avís legal i la privacitat"
   },
   "auth": {
     "loginTitle": "Inicia sessió",
@@ -181,13 +191,15 @@
     "tooManyPhotos": "Màxim 8 fotos.",
     "firstPhotoRequired": "La primera foto és obligatòria.",
     "captcha": "No hem pogut verificar que ets una persona. Torna-ho a provar.",
-    "outsideSpain": "El marcador és fora d'Espanya."
+    "outsideSpain": "El marcador és fora d'Espanya.",
+    "contactRequired": "Indica un WhatsApp o activa «Mostrar el meu correu a l'anunci».",
+    "fieldInvalid": "Revisa aquest camp."
   },
   "legal": {
     "title": "Avís legal i privacitat",
     "intro": "MyLloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
     "dataTitle": "Dades personals",
-    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci (inclòs el WhatsApp o enllaç de contacte, que és públic), el teu correu electrònic (privat, només per enviar-te l'enllaç de gestió) i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió.",
+    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci (inclòs el WhatsApp o enllaç de contacte, que és públic), el teu correu electrònic (privat i només per enviar-te l'enllaç de gestió, tret que triïs mostrar-lo a l'anunci) i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió.",
     "contentTitle": "Contingut",
     "contentBody": "Els anuncis són responsabilitat exclusiva de qui els publica. Moderem els anuncis abans de la publicació, però no n-garantim la veracitat.",
     "contactTitle": "Contacte",

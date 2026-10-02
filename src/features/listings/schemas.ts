@@ -50,6 +50,8 @@ const listingShape = {
           .regex(/^\+?[0-9][0-9 ]{6,20}$/, "validation")
           .nullable(),
       ),
+    /** Show the poster's email on the listing as a public contact. */
+    show_email: z.boolean(),
     contact_external: optionalUrl,
     photos: z
       .array(
@@ -76,8 +78,9 @@ function refineListing(val: z.infer<typeof listingObject>, ctx: z.RefinementCtx)
   if (val.type === "full_flat" && !val.bedrooms) {
     ctx.addIssue({ code: "custom", path: ["bedrooms"], message: "validation" });
   }
-  if (!val.contact_whatsapp && !val.contact_external) {
-    ctx.addIssue({ code: "custom", path: ["contact_whatsapp"], message: "validation" });
+  // At least one public contact: WhatsApp or the poster's email. The external link is optional.
+  if (!val.contact_whatsapp && !val.show_email) {
+    ctx.addIssue({ code: "custom", path: ["contact_whatsapp"], message: "contactRequired" });
   }
 }
 

@@ -64,8 +64,9 @@ export type ListingRow = {
   bedrooms: number | null;
   views_count: number;
   photos: string[];
-  /** Private: poster email, never exposed by public views. */
+  /** Private: poster email. Public only as public_email when show_email is true. */
   contact_email: string | null;
+  show_email: boolean;
   /** Private: sha256 of the poster's edit token. */
   edit_token_hash: string | null;
   expires_at: string | null;
@@ -101,6 +102,7 @@ export type ListingInsert = {
   bedrooms?: number | null;
   photos?: string[];
   contact_email?: string | null;
+  show_email?: boolean;
   edit_token_hash?: string | null;
 }
 export type ListingUpdate = Partial<
@@ -165,6 +167,8 @@ export type PublicListingRow = {
   tenant_pref: TenantPref;
   contact_external: string | null;
   contact_whatsapp: string | null;
+  /** The poster's email, only when they chose to show it. */
+  public_email: string | null;
   bathrooms: number | null;
   bedrooms: number | null;
   views_count: number;

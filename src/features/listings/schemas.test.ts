@@ -22,6 +22,7 @@ const validRoom = {
   bedrooms: null,
   contact_whatsapp: "+34 600 123 456",
   contact_external: "",
+  show_email: false,
   photos: ["anon/draft/photo1.webp"],
 };
 
@@ -35,16 +36,31 @@ describe("listingFormSchema", () => {
     }
   });
 
-  it("accepts a valid full flat with only external contact", () => {
+  it("accepts a full flat that shows an email instead of WhatsApp", () => {
     const result = listingFormSchema.safeParse({
       ...validRoom,
       type: "full_flat",
       room_type: null,
       bedrooms: 3,
       contact_whatsapp: "",
-      contact_external: "https://example.com/anunci",
+      show_email: true,
     });
     expect(result.success).toBe(true);
+  });
+
+  it("requires WhatsApp or a shown email; an external link alone is not enough", () => {
+    const none = { ...validRoom, contact_whatsapp: "", show_email: false };
+    expect(listingFormSchema.safeParse(none).success).toBe(false);
+    expect(
+      listingFormSchema.safeParse({ ...none, contact_external: "https://example.com/anuncio" })
+        .success,
+    ).toBe(false);
+  });
+
+  it("treats the external link as optional", () => {
+    const r = listingFormSchema.safeParse({ ...validRoom, contact_external: "" });
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data.contact_external).toBeNull();
   });
 
   it("rejects a room without room_type", () => {

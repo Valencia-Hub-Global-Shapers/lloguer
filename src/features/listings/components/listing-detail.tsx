@@ -8,6 +8,7 @@ import {
   Calendar,
   Cigarette,
   ExternalLink,
+  Mail,
   Eye,
   Home,
   PawPrint,
@@ -172,6 +173,14 @@ export function ListingDetail({
               rel="noopener noreferrer"
             >
               {t("listing.whatsappCta")}
+            </a>
+          </Button>
+        ) : null}
+        {listing.public_email ? (
+          <Button asChild variant={whatsappDigits ? "outline" : "default"} size="lg">
+            <a href={`mailto:${listing.public_email}`}>
+              <Mail />
+              {t("listing.emailCta")}
             </a>
           </Button>
         ) : null}

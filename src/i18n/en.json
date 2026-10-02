@@ -21,7 +21,9 @@
     "any": "Any",
     "legal": "Legal notice & privacy",
     "language": "Language",
-    "view": "View"
+    "view": "View",
+    "required": "required",
+    "optional": "optional"
   },
   "home": {
     "emptyTitle": "Nothing here",
@@ -94,7 +96,8 @@
     "deleteConfirmTitle": "Delete listing?",
     "deleteConfirmDescription": "The listing will be deleted and cannot be recovered.",
     "deactivateConfirmTitle": "Deactivate listing?",
-    "deactivateConfirmDescription": "The listing will stop being visible until you republish it."
+    "deactivateConfirmDescription": "The listing will stop being visible until you republish it.",
+    "emailCta": "Send an email"
   },
   "publish": {
     "title": "Publish your listing",
@@ -121,16 +124,15 @@
     "photos": "Photos",
     "photosHint": "Up to 8 photos. The first one is required.",
     "contactWhatsapp": "WhatsApp number",
-    "contactExternal": "External contact link (optional)",
+    "contactExternal": "External contact link",
     "submit": "Submit for review",
     "submitEdit": "Save and resubmit",
     "successTitle": "Listing submitted!",
     "successDescription": "We will review it manually and it will show on the map once approved. It switches off by itself after 10 days.",
-    "stepEmail": "Private contact and submit",
     "email": "Your email",
-    "emailHint": "It is not published. We send you a private link to edit, deactivate or delete your listing.",
-    "contactPublicHint": "The WhatsApp number or link you enter here is visible to anyone viewing the listing.",
-    "acceptTerms": "I have read and accept the legal notice.",
+    "emailHint": "We send you the private link to edit, deactivate or delete your listing. It is not published unless you turn on \"Show my email on the listing\".",
+    "contactPublicHint": "The external link (for example, your ad on another site) is optional.",
+    "acceptTerms": "I have read and accept",
     "editLinkTitle": "Your private management link",
     "editLinkEmailed": "We also emailed it to you. Keep it: it is the only way to edit your listing.",
     "editLinkSaveIt": "Save it now: it is the only way to edit, deactivate or delete your listing.",
@@ -138,8 +140,16 @@
     "linkCopied": "Link copied",
     "manageListing": "Manage listing",
     "municipality": "Municipality",
-    "neighborhood": "Neighborhood (optional)",
-    "placeHint": "Filled in automatically from the pin. You can correct them."
+    "neighborhood": "Neighborhood",
+    "placeHint": "Filled in automatically from the pin. You can correct them.",
+    "requiredNote": "Fields marked with an asterisk are required; the rest are optional.",
+    "extras": "Extras",
+    "contactGroupTitle": "How people can reach you",
+    "contactAtLeastOne": "Give at least one: WhatsApp or your email. Whatever you show here is visible to anyone viewing the listing.",
+    "oneOfTwo": "at least one of the two",
+    "showEmail": "Show my email on the listing",
+    "stepSubmit": "Review and submit",
+    "legalLink": "the legal notice and privacy policy"
   },
   "auth": {
     "loginTitle": "Sign in",
@@ -181,13 +191,15 @@
     "tooManyPhotos": "Maximum 8 photos.",
     "firstPhotoRequired": "The first photo is required.",
     "captcha": "We could not verify you are human. Please try again.",
-    "outsideSpain": "The pin is outside Spain."
+    "outsideSpain": "The pin is outside Spain.",
+    "contactRequired": "Give a WhatsApp number or turn on \"Show my email on the listing\".",
+    "fieldInvalid": "Please check this field."
   },
   "legal": {
     "title": "Legal notice & privacy",
     "intro": "MyLloguer is a non-profit classifieds platform for private rentals and shared flats across Spain, run by Global Shapers Valencia.",
     "dataTitle": "Personal data",
-    "dataBody": "We only process what the service needs: your listing content (including the WhatsApp number or contact link, which is public), your email (private, only used to send you the management link) and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link.",
+    "dataBody": "We only process what the service needs: your listing content (including the WhatsApp number or contact link, which is public), your email (private and only used to send you the management link, unless you choose to show it on the listing) and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link.",
     "contentTitle": "Content",
     "contentBody": "Listings are the sole responsibility of their publishers. We moderate listings before publication but cannot guarantee their accuracy.",
     "contactTitle": "Contact",

@@ -77,8 +77,10 @@ create table listings (
   bedrooms int check (bedrooms >= 0),
   views_count int not null default 0,
   photos text[] not null default '{}',
-  -- Private: never exposed by public views.
+  -- Private by default: the poster's email is only used to send the edit link.
+  -- It is shown publicly (as public_email) only when show_email is true.
   contact_email text,
+  show_email boolean not null default false,
   edit_token_hash text,
   expires_at timestamptz,
   approved_at timestamptz,
@@ -93,7 +95,10 @@ create table listings (
     (st_y(location::geometry) between 35.1 and 43.9 and st_x(location::geometry) between -9.6 and 4.5)
     or (st_y(location::geometry) between 27.4 and 29.6 and st_x(location::geometry) between -18.4 and -13.2)
   ),
-  constraint listings_contact_required check (contact_whatsapp is not null or contact_external is not null),
+  -- At least one public way to get in touch: WhatsApp or a shown email.
+  -- contact_external (a link) is always optional.
+  constraint listings_contact_required check (contact_whatsapp is not null or show_email),
+  constraint listings_show_email_needs_email check (not show_email or contact_email is not null),
   constraint listings_bedrooms_required_for_flat check (type = 'room' or bedrooms is not null),
   constraint listings_room_type_required_for_room check (type = 'full_flat' or room_type is not null)
 );
@@ -328,6 +333,7 @@ select
   tenant_pref,
   contact_external,
   contact_whatsapp,
+  case when show_email then contact_email end as public_email,
   bathrooms,
   bedrooms,
   views_count,
@@ -538,7 +544,7 @@ begin
     type, status, price, neighborhood, municipality, location,
     flatmates, preferred_gender, description, available_from, bills_included,
     deposit, room_type, pets, smokers, tenant_pref, contact_external,
-    contact_whatsapp, bathrooms, bedrooms, photos, contact_email, edit_token_hash
+    contact_whatsapp, bathrooms, bedrooms, photos, contact_email, show_email, edit_token_hash
   ) values (
     (p_payload ->> 'type')::listing_type,
     'pending',
@@ -564,6 +570,7 @@ begin
     (p_payload ->> 'bedrooms')::int,
     array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb))),
     email,
+    coalesce((p_payload ->> 'show_email')::boolean, false),
     p_token_hash
   )
   returning id into new_id;
@@ -655,6 +662,7 @@ begin
     tenant_pref = coalesce((p_payload ->> 'tenant_pref')::tenant_pref, 'any'),
     contact_external = p_payload ->> 'contact_external',
     contact_whatsapp = p_payload ->> 'contact_whatsapp',
+    show_email = coalesce((p_payload ->> 'show_email')::boolean, false),
     bathrooms = (p_payload ->> 'bathrooms')::int,
     bedrooms = (p_payload ->> 'bedrooms')::int,
     photos = array(select jsonb_array_elements_text(coalesce(p_payload -> 'photos', '[]'::jsonb))),

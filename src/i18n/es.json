@@ -21,7 +21,9 @@
     "any": "Cualquiera",
     "legal": "Aviso legal y privacidad",
     "language": "Idioma",
-    "view": "Ver"
+    "view": "Ver",
+    "required": "obligatorio",
+    "optional": "opcional"
   },
   "home": {
     "emptyTitle": "No hay nada aquí",
@@ -94,7 +96,8 @@
     "deleteConfirmTitle": "¿Eliminar el anuncio?",
     "deleteConfirmDescription": "El anuncio se eliminará y no se podrá recuperar.",
     "deactivateConfirmTitle": "¿Desactivar el anuncio?",
-    "deactivateConfirmDescription": "El anuncio dejará de ser visible hasta que lo vuelvas a publicar."
+    "deactivateConfirmDescription": "El anuncio dejará de ser visible hasta que lo vuelvas a publicar.",
+    "emailCta": "Escribir por correo"
   },
   "publish": {
     "title": "Publica tu anuncio",
@@ -121,16 +124,15 @@
     "photos": "Fotos",
     "photosHint": "Hasta 8 fotos. La primera es obligatoria.",
     "contactWhatsapp": "Teléfono de WhatsApp",
-    "contactExternal": "Enlace externo de contacto (opcional)",
+    "contactExternal": "Enlace externo de contacto",
     "submit": "Enviar a revisión",
     "submitEdit": "Guardar y reenviar",
     "successTitle": "¡Anuncio enviado!",
     "successDescription": "Lo revisaremos manualmente y aparecerá en el mapa cuando lo aprobemos. Se desactivará solo a los 10 días.",
-    "stepEmail": "Contacto interno y envío",
     "email": "Tu email",
-    "emailHint": "No se publica. Te enviamos un enlace privado para editar, desactivar o borrar tu anuncio.",
-    "contactPublicHint": "El WhatsApp o enlace que pongas aquí será visible para cualquiera que vea el anuncio.",
-    "acceptTerms": "He leído y acepto el aviso legal.",
+    "emailHint": "Te enviamos el enlace privado para editar, desactivar o borrar tu anuncio. No se publica salvo que actives «Mostrar mi correo en el anuncio».",
+    "contactPublicHint": "El enlace externo (por ejemplo, tu anuncio en otra web) es opcional.",
+    "acceptTerms": "He leído y acepto",
     "editLinkTitle": "Tu enlace privado de gestión",
     "editLinkEmailed": "Te lo hemos enviado también por email. Guárdalo: es la única forma de editar tu anuncio.",
     "editLinkSaveIt": "Guárdalo ahora: es la única forma de editar, desactivar o borrar tu anuncio.",
@@ -138,8 +140,16 @@
     "linkCopied": "Enlace copiado",
     "manageListing": "Gestionar anuncio",
     "municipality": "Municipio",
-    "neighborhood": "Barrio (opcional)",
-    "placeHint": "Se rellenan solos según el marcador. Puedes corregirlos."
+    "neighborhood": "Barrio",
+    "placeHint": "Se rellenan solos según el marcador. Puedes corregirlos.",
+    "requiredNote": "Los campos con asterisco son obligatorios; el resto son opcionales.",
+    "extras": "Extras",
+    "contactGroupTitle": "Cómo pueden contactarte",
+    "contactAtLeastOne": "Indica al menos una vía: WhatsApp o tu correo. Lo que muestres aquí lo verá cualquiera que vea el anuncio.",
+    "oneOfTwo": "al menos uno de los dos",
+    "showEmail": "Mostrar mi correo en el anuncio",
+    "stepSubmit": "Revisión y envío",
+    "legalLink": "el aviso legal y la privacidad"
   },
   "auth": {
     "loginTitle": "Inicia sesión",
@@ -181,13 +191,15 @@
     "tooManyPhotos": "Máximo 8 fotos.",
     "firstPhotoRequired": "La primera foto es obligatoria.",
     "captcha": "No hemos podido verificar que eres una persona. Inténtalo de nuevo.",
-    "outsideSpain": "El marcador está fuera de España."
+    "outsideSpain": "El marcador está fuera de España.",
+    "contactRequired": "Indica un WhatsApp o activa «Mostrar mi correo en el anuncio».",
+    "fieldInvalid": "Revisa este campo."
   },
   "legal": {
     "title": "Aviso legal y privacidad",
     "intro": "MyLloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
     "dataTitle": "Datos personales",
-    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio (incluido el WhatsApp o enlace de contacto, que es público), tu correo electrónico (privado, solo para enviarte el enlace de gestión) y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión.",
+    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio (incluido el WhatsApp o enlace de contacto, que es público), tu correo electrónico (privado y solo para enviarte el enlace de gestión, salvo que elijas mostrarlo en el anuncio) y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión.",
     "contentTitle": "Contenido",
     "contentBody": "Los anuncios son responsabilidad exclusiva de quien los publica. Moderamos los anuncios antes de su publicación, pero no garantizamos su veracidad.",
     "contactTitle": "Contacto",

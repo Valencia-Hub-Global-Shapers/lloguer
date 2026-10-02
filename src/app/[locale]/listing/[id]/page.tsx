@@ -36,11 +36,13 @@ export default async function ListingPage({ params }: Props) {
     const own = await getListingForAdmin(supabase, id).catch(() => null);
     if (!own) notFound();
     // Strip the exact location and private fields from the preview payload
-    const { location, edit_token_hash, contact_email, ...safe } = own;
+    const { location, edit_token_hash, contact_email, show_email, ...safe } = own;
     void location;
     void edit_token_hash;
-    void contact_email;
-    listing = safe as unknown as PublicListing;
+    listing = {
+      ...safe,
+      public_email: show_email ? contact_email : null,
+    } as unknown as PublicListing;
     isPreview = true;
   }
 

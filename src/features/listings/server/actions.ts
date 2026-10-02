@@ -44,6 +44,7 @@ function listingPayload(values: ListingFormInput): Json {
     tenant_pref: values.tenant_pref,
     contact_external: values.contact_external || null,
     contact_whatsapp: values.contact_whatsapp || null,
+    show_email: values.show_email,
     bathrooms: values.bathrooms ?? null,
     bedrooms: values.type === "full_flat" ? (values.bedrooms ?? null) : null,
     photos: values.photos,
