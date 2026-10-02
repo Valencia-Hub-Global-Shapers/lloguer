@@ -134,16 +134,14 @@ export type ListingViewRow = {
   created_at: string;
 }
 
-export type NeighborhoodRow = {
-  id: number;
-  name_es: string;
-  name_ca: string;
-  name_en: string;
-  slug: string;
-  center: unknown;
+export type PublicPlaceRow = {
   municipality: string;
-  lat: number;
-  lng: number;
+  neighborhood: string | null;
+  listings: number;
+  min_lat: number;
+  min_lng: number;
+  max_lat: number;
+  max_lng: number;
 }
 
 export type PublicListingRow = {
@@ -208,19 +206,6 @@ export type Database = {
         Update: Record<string, never>;
         Relationships: [];
       };
-      neighborhoods: {
-        Row: NeighborhoodRow;
-        Insert: {
-          name_es: string;
-          name_ca: string;
-          name_en: string;
-          slug: string;
-          center: string;
-          municipality: string;
-        };
-        Update: Record<string, never>;
-        Relationships: [];
-      };
     };
     Views: {
       public_listings: {
@@ -229,6 +214,10 @@ export type Database = {
       };
       public_profiles: {
         Row: PublicProfileRow;
+        Relationships: [];
+      };
+      public_places: {
+        Row: PublicPlaceRow;
         Relationships: [];
       };
     };
@@ -273,4 +262,4 @@ export type Listing = ListingRow;
 export type PublicListing = PublicListingRow;
 export type PublicProfile = PublicProfileRow;
 export type ModerationEvent = ModerationEventRow;
-export type Neighborhood = NeighborhoodRow;
+export type PublicPlace = PublicPlaceRow;

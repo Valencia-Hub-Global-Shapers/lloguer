@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MyLloguer — Lloguers a València",
+  title: "MyLloguer — Lloguers a Espanya",
   description:
-    "Habitacions i pisos entre particulars a València i la seua àrea metropolitana.",
+    "Habitacions i pisos entre particulars a tot Espanya.",
 };
 
 export default async function RootLayout({

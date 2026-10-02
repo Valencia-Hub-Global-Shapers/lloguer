@@ -6,7 +6,9 @@ export type FilterState = {
   type?: ListingType;
   minPrice?: number;
   maxPrice?: number;
-  /** neighborhood slug */
+  /** municipality name, as stored on listings */
+  city?: string;
+  /** neighborhood name within the municipality */
   neighborhood?: string;
   billsIncluded?: boolean;
   pets?: boolean;
@@ -43,6 +45,7 @@ export function parseFilters(raw: RawParams): FilterState {
     type: type === "room" || type === "full_flat" ? type : undefined,
     minPrice: toInt(get(raw, "min")),
     maxPrice: toInt(get(raw, "max")),
+    city: get(raw, "city") || undefined,
     neighborhood: get(raw, "hood") || undefined,
     billsIncluded: get(raw, "bills") === "1" || undefined,
     pets: get(raw, "pets") === "1" || undefined,
@@ -58,6 +61,7 @@ export function filtersToSearchParams(filters: FilterState): URLSearchParams {
   if (filters.type) p.set("type", filters.type);
   if (filters.minPrice != null) p.set("min", String(filters.minPrice));
   if (filters.maxPrice != null) p.set("max", String(filters.maxPrice));
+  if (filters.city) p.set("city", filters.city);
   if (filters.neighborhood) p.set("hood", filters.neighborhood);
   if (filters.billsIncluded) p.set("bills", "1");
   if (filters.pets) p.set("pets", "1");
@@ -73,6 +77,7 @@ export function countActiveFilters(f: FilterState): number {
     f.type,
     f.minPrice,
     f.maxPrice,
+    f.city,
     f.neighborhood,
     f.billsIncluded,
     f.pets,

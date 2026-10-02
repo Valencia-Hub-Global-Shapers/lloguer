@@ -1,4 +1,4 @@
-import type { GenderPref, Neighborhood, PublicListing } from "@/lib/types/database.types";
+import type { GenderPref, PublicListing, PublicPlace } from "@/lib/types/database.types";
 import type { createClient } from "@/lib/supabase/server";
 import type { FilterState } from "@/features/search/params";
 import type { Bounds, BrowseResponse, ListingPin, PosterListing } from "../types";
@@ -12,14 +12,21 @@ const PIN_COLUMNS = "id, type, price, public_lat, public_lng";
 const CARD_COLUMNS =
   "id, type, price, neighborhood, municipality, photos, room_type, bills_included, pets, smokers, flatmates, available_from, bedrooms";
 
-export async function getNeighborhoods(supabase: Db): Promise<Neighborhood[]> {
+/** Places (municipality + neighborhood) that currently have live listings. */
+export async function getPublicPlaces(supabase: Db): Promise<PublicPlace[]> {
   const { data, error } = await supabase
-    .from("neighborhoods")
-    .select("id, name_es, name_ca, name_en, slug, lat, lng, municipality")
+    .from("public_places")
+    .select("municipality, neighborhood, listings, min_lat, min_lng, max_lat, max_lng")
     .order("municipality")
-    .order("name_es");
+    .order("neighborhood");
   if (error) throw error;
-  return data as unknown as Neighborhood[];
+  return data.map((p) => ({
+    ...p,
+    min_lat: Number(p.min_lat),
+    min_lng: Number(p.min_lng),
+    max_lat: Number(p.max_lat),
+    max_lng: Number(p.max_lng),
+  }));
 }
 
 /** Public browse: pins for markers + cards for the panel, within bounds+filters. */
@@ -27,12 +34,7 @@ export async function getPublicListings(
   supabase: Db,
   bounds: Bounds,
   filters: FilterState,
-  neighborhoods: Neighborhood[],
 ): Promise<BrowseResponse> {
-  const hoodName = filters.neighborhood
-    ? neighborhoods.find((n) => n.slug === filters.neighborhood)?.name_ca
-    : undefined;
-
   let pins = supabase
     .from("public_listings")
     .select(PIN_COLUMNS)
@@ -61,9 +63,13 @@ export async function getPublicListings(
     pins = pins.lte("price", filters.maxPrice);
     cards = cards.lte("price", filters.maxPrice);
   }
-  if (hoodName) {
-    pins = pins.eq("neighborhood", hoodName);
-    cards = cards.eq("neighborhood", hoodName);
+  if (filters.city) {
+    pins = pins.eq("municipality", filters.city);
+    cards = cards.eq("municipality", filters.city);
+  }
+  if (filters.neighborhood) {
+    pins = pins.eq("neighborhood", filters.neighborhood);
+    cards = cards.eq("neighborhood", filters.neighborhood);
   }
   if (filters.gender) {
     // Listings that accept this gender: open to anyone, or asking for it.

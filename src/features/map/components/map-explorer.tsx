@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Drawer, DrawerContent, DrawerHandle } from "@/components/ui/drawer";
 import { useI18n } from "@/i18n/client";
-import type { Neighborhood } from "@/lib/types/database.types";
+import type { PublicPlace } from "@/lib/types/database.types";
+import { parseFilters } from "@/features/search/params";
+import { placeBounds } from "@/features/search/places";
 import { ListingCard } from "@/features/listings/components/listing-card";
 import { FilterBar } from "@/features/search/components/filter-bar";
 import type { Bounds, BrowseResponse } from "@/features/listings/types";
@@ -15,7 +17,7 @@ import { ExplorerMap, hasMapboxToken } from "./explorer-map";
 type Props = {
   initialData: BrowseResponse;
   initialBounds: Bounds;
-  neighborhoods: Neighborhood[];
+  places: PublicPlace[];
 };
 
 function ResultsList({
@@ -95,7 +97,7 @@ function ResultsList({
   );
 }
 
-export function MapExplorer({ initialData, initialBounds, neighborhoods }: Props) {
+export function MapExplorer({ initialData, initialBounds, places }: Props) {
   const { locale } = useI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -106,6 +108,7 @@ export function MapExplorer({ initialData, initialBounds, neighborhoods }: Props
   const [error, setError] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [snap, setSnap] = useState<number | string | null>("140px");
+  const [focusBounds, setFocusBounds] = useState<Bounds | null>(null);
 
   const boundsRef = useRef<Bounds | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -147,13 +150,27 @@ export function MapExplorer({ initialData, initialBounds, neighborhoods }: Props
 
   // Refetch when filters (URL) change
   const firstRun = useRef(true);
+  const lastPlaceKey = useRef<string | null>(null);
   useEffect(() => {
+    const filters = parseFilters(new URLSearchParams(searchKey));
+    const placeKey = `${filters.city ?? ""}|${filters.neighborhood ?? ""}`;
+    const placeChanged = lastPlaceKey.current !== null && lastPlaceKey.current !== placeKey;
+    lastPlaceKey.current = placeKey;
+
     if (firstRun.current) {
       firstRun.current = false;
       return;
     }
+
+    // Picking a place moves the map there; the list follows even without a map
+    const target = placeChanged ? placeBounds(places, filters) : null;
+    if (target) {
+      setFocusBounds(target);
+      fetchData(target);
+      return;
+    }
     fetchData(boundsRef.current ?? initialBounds);
-  }, [searchKey, fetchData, initialBounds]);
+  }, [searchKey, fetchData, initialBounds, places]);
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
@@ -183,7 +200,7 @@ export function MapExplorer({ initialData, initialBounds, neighborhoods }: Props
       {/* Desktop results panel */}
       <aside className="bg-background z-10 hidden w-[420px] shrink-0 flex-col border-r md:flex">
         <div className="border-b">
-          <FilterBar neighborhoods={neighborhoods} />
+          <FilterBar places={places} />
         </div>
         <div className="flex-1 overflow-y-auto">{list}</div>
       </aside>
@@ -203,6 +220,11 @@ export function MapExplorer({ initialData, initialBounds, neighborhoods }: Props
               initialBounds.maxLng,
               initialBounds.maxLat,
             ]}
+            focusBounds={
+              focusBounds
+                ? [focusBounds.minLng, focusBounds.minLat, focusBounds.maxLng, focusBounds.maxLat]
+                : null
+            }
           />
         ) : (
           <div className="bg-muted text-muted-foreground absolute inset-0 hidden items-center justify-center p-8 text-center text-sm md:flex">
@@ -212,7 +234,7 @@ export function MapExplorer({ initialData, initialBounds, neighborhoods }: Props
 
         {/* Mobile filter bar overlay */}
         <div className="bg-background/90 absolute inset-x-0 top-0 z-10 border-b backdrop-blur md:hidden">
-          <FilterBar neighborhoods={neighborhoods} />
+          <FilterBar places={places} />
         </div>
 
         {/* Mobile: no map token => plain list */}

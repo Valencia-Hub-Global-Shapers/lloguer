@@ -1,6 +1,6 @@
 # MyLloguer — agent guide
 
-Map-first, open shared-flat classifieds for València + ~20 km metro area. Anyone can publish without an account; every listing is manually moderated and expires 10 days after approval. Next.js 15 (App Router) + TypeScript + Tailwind v4 + Supabase (Postgres/PostGIS, Auth, Storage) + Mapbox GL + supercluster.
+Map-first, open shared-flat classifieds for all of Spain (the map opens on València by default). Anyone can publish without an account; every listing is manually moderated and expires 10 days after approval. Next.js 15 (App Router) + TypeScript + Tailwind v4 + Supabase (Postgres/PostGIS, Auth, Storage) + Mapbox GL + supercluster.
 
 ## Commands
 
@@ -50,7 +50,9 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 - Filter state lives only in URL searchParams (`src/features/search/params.ts`). The gender filter means "listings that accept my gender" (`preferred_gender` is `any` or the chosen value).
 - Listing TTL is `LISTING_TTL_DAYS` (`src/lib/constants.ts`, 10 days), applied on approval.
 - Schema baseline is the single `supabase/migrations/0001_init.sql`. Nothing is deployed yet, so edit it in place and reset the DB; once a production database exists, switch to append-only migrations. `supabase/seed.sql` must stay reproducible via `db reset`.
-- Neighborhood names are stored in Valencian (`name_ca`) on listings; the filter maps slug → `name_ca`.
+- Places are free text on each listing (`municipality` required, `neighborhood` optional), filled at publish time by Mapbox reverse geocoding with `language=es` (`src/features/map/geocode.ts`) and editable by the poster. There is no neighborhoods table: the `public_places` view lists places with live listings (plus their bounding box) and drives the "city or neighborhood" filter (`city` / `hood` URL params) and the map fly-to.
+- Geography is Spain only. `src/lib/geo.ts` and the `listings_in_spain` constraint hold the same COARSE bounding boxes (they cannot follow the border, so they still cover Portugal and southern France); the form also rejects pins whose reverse-geocoded country is not ES, and moderators review everything.
+- The map query returns at most 1000 pins (`PINS_LIMIT`); zoomed out over all of Spain with many listings it will need server-side clustering.
 
 ## Known MVP shortcuts
 

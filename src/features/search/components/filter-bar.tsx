@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -24,27 +25,39 @@ import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/i18n/client";
-import type { Locale } from "@/i18n/config";
-import type { Neighborhood } from "@/lib/types/database.types";
+import type { PublicPlace } from "@/lib/types/database.types";
 import {
   countActiveFilters,
   filtersToSearchParams,
   parseFilters,
   type FilterGender,
 } from "../params";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { groupPlaces } from "../places";
 
-function neighborhoodName(n: Neighborhood, locale: Locale): string {
-  return locale === "ca" ? n.name_ca : locale === "en" ? n.name_en : n.name_es;
+const SEP = "\u0001";
+
+function encodePlace(city: string, hood?: string): string {
+  return hood ? `${city}${SEP}${hood}` : city;
 }
 
-export function FilterBar({ neighborhoods }: { neighborhoods: Neighborhood[] }) {
+function decodePlace(value: string): [string, string | undefined] {
+  const [city, hood] = value.split(SEP);
+  return [city, hood || undefined];
+}
+
+function placeValue(f: { city?: string; neighborhood?: string }): string {
+  return f.city ? encodePlace(f.city, f.neighborhood) : "all";
+}
+
+export function FilterBar({ places }: { places: PublicPlace[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { locale, t } = useI18n();
+  const { t } = useI18n();
 
   const filters = parseFilters(searchParams);
+  const groups = useMemo(() => groupPlaces(places), [places]);
   const activeCount = countActiveFilters(filters);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [price, setPrice] = useState<{ min?: string; max?: string }>({});
@@ -77,18 +90,37 @@ export function FilterBar({ neighborhoods }: { neighborhoods: Neighborhood[] }) 
       </ToggleGroup>
 
       <Select
-        value={filters.neighborhood ?? "all"}
-        onValueChange={(v) => apply({ neighborhood: v === "all" ? undefined : v })}
+        value={placeValue(filters)}
+        onValueChange={(v) => {
+          if (v === "all") return apply({ city: undefined, neighborhood: undefined });
+          const [city, hood] = decodePlace(v);
+          apply({ city, neighborhood: hood });
+        }}
       >
-        <SelectTrigger className="w-auto min-w-32" aria-label={t("filters.neighborhood")}>
-          <SelectValue placeholder={t("filters.neighborhood")} />
+        <SelectTrigger className="w-auto min-w-32" aria-label={t("filters.place")}>
+          <SelectValue placeholder={t("filters.place")} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">{t("filters.allNeighborhoods")}</SelectItem>
-          {neighborhoods.map((n) => (
-            <SelectItem key={n.slug} value={n.slug}>
-              {neighborhoodName(n, locale as Locale)}
+          <SelectItem value="all">{t("filters.allPlaces")}</SelectItem>
+          {/* A place that no longer has live listings stays selectable while active */}
+          {filters.city && !groups.some((g) => g.municipality === filters.city) ? (
+            <SelectItem value={encodePlace(filters.city, filters.neighborhood)}>
+              {filters.neighborhood ? `${filters.neighborhood}, ${filters.city}` : filters.city}
             </SelectItem>
+          ) : null}
+          {groups.map((g) => (
+            <SelectGroup key={g.municipality}>
+              <SelectItem value={encodePlace(g.municipality)}>
+                {g.municipality} ({g.listings})
+              </SelectItem>
+              {g.neighborhoods.map((n) => (
+                <SelectItem key={n.name} value={encodePlace(g.municipality, n.name)}>
+                  <span className="text-muted-foreground pl-3">
+                    {n.name} ({n.listings})
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectGroup>
           ))}
         </SelectContent>
       </Select>

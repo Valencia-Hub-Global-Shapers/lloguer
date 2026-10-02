@@ -99,9 +99,9 @@ describe("listingFormSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("rejects coordinates outside the Valencia service area", () => {
-    expect(listingFormSchema.safeParse({ ...validRoom, lat: 41.4 }).success).toBe(false);
-    expect(listingFormSchema.safeParse({ ...validRoom, lng: -3.7 }).success).toBe(false);
+  it("rejects impossible coordinates", () => {
+    expect(listingFormSchema.safeParse({ ...validRoom, lat: 91 }).success).toBe(false);
+    expect(listingFormSchema.safeParse({ ...validRoom, lng: -181 }).success).toBe(false);
   });
 
   it("coerces numeric strings from form inputs", () => {
@@ -112,6 +112,30 @@ describe("listingFormSchema", () => {
     });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.price).toBe(500);
+  });
+});
+
+describe("listing location", () => {
+  it("accepts listings anywhere in Spain", () => {
+    for (const [lat, lng, municipality] of [
+      [40.42, -3.7, "Madrid"],
+      [41.39, 2.17, "Barcelona"],
+      [28.12, -15.43, "Las Palmas de Gran Canaria"],
+    ] as const) {
+      const r = listingFormSchema.safeParse({ ...validRoom, lat, lng, municipality });
+      expect(r.success).toBe(true);
+    }
+  });
+
+  it("rejects coordinates outside Spain", () => {
+    const r = listingFormSchema.safeParse({ ...validRoom, lat: 48.86, lng: 2.35 });
+    expect(r.success).toBe(false);
+  });
+
+  it("makes the neighborhood optional but the municipality required", () => {
+    expect(listingFormSchema.safeParse({ ...validRoom, neighborhood: "" }).success).toBe(true);
+    expect(listingFormSchema.safeParse({ ...validRoom, neighborhood: null }).success).toBe(true);
+    expect(listingFormSchema.safeParse({ ...validRoom, municipality: "" }).success).toBe(false);
   });
 });
 

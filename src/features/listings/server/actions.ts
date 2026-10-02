@@ -28,7 +28,7 @@ function listingPayload(values: ListingFormInput): Json {
   return {
     type: values.type,
     price: values.price,
-    neighborhood: values.neighborhood,
+    neighborhood: values.neighborhood || null,
     municipality: values.municipality,
     lat: values.lat,
     lng: values.lng,

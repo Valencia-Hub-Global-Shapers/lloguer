@@ -1,19 +1,56 @@
 import { describe, expect, it } from "vitest";
-import { nearestNeighborhood } from "./geocode";
+import { parseReverseGeocode } from "./geocode";
 
-const neighborhoods = [
-  { name_ca: "Russafa", municipality: "València", lat: 39.463, lng: -0.3735 },
-  { name_ca: "Benimaclet", municipality: "València", lat: 39.485, lng: -0.362 },
-];
+const valencia = {
+  features: [
+    {
+      id: "neighborhood.1",
+      place_type: ["neighborhood"],
+      text: "Ruzafa",
+      context: [
+        { id: "place.2", text: "València" },
+        { id: "country.3", text: "España", short_code: "es" },
+      ],
+    },
+    { id: "place.2", place_type: ["place"], text: "València", context: [] },
+  ],
+};
 
-describe("nearestNeighborhood", () => {
-  it("finds the closest neighborhood", () => {
-    const n = nearestNeighborhood(neighborhoods, { lat: 39.4635, lng: -0.374 });
-    expect(n?.name_ca).toBe("Russafa");
+describe("parseReverseGeocode", () => {
+  it("extracts neighborhood, municipality and country", () => {
+    expect(parseReverseGeocode(valencia)).toEqual({
+      neighborhood: "Ruzafa",
+      municipality: "València",
+      country: "es",
+    });
   });
 
-  it("returns null beyond the distance threshold", () => {
-    const n = nearestNeighborhood(neighborhoods, { lat: 40.1, lng: -0.3 });
-    expect(n).toBeNull();
+  it("falls back to a locality when there is no neighborhood", () => {
+    const r = parseReverseGeocode({
+      features: [
+        { place_type: ["locality"], text: "Benimaclet", context: [] },
+        { place_type: ["place"], text: "València", context: [] },
+      ],
+    });
+    expect(r.neighborhood).toBe("Benimaclet");
+  });
+
+  it("handles a town with no neighborhood", () => {
+    const r = parseReverseGeocode({
+      features: [
+        {
+          place_type: ["place"],
+          text: "Cuenca",
+          context: [{ id: "country.1", text: "España", short_code: "ES" }],
+        },
+      ],
+    });
+    expect(r).toEqual({ neighborhood: null, municipality: "Cuenca", country: "es" });
+  });
+
+  it("returns empty values for empty or malformed responses", () => {
+    const empty = { neighborhood: null, municipality: null, country: null };
+    expect(parseReverseGeocode({ features: [] })).toEqual(empty);
+    expect(parseReverseGeocode(null)).toEqual(empty);
   });
 });

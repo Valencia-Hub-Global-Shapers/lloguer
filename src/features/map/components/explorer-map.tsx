@@ -21,6 +21,8 @@ type Props = {
   onPinClick: (id: string) => void;
   onPinHover?: (id: string | null) => void;
   initialBounds?: [number, number, number, number];
+  /** Fly the map to these bounds whenever the value changes. */
+  focusBounds?: [number, number, number, number] | null;
 };
 
 type PinProps = { id: string; price: number; type: string };
@@ -40,6 +42,7 @@ export function ExplorerMap({
   onPinClick,
   onPinHover,
   initialBounds,
+  focusBounds,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -112,6 +115,21 @@ export function ExplorerMap({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Fly to a place picked in the filters
+  const focusKey = focusBounds?.join(",");
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !focusBounds) return;
+    map.fitBounds(
+      [
+        [focusBounds[0], focusBounds[1]],
+        [focusBounds[2], focusBounds[3]],
+      ],
+      { padding: 40, maxZoom: 15, duration: 800 },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusKey]);
 
   // Render clusters whenever the index changes
   useEffect(() => {

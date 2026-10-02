@@ -1,7 +1,7 @@
 {
   "common": {
     "siteName": "MyLloguer",
-    "tagline": "Lloguers entre particulars a València i àrea metropolitana",
+    "tagline": "Lloguer entre particulars a tot Espanya",
     "publish": "Publica",
     "login": "Inicia sessió",
     "logout": "Tanca sessió",
@@ -37,7 +37,6 @@
     "priceMin": "Mínim",
     "priceMax": "Màxim",
     "neighborhood": "Barri",
-    "allNeighborhoods": "Tots els barris",
     "billsIncluded": "Despeses incloses",
     "pets": "S'admeten mascotes",
     "smokers": "S'admeten fumadors",
@@ -46,7 +45,9 @@
     "apply": "Aplica",
     "reset": "Esborra",
     "gender": "El meu gènere",
-    "genderHint": "Només anuncis que m'accepten"
+    "genderHint": "Només anuncis que m'accepten",
+    "place": "Ciutat o barri",
+    "allPlaces": "Tot Espanya"
   },
   "listing": {
     "perMonth": "€/mes",
@@ -103,8 +104,6 @@
     "stepPhotos": "Fotos i contacte",
     "type": "Què ofereixes?",
     "dropPin": "Arrossega el marcador fins a la ubicació aproximada",
-    "neighborhoodDetected": "Barri detectat",
-    "noNeighborhood": "Acosta el marcador a un barri conegut",
     "price": "Preu mensual (€)",
     "availableFrom": "Disponible des de",
     "description": "Descripció",
@@ -137,7 +136,10 @@
     "editLinkSaveIt": "Guarda'l ara: és l'única manera d'editar, desactivar o esborrar el teu anunci.",
     "copyLink": "Copiar enllaç",
     "linkCopied": "Enllaç copiat",
-    "manageListing": "Gestionar anunci"
+    "manageListing": "Gestionar anunci",
+    "municipality": "Municipi",
+    "neighborhood": "Barri (opcional)",
+    "placeHint": "S'omplin sols segons el marcador. Pots corregir-los."
   },
   "auth": {
     "loginTitle": "Inicia sessió",
@@ -178,13 +180,14 @@
     "photoInvalidType": "Format d'imatge no admés.",
     "tooManyPhotos": "Màxim 8 fotos.",
     "firstPhotoRequired": "La primera foto és obligatòria.",
-    "captcha": "No hem pogut verificar que ets una persona. Torna-ho a provar."
+    "captcha": "No hem pogut verificar que ets una persona. Torna-ho a provar.",
+    "outsideSpain": "El marcador és fora d'Espanya."
   },
   "legal": {
     "title": "Avís legal i privacitat",
-    "intro": "MyLloguer és una plataforma d'anuncis de lloguer entre particulars a València i la seua àrea metropolitana.",
+    "intro": "MyLloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
     "dataTitle": "Dades personals",
-    "dataBody": "Només tractem les dades necessàries per al funcionament del servei: el teu compte de Google (nom, correu i avatar) i els anuncis que publiques. No venem dades a tercers.",
+    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci (inclòs el WhatsApp o enllaç de contacte, que és públic), el teu correu electrònic (privat, només per enviar-te l'enllaç de gestió) i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió.",
     "contentTitle": "Contingut",
     "contentBody": "Els anuncis són responsabilitat exclusiva de qui els publica. Moderem els anuncis abans de la publicació, però no n-garantim la veracitat.",
     "contactTitle": "Contacte",

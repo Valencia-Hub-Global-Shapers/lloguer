@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { hashEditToken, isWellFormedToken } from "@/lib/edit-token";
-import { getListingByToken, getNeighborhoods } from "@/features/listings/server/queries";
+import { getListingByToken } from "@/features/listings/server/queries";
 import { ListingForm } from "@/features/listings/components/listing-form";
 import { ManagePanel } from "@/features/listings/components/manage-panel";
 import { VALENCIA_CENTER } from "@/lib/utils";
@@ -28,7 +28,6 @@ export default async function ManageListingPage({
   const listing = await getListingByToken(supabase, id, hashEditToken(token)).catch(() => null);
   if (!listing) notFound();
 
-  const neighborhoods = await getNeighborhoods(supabase).catch(() => []);
 
   const defaults: SubmissionValues = {
     type: listing.type,
@@ -70,7 +69,6 @@ export default async function ManageListingPage({
         mode="edit"
         listingId={listing.id}
         token={token}
-        neighborhoods={neighborhoods}
         defaults={defaults}
       />
     </div>

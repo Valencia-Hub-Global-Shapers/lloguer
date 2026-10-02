@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
@@ -23,10 +23,9 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useI18n } from "@/i18n/client";
-import type { Neighborhood } from "@/lib/types/database.types";
 import { PinPickerMap } from "@/features/map/components/pin-picker-map";
-import { hasMapboxToken } from "@/features/map/components/explorer-map";
-import { nearestNeighborhood } from "@/features/map/geocode";
+import { hasMapboxToken, MAPBOX_TOKEN } from "@/features/map/components/explorer-map";
+import { reverseGeocode } from "@/features/map/geocode";
 import { VALENCIA_CENTER } from "@/lib/utils";
 import {
   listingFormSchema,
@@ -46,14 +45,12 @@ export function ListingForm({
   mode,
   listingId,
   token,
-  neighborhoods,
   defaults,
 }: {
   mode: "create" | "edit";
   /** edit mode: the poster's secret edit token */
   listingId?: string;
   token?: string;
-  neighborhoods: Pick<Neighborhood, "name_ca" | "municipality" | "lat" | "lng">[];
   defaults: SubmissionValues;
 }) {
   const { locale, t } = useI18n();
@@ -80,19 +77,27 @@ export function ListingForm({
   const type = watch("type");
   const lat = watch("lat");
   const lng = watch("lng");
-  const neighborhood = watch("neighborhood");
 
-  // Initial neighborhood detection for new listings
+  // Fill municipality/neighborhood from the pin. Both stay editable: the lookup
+  // can fail (no token, offline, a spot without a named neighborhood).
+  const geocodeRequest = useRef(0);
+  const fillPlaceFromPin = async (pinLat: number, pinLng: number) => {
+    const request = ++geocodeRequest.current;
+    const place = await reverseGeocode(pinLat, pinLng, MAPBOX_TOKEN);
+    if (!place || request !== geocodeRequest.current) return;
+    if (place.country && place.country !== "es") {
+      form.setError("lat", { message: "outsideSpain" });
+      return;
+    }
+    form.clearErrors("lat");
+    setValue("municipality", place.municipality ?? "", { shouldValidate: true });
+    setValue("neighborhood", place.neighborhood ?? "");
+  };
+
+  // New listings start on the default map position: detect its place too
   useEffect(() => {
-    if (mode === "create" && !form.getValues("neighborhood")) {
-      const n = nearestNeighborhood(neighborhoods, {
-        lat: form.getValues("lat"),
-        lng: form.getValues("lng"),
-      });
-      if (n) {
-        setValue("neighborhood", n.name_ca);
-        setValue("municipality", n.municipality);
-      }
+    if (mode === "create" && hasMapboxToken && !form.getValues("municipality")) {
+      void fillPlaceFromPin(form.getValues("lat"), form.getValues("lng"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -100,9 +105,7 @@ export function ListingForm({
   const onPin = (newLat: number, newLng: number) => {
     setValue("lat", newLat, { shouldValidate: true });
     setValue("lng", newLng, { shouldValidate: true });
-    const n = nearestNeighborhood(neighborhoods, { lat: newLat, lng: newLng });
-    setValue("neighborhood", n?.name_ca ?? "", { shouldValidate: true });
-    setValue("municipality", n?.municipality ?? "");
+    void fillPlaceFromPin(newLat, newLng);
   };
 
   const onSubmit = handleSubmit(async (values) => {
@@ -131,7 +134,9 @@ export function ListingForm({
   });
 
   const fieldError = (key: string | undefined) =>
-    key ? <p className="text-destructive text-xs">{t(key)}</p> : null;
+    key ? (
+      <p className="text-destructive text-xs">{t(key.includes(".") ? key : `errors.${key}`)}</p>
+    ) : null;
 
   if (created) {
     const editUrl = `${window.location.origin}/${locale}/manage/${created.id}/${created.token}`;
@@ -213,14 +218,19 @@ export function ListingForm({
               </div>
             )}
             {fieldError(errors.lat?.message || errors.lng?.message)}
-            <p className="text-muted-foreground text-sm">
-              {neighborhood
-                ? `${t("publish.neighborhoodDetected")}: ${neighborhood}`
-                : t("publish.noNeighborhood")}
-            </p>
-            {fieldError(errors.neighborhood?.message)}
-            <input type="hidden" {...register("neighborhood")} />
-            <input type="hidden" {...register("municipality")} />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-1.5">
+                <Label htmlFor="municipality">{t("publish.municipality")}</Label>
+                <Input id="municipality" autoComplete="off" {...register("municipality")} />
+                {fieldError(errors.municipality?.message)}
+              </div>
+              <div className="grid gap-1.5">
+                <Label htmlFor="neighborhood">{t("publish.neighborhood")}</Label>
+                <Input id="neighborhood" autoComplete="off" {...register("neighborhood")} />
+                {fieldError(errors.neighborhood?.message)}
+              </div>
+            </div>
+            <p className="text-muted-foreground text-xs">{t("publish.placeHint")}</p>
             {hasMapboxToken ? (
               <>
                 <input type="hidden" {...register("lat", { valueAsNumber: true })} />

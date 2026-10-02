@@ -1,9 +1,9 @@
 -- ---------------------------------------------------------------------------
 -- MyLloguer baseline schema.
 --
--- Open shared-flat classifieds: anyone can publish without an account, every
--- listing goes through manual moderation, and approved listings expire on
--- their own.
+-- Open shared-flat classifieds for Spain: anyone can publish without an
+-- account, every listing goes through manual moderation, and approved listings
+-- expire on their own.
 --
 --  * Posters have no accounts. Ownership is proven by an edit token: the app
 --    generates a random token, shows/emails it once and stores only its sha256
@@ -55,7 +55,7 @@ create table listings (
   status listing_status not null default 'pending',
   price int not null check (price > 0),
   neighborhood text,
-  municipality text not null default 'València',
+  municipality text not null,
   -- Exact point. NEVER exposed via public views/API.
   location geography(Point, 4326) not null,
   -- Truncated to ~100m grid at write time (trigger). Safe to expose.
@@ -87,6 +87,12 @@ create table listings (
   updated_at timestamptz not null default now(),
   deleted_at timestamptz,
 
+  -- Spain only: mainland + Balearics + Ceuta/Melilla box, or the Canary Islands box.
+  -- Keep in sync with src/lib/geo.ts.
+  constraint listings_in_spain check (
+    (st_y(location::geometry) between 35.1 and 43.9 and st_x(location::geometry) between -9.6 and 4.5)
+    or (st_y(location::geometry) between 27.4 and 29.6 and st_x(location::geometry) between -18.4 and -13.2)
+  ),
   constraint listings_contact_required check (contact_whatsapp is not null or contact_external is not null),
   constraint listings_bedrooms_required_for_flat check (type = 'room' or bedrooms is not null),
   constraint listings_room_type_required_for_room check (type = 'full_flat' or room_type is not null)
@@ -119,21 +125,6 @@ create table listing_views (
 );
 
 create unique index listing_views_dedupe_idx on listing_views (listing_id, viewer_hash);
-
--- Neighborhood lookup (seeded)
-create table neighborhoods (
-  id bigint generated always as identity primary key,
-  name_es text not null,
-  name_ca text not null,
-  name_en text not null,
-  slug text not null unique,
-  center geography(Point, 4326) not null,
-  lat numeric generated always as (st_y(center::geometry)) stored,
-  lng numeric generated always as (st_x(center::geometry)) stored,
-  municipality text not null
-);
-
-create index neighborhoods_center_gix on neighborhoods using gist (center);
 
 -- Private key/value settings. RLS on, no policies, no grants: only
 -- security-definer functions can read it.
@@ -280,7 +271,6 @@ alter table profiles enable row level security;
 alter table listings enable row level security;
 alter table moderation_events enable row level security;
 alter table listing_views enable row level security;
-alter table neighborhoods enable row level security;
 alter table private_settings enable row level security;
 
 -- profiles: self + admin. Public display data goes through public_profiles.
@@ -311,10 +301,6 @@ create policy moderation_events_insert on moderation_events
 -- listing_views: admin read only. Writes only via increment_listing_view().
 create policy listing_views_select on listing_views
   for select using (public.is_admin());
-
--- neighborhoods: public lookup table
-create policy neighborhoods_select on neighborhoods
-  for select using (true);
 
 -- Public-safe views ----------------------------------------------------------
 -- Security definer on purpose: expose only safe columns and bypass RLS.
@@ -351,6 +337,22 @@ select
 from listings
 where status = 'approved' and (expires_at is null or expires_at > now());
 
+-- Places (municipality + neighborhood) that currently have live listings, with
+-- their bounding box. Powers the place filter and "fly to" on the map.
+create or replace view public.public_places
+with (security_invoker = false) as
+select
+  municipality,
+  neighborhood,
+  count(*)::int as listings,
+  min(public_lat) as min_lat,
+  min(public_lng) as min_lng,
+  max(public_lat) as max_lat,
+  max(public_lng) as max_lng
+from listings
+where status = 'approved' and (expires_at is null or expires_at > now())
+group by municipality, neighborhood;
+
 create or replace view public.public_profiles
 with (security_invoker = false) as
 select id, full_name, avatar_url
@@ -363,7 +365,7 @@ grant usage on schema public to anon, authenticated;
 
 grant select on public.public_listings to anon, authenticated;
 grant select on public.public_profiles to anon, authenticated;
-grant select on neighborhoods to anon, authenticated;
+grant select on public.public_places to anon, authenticated;
 
 grant select, insert, update on listings to authenticated;
 grant select, update on profiles to authenticated;
@@ -468,7 +470,7 @@ begin
     'pending',
     (p_payload ->> 'price')::int,
     p_payload ->> 'neighborhood',
-    coalesce(p_payload ->> 'municipality', 'València'),
+    p_payload ->> 'municipality',
     st_setsrid(
       st_makepoint((p_payload ->> 'lng')::float8, (p_payload ->> 'lat')::float8), 4326
     )::geography,
@@ -563,7 +565,7 @@ begin
     status = 'pending',
     price = (p_payload ->> 'price')::int,
     neighborhood = p_payload ->> 'neighborhood',
-    municipality = coalesce(p_payload ->> 'municipality', 'València'),
+    municipality = p_payload ->> 'municipality',
     location = st_setsrid(
       st_makepoint((p_payload ->> 'lng')::float8, (p_payload ->> 'lat')::float8), 4326
     )::geography,

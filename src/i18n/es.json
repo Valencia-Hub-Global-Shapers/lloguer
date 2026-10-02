@@ -1,7 +1,7 @@
 {
   "common": {
     "siteName": "MyLloguer",
-    "tagline": "Alquiler entre particulares en València y área metropolitana",
+    "tagline": "Alquiler entre particulares en toda España",
     "publish": "Publica",
     "login": "Inicia sesión",
     "logout": "Cierra sesión",
@@ -37,7 +37,6 @@
     "priceMin": "Mínimo",
     "priceMax": "Máximo",
     "neighborhood": "Barrio",
-    "allNeighborhoods": "Todos los barrios",
     "billsIncluded": "Gastos incluidos",
     "pets": "Se admiten mascotas",
     "smokers": "Se admiten fumadores",
@@ -46,7 +45,9 @@
     "apply": "Aplicar",
     "reset": "Borrar",
     "gender": "Mi género",
-    "genderHint": "Solo anuncios que me aceptan"
+    "genderHint": "Solo anuncios que me aceptan",
+    "place": "Ciudad o barrio",
+    "allPlaces": "Toda España"
   },
   "listing": {
     "perMonth": "€/mes",
@@ -103,8 +104,6 @@
     "stepPhotos": "Fotos y contacto",
     "type": "¿Qué ofreces?",
     "dropPin": "Arrastra el marcador hasta la ubicación aproximada",
-    "neighborhoodDetected": "Barrio detectado",
-    "noNeighborhood": "Acerca el marcador a un barrio conocido",
     "price": "Precio mensual (€)",
     "availableFrom": "Disponible desde",
     "description": "Descripción",
@@ -137,7 +136,10 @@
     "editLinkSaveIt": "Guárdalo ahora: es la única forma de editar, desactivar o borrar tu anuncio.",
     "copyLink": "Copiar enlace",
     "linkCopied": "Enlace copiado",
-    "manageListing": "Gestionar anuncio"
+    "manageListing": "Gestionar anuncio",
+    "municipality": "Municipio",
+    "neighborhood": "Barrio (opcional)",
+    "placeHint": "Se rellenan solos según el marcador. Puedes corregirlos."
   },
   "auth": {
     "loginTitle": "Inicia sesión",
@@ -178,13 +180,14 @@
     "photoInvalidType": "Formato de imagen no admitido.",
     "tooManyPhotos": "Máximo 8 fotos.",
     "firstPhotoRequired": "La primera foto es obligatoria.",
-    "captcha": "No hemos podido verificar que eres una persona. Inténtalo de nuevo."
+    "captcha": "No hemos podido verificar que eres una persona. Inténtalo de nuevo.",
+    "outsideSpain": "El marcador está fuera de España."
   },
   "legal": {
     "title": "Aviso legal y privacidad",
-    "intro": "MyLloguer es una plataforma de anuncios de alquiler entre particulares en València y su área metropolitana.",
+    "intro": "MyLloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
     "dataTitle": "Datos personales",
-    "dataBody": "Solo tratamos los datos necesarios para el funcionamiento del servicio: tu cuenta de Google (nombre, correo y avatar) y los anuncios que publicas. No vendemos datos a terceros.",
+    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio (incluido el WhatsApp o enlace de contacto, que es público), tu correo electrónico (privado, solo para enviarte el enlace de gestión) y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión.",
     "contentTitle": "Contenido",
     "contentBody": "Los anuncios son responsabilidad exclusiva de quien los publica. Moderamos los anuncios antes de su publicación, pero no garantizamos su veracidad.",
     "contactTitle": "Contacto",

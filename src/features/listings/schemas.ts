@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isInSpain } from "@/lib/geo";
 
 const optionalInt = (max: number) =>
   z.coerce.number().int().min(0).max(max).optional().nullable();
@@ -14,10 +15,10 @@ const optionalUrl = z
 
 const listingShape = {
     type: z.enum(["room", "full_flat"]),
-    lat: z.number().min(38.9, "validation").max(40.1, "validation"),
-    lng: z.number().min(-1.3, "validation").max(0.3, "validation"),
-    neighborhood: z.string().min(1, "validation"),
-    municipality: z.string().min(1, "validation"),
+    lat: z.number().min(-90, "validation").max(90, "validation"),
+    lng: z.number().min(-180, "validation").max(180, "validation"),
+    neighborhood: z.string().trim().max(100, "validation").optional().nullable(),
+    municipality: z.string().trim().min(1, "validation").max(100, "validation"),
     price: z.coerce.number().int().min(50, "validation").max(20000, "validation"),
     description: z.string().trim().min(20, "validation").max(2000, "validation"),
     available_from: z
@@ -66,6 +67,9 @@ const listingShape = {
 const listingObject = z.object(listingShape);
 
 function refineListing(val: z.infer<typeof listingObject>, ctx: z.RefinementCtx) {
+  if (!isInSpain(val.lat, val.lng)) {
+    ctx.addIssue({ code: "custom", path: ["lat"], message: "outsideSpain" });
+  }
   if (val.type === "room" && !val.room_type) {
     ctx.addIssue({ code: "custom", path: ["room_type"], message: "validation" });
   }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getNeighborhoods, getPublicListings } from "@/features/listings/server/queries";
+import { getPublicListings } from "@/features/listings/server/queries";
 import { parseFilters } from "@/features/search/params";
 import type { Bounds } from "@/features/listings/types";
 
@@ -25,8 +25,7 @@ export async function GET(request: Request) {
   const supabase = await createClient();
 
   try {
-    const neighborhoods = await getNeighborhoods(supabase);
-    const result = await getPublicListings(supabase, bounds, filters, neighborhoods);
+    const result = await getPublicListings(supabase, bounds, filters);
     return NextResponse.json(result, {
       headers: { "Cache-Control": "private, max-age=15" },
     });

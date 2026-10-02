@@ -4,13 +4,14 @@ import { countActiveFilters, filtersToSearchParams, parseFilters } from "./param
 describe("filter params", () => {
   it("parses a full query string", () => {
     const p = new URLSearchParams(
-      "type=room&min=300&max=650&hood=russafa&bills=1&pets=1&smokers=1&mates=2&gender=female&avail=2026-09-01",
+      "type=room&min=300&max=650&city=Val%C3%A8ncia&hood=Ruzafa&bills=1&pets=1&smokers=1&mates=2&gender=female&avail=2026-09-01",
     );
     expect(parseFilters(p)).toEqual({
       type: "room",
       minPrice: 300,
       maxPrice: 650,
-      neighborhood: "russafa",
+      city: "València",
+      neighborhood: "Ruzafa",
       billsIncluded: true,
       pets: true,
       smokers: true,
@@ -58,5 +59,6 @@ describe("filter params", () => {
     expect(countActiveFilters({})).toBe(0);
     expect(countActiveFilters({ type: "room", pets: true, minPrice: 100 })).toBe(3);
     expect(countActiveFilters({ gender: "male" })).toBe(1);
+    expect(countActiveFilters({ city: "Madrid", neighborhood: "Chamberí" })).toBe(2);
   });
 });
