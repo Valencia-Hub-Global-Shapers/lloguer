@@ -202,15 +202,11 @@
     "rejectedHint": "Corregeix el que s'indica i torna a publicar-lo."
   },
   "footer": {
-    "about": "MyLloguer és una iniciativa sense ànim de lucre del Hub València de Global Shapers: un directori obert de pisos i habitacions compartides perquè trobar casa deixe de dependre de mil grups de WhatsApp.",
-    "exploreTitle": "Explora",
-    "hubSite": "Global Shapers València",
-    "publish": "Publicar un anunci",
-    "contactTitle": "Contacte",
+    "initiative": {
+      "before": "Una iniciativa sense ànim de lucre de",
+      "hub": "Global Shapers València"
+    },
     "contactEmail": "valencia.globalshapers@gmail.com",
-    "contactCity": "València, Espanya",
-    "membershipNote": "Global Shapers València és un hub independent i de voluntariat de la Global Shapers Community, una iniciativa del Fòrum Econòmic Mundial. No és una entitat legal ni financerament afiliada al Fòrum Econòmic Mundial.",
-    "rights": "Hub València de Global Shapers. Construït per la comunitat, gestionat per voluntaris.",
-    "initiative": "Una iniciativa de Global Shapers València"
+    "membershipNote": "Global Shapers València és un hub independent i de voluntariat de la Global Shapers Community, una iniciativa del Fòrum Econòmic Mundial. No és una entitat legal ni financerament afiliada al Fòrum Econòmic Mundial."
   }
 }
