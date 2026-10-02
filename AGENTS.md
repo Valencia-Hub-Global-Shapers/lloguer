@@ -1,6 +1,6 @@
 # MyLloguer — agent guide
 
-Map-first, open shared-flat classifieds for all of Spain (the map opens on València by default). Anyone can publish without an account; every listing is manually moderated and expires 10 days after approval. Next.js 15 (App Router) + TypeScript + Tailwind v4 + Supabase (Postgres/PostGIS, Auth, Storage) + Mapbox GL.
+Map-first, open shared-flat classifieds for all of Spain (the map opens on València by default). Anyone can publish without an account; every listing is manually moderated and expires 10 days after approval. Next.js 15 (App Router) + TypeScript + Tailwind v4 + Supabase (Postgres/PostGIS, Auth, Storage) + MapLibre GL (OpenStreetMap tiles, no API key).
 
 ## Commands
 
@@ -17,7 +17,7 @@ npm run db:reset       # re-apply migrations + seed
 
 ## Local setup
 
-Dev runs against the **cloud Supabase project** — no Docker required. `.env` holds the cloud keys (Supabase URL/anon key, Mapbox, Upstash). Do not create `.env.local` (it would override `.env`).
+Dev runs against the **cloud Supabase project** — no Docker required. `.env` holds the cloud keys (Supabase URL/anon key, Upstash). Do not create `.env.local` (it would override `.env`).
 
 1. Apply migrations to the cloud project (one time, or after adding migrations):
    `npx supabase link --project-ref oivdjumiwtppxuvpirab && npx supabase db push`
@@ -53,7 +53,7 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 - Filter state lives only in URL searchParams (`src/features/search/params.ts`). The gender filter means "listings that accept my gender" (`preferred_gender` is `any` or the chosen value).
 - Listing TTL is `LISTING_TTL_DAYS` (`src/lib/constants.ts`, 10 days), applied on approval.
 - Schema baseline is the single `supabase/migrations/0001_init.sql`. Nothing is deployed yet, so edit it in place and reset the DB; once a production database exists, switch to append-only migrations. `supabase/seed.sql` must stay reproducible via `db reset`.
-- Places are free text on each listing (`municipality` required, `neighborhood` optional), filled at publish time by Mapbox reverse geocoding with `language=es` (`src/features/map/geocode.ts`) and editable by the poster. There is no neighborhoods table: the `public_places` view lists places with live listings (plus their bounding box) and drives the "city or neighborhood" filter (`city` / `hood` URL params) and the map fly-to.
+- Places are free text on each listing (`municipality` required, `neighborhood` optional), filled at publish time by OpenStreetMap Nominatim reverse geocoding with `accept-language=es` (`src/features/map/geocode.ts`) and editable by the poster. There is no neighborhoods table: the `public_places` view lists places with live listings (plus their bounding box) and drives the "city or neighborhood" filter (`city` / `hood` URL params) and the map fly-to.
 - Geography is Spain only. `src/lib/geo.ts` and the `listings_in_spain` constraint hold the same COARSE bounding boxes (they cannot follow the border, so they still cover Portugal and southern France); the form also rejects pins whose reverse-geocoded country is not ES, and moderators review everything.
 - Map pins are clustered on the server: `browse_pins()` (SQL) snaps live listings to a grid sized for the client's zoom (`src/features/map/clustering.ts`, clustered at zoom <= 13) and returns single listings or `{count, lat, lng}` cells. The client sends `zoom` with the bounds and just draws what it gets, so payload size does not grow with the number of listings. Its filters mirror `getPublicListings`; keep both in sync when adding a filter. Public coords are snapped to ~100 m, so many listings can share one point even at max zoom (they still overlap there).
 

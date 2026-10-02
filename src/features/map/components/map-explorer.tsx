@@ -13,7 +13,7 @@ import { zoomForBounds } from "../clustering";
 import { ListingCard } from "@/features/listings/components/listing-card";
 import { FilterBar } from "@/features/search/components/filter-bar";
 import type { Bounds, BrowseResponse } from "@/features/listings/types";
-import { ExplorerMap, hasMapboxToken } from "./explorer-map";
+import { ExplorerMap } from "./explorer-map";
 
 type Props = {
   initialData: BrowseResponse;
@@ -213,60 +213,47 @@ export function MapExplorer({ initialData, initialBounds, places }: Props) {
 
       {/* Map */}
       <div className="relative flex-1">
-        {hasMapboxToken ? (
-          <ExplorerMap
-            pins={data.pins}
-            activeId={activeId}
-            onBoundsChange={onBoundsChange}
-            onPinClick={openListing}
-            onPinHover={setActiveId}
-            initialBounds={[
-              initialBounds.minLng,
-              initialBounds.minLat,
-              initialBounds.maxLng,
-              initialBounds.maxLat,
-            ]}
-            focusBounds={
-              focusBounds
-                ? [focusBounds.minLng, focusBounds.minLat, focusBounds.maxLng, focusBounds.maxLat]
-                : null
-            }
-          />
-        ) : (
-          <div className="bg-muted text-muted-foreground absolute inset-0 hidden items-center justify-center p-8 text-center text-sm md:flex">
-            Mapbox token not configured (NEXT_PUBLIC_MAPBOX_TOKEN)
-          </div>
-        )}
+        <ExplorerMap
+          pins={data.pins}
+          activeId={activeId}
+          onBoundsChange={onBoundsChange}
+          onPinClick={openListing}
+          onPinHover={setActiveId}
+          initialBounds={[
+            initialBounds.minLng,
+            initialBounds.minLat,
+            initialBounds.maxLng,
+            initialBounds.maxLat,
+          ]}
+          focusBounds={
+            focusBounds
+              ? [focusBounds.minLng, focusBounds.minLat, focusBounds.maxLng, focusBounds.maxLat]
+              : null
+          }
+        />
 
         {/* Mobile filter bar overlay */}
         <div className="bg-background/90 absolute inset-x-0 top-0 z-10 border-b backdrop-blur md:hidden">
           <FilterBar places={places} />
         </div>
-
-        {/* Mobile: no map token => plain list */}
-        {!hasMapboxToken && (
-          <div className="absolute inset-0 top-14 overflow-y-auto md:hidden">{list}</div>
-        )}
       </div>
 
       {/* Mobile bottom sheet */}
-      {hasMapboxToken && (
-        <div className="md:hidden">
-          <Drawer
-            open
-            modal={false}
-            dismissible={false}
-            snapPoints={["140px", 0.55, 0.92]}
-            activeSnapPoint={snap}
-            setActiveSnapPoint={setSnap}
-          >
-            <DrawerContent className="max-h-[92dvh]" aria-label="Results">
-              <DrawerHandle />
-              <div className="min-h-0 flex-1 overflow-y-auto pb-6">{list}</div>
-            </DrawerContent>
-          </Drawer>
-        </div>
-      )}
+      <div className="md:hidden">
+        <Drawer
+          open
+          modal={false}
+          dismissible={false}
+          snapPoints={["140px", 0.55, 0.92]}
+          activeSnapPoint={snap}
+          setActiveSnapPoint={setSnap}
+        >
+          <DrawerContent className="max-h-[92dvh]" aria-label="Results">
+            <DrawerHandle />
+            <div className="min-h-0 flex-1 overflow-y-auto pb-6">{list}</div>
+          </DrawerContent>
+        </Drawer>
+      </div>
     </div>
   );
 }

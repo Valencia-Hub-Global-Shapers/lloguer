@@ -1,61 +1,56 @@
 export type ReverseGeocodeResult = {
   /** Neighborhood or locality, when the point has one. */
   neighborhood: string | null;
-  /** City/town ("place"). */
+  /** City/town/village. */
   municipality: string | null;
   /** ISO 3166-1 alpha-2, lowercase (e.g. "es"). */
   country: string | null;
 };
 
-type MapboxFeature = {
-  id?: string;
-  place_type?: string[];
-  text?: string;
-  properties?: { short_code?: string };
-  context?: { id: string; text: string; short_code?: string }[];
-};
+type NominatimAddress = Record<string, string | undefined>;
 
-/**
- * Parses a Mapbox Geocoding v5 reverse response (types=neighborhood,locality,place).
- * Features come most specific first.
- */
-export function parseReverseGeocode(json: unknown): ReverseGeocodeResult {
-  const features = ((json as { features?: MapboxFeature[] } | null)?.features ?? []) as MapboxFeature[];
-  const byType = (type: string) => features.find((f) => f.place_type?.includes(type));
+// Most specific first. OSM tags vary by place, so take the first one present.
+const NEIGHBORHOOD_KEYS = ["neighbourhood", "quarter", "suburb", "city_district", "borough"];
+const MUNICIPALITY_KEYS = ["city", "town", "village", "municipality"];
 
-  const hood = byType("neighborhood") ?? byType("locality");
-  const place = byType("place");
-
-  // Country lives in the context of any feature
-  let country: string | null = null;
-  for (const f of features) {
-    const c = f.context?.find((ctx) => ctx.id.startsWith("country"));
-    if (c?.short_code) {
-      country = c.short_code.toLowerCase();
-      break;
-    }
+function firstOf(address: NominatimAddress, keys: string[]): string | null {
+  for (const key of keys) {
+    const value = address[key]?.trim();
+    if (value) return value;
   }
+  return null;
+}
 
+/** Parses a Nominatim reverse response (format=jsonv2&addressdetails=1). */
+export function parseReverseGeocode(json: unknown): ReverseGeocodeResult {
+  const address = (json as { address?: NominatimAddress } | null)?.address ?? {};
   return {
-    neighborhood: hood?.text ?? null,
-    municipality: place?.text ?? null,
-    country,
+    neighborhood: firstOf(address, NEIGHBORHOOD_KEYS),
+    municipality: firstOf(address, MUNICIPALITY_KEYS),
+    country: address.country_code?.toLowerCase() ?? null,
   };
 }
 
-/** Names are stored in Spanish so filter values stay consistent across UI languages. */
+/**
+ * Reverse geocodes with OpenStreetMap Nominatim (no API key). Names are
+ * requested in Spanish so filter values stay consistent across UI languages.
+ * Usage policy: max 1 request per second, called only on explicit pin drops.
+ */
 export async function reverseGeocode(
   lat: number,
   lng: number,
-  token: string,
   signal?: AbortSignal,
 ): Promise<ReverseGeocodeResult | null> {
-  if (!token) return null;
   try {
-    const url =
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json` +
-      `?types=neighborhood,locality,place&language=es&limit=5&access_token=${token}`;
-    const res = await fetch(url, { signal });
+    const params = new URLSearchParams({
+      format: "jsonv2",
+      lat: String(lat),
+      lon: String(lng),
+      zoom: "16",
+      addressdetails: "1",
+      "accept-language": "es",
+    });
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?${params}`, { signal });
     if (!res.ok) return null;
     return parseReverseGeocode(await res.json());
   } catch {

@@ -26,7 +26,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useI18n } from "@/i18n/client";
 import { PinPickerMap } from "@/features/map/components/pin-picker-map";
-import { hasMapboxToken, MAPBOX_TOKEN } from "@/features/map/components/explorer-map";
 import { reverseGeocode } from "@/features/map/geocode";
 import { VALENCIA_CENTER } from "@/lib/utils";
 import {
@@ -89,7 +88,7 @@ export function ListingForm({
   const geocodeRequest = useRef(0);
   const fillPlaceFromPin = async (pinLat: number, pinLng: number) => {
     const request = ++geocodeRequest.current;
-    const place = await reverseGeocode(pinLat, pinLng, MAPBOX_TOKEN);
+    const place = await reverseGeocode(pinLat, pinLng);
     if (!place || request !== geocodeRequest.current) return;
     if (place.country && place.country !== "es") {
       form.setError("lat", { message: "outsideSpain" });
@@ -102,7 +101,7 @@ export function ListingForm({
 
   // New listings start on the default map position: detect its place too
   useEffect(() => {
-    if (mode === "create" && hasMapboxToken && !form.getValues("municipality")) {
+    if (mode === "create" && !form.getValues("municipality")) {
       void fillPlaceFromPin(form.getValues("lat"), form.getValues("lng"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -217,24 +216,7 @@ export function ListingForm({
 
           <div className="grid gap-1.5">
             <FieldLabel required>{t("publish.dropPin")}</FieldLabel>
-            {hasMapboxToken ? (
-              <PinPickerMap lat={lat} lng={lng} onChange={onPin} />
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Input
-                  type="number"
-                  step="any"
-                  placeholder="lat"
-                  {...register("lat", { valueAsNumber: true })}
-                />
-                <Input
-                  type="number"
-                  step="any"
-                  placeholder="lng"
-                  {...register("lng", { valueAsNumber: true })}
-                />
-              </div>
-            )}
+            <PinPickerMap lat={lat} lng={lng} onChange={onPin} />
             {fieldError(errors.lat?.message || errors.lng?.message)}
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-1.5">
@@ -253,12 +235,8 @@ export function ListingForm({
               </div>
             </div>
             <p className="text-muted-foreground text-xs">{t("publish.placeHint")}</p>
-            {hasMapboxToken ? (
-              <>
-                <input type="hidden" {...register("lat", { valueAsNumber: true })} />
-                <input type="hidden" {...register("lng", { valueAsNumber: true })} />
-              </>
-            ) : null}
+            <input type="hidden" {...register("lat", { valueAsNumber: true })} />
+            <input type="hidden" {...register("lng", { valueAsNumber: true })} />
           </div>
         </CardContent>
       </Card>

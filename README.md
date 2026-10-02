@@ -6,7 +6,7 @@ Mapa primero: habitaciones y pisos entre particulares en toda España. El mapa a
 
 ## Stack
 
-Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase (Postgres/PostGIS, Auth, Storage) · Mapbox GL · i18n es/ca/en
+Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase (Postgres/PostGIS, Auth, Storage) · MapLibre GL + OpenStreetMap · i18n es/ca/en
 
 ## Arranque local
 

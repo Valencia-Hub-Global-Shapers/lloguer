@@ -1,18 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import * as maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import type { Bounds, ListingPin } from "@/features/listings/types";
 import { useI18n } from "@/i18n/client";
 import { VALENCIA_CENTER } from "@/lib/utils";
 import { formatCount } from "../clustering";
+import { MAP_STYLE } from "../style";
 
-export const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
-export const hasMapboxToken =
-  MAPBOX_TOKEN.length > 0 && !MAPBOX_TOKEN.startsWith("your-");
-
-const MAP_STYLE = "mapbox://styles/mapbox/light-v11";
 const MAX_CLUSTER_CLICK_ZOOM = 16;
 
 type Props = {
@@ -37,26 +33,25 @@ export function ExplorerMap({
 }: Props) {
   const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+  const markersRef = useRef<maplibregl.Marker[]>([]);
   const pillByIdRef = useRef(new Map<string, HTMLElement>());
   const callbacksRef = useRef({ onBoundsChange, onPinClick, onPinHover });
   callbacksRef.current = { onBoundsChange, onPinClick, onPinHover };
 
   // Init map once
   useEffect(() => {
-    if (!hasMapboxToken || !containerRef.current || mapRef.current) return;
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+    if (!containerRef.current || mapRef.current) return;
 
-    const map = new mapboxgl.Map({
+    const map = new maplibregl.Map({
       container: containerRef.current,
       style: MAP_STYLE,
       center: VALENCIA_CENTER,
       zoom: 11.5,
       attributionControl: false,
     });
-    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
-    map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
 
     if (initialBounds) {
       map.fitBounds(
@@ -146,7 +141,7 @@ export function ExplorerMap({
         }
 
         markersRef.current.push(
-          new mapboxgl.Marker({ element: el }).setLngLat([pin.lng, pin.lat]).addTo(map),
+          new maplibregl.Marker({ element: el }).setLngLat([pin.lng, pin.lat]).addTo(map),
         );
       }
     };
