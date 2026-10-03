@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Lloguer · Global Shapers Valencia",
   description:
-    "Alquiler de habitaciones y pisos compartidos entre particulares en toda España. Una iniciativa sin ánimo de lucro de Global Shapers Valencia Hub.",
+    "Alquiler de pisos y habitaciones asequibles entre particulares en toda España. Una iniciativa sin ánimo de lucro de Global Shapers Valencia Hub.",
 };
 
 export default async function RootLayout({

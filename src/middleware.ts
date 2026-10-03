@@ -52,6 +52,6 @@ export const config = {
     /*
      * Skip static assets, image optimizer, api routes and the auth callback.
      */
-    "/((?!_next/static|_next/image|favicon.ico|api/|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/|auth/callback|maplibre/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };
