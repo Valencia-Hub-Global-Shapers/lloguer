@@ -263,7 +263,9 @@
     "captcha": "We could not verify you are human. Please try again.",
     "outsideSpain": "The pin is outside Spain.",
     "contactRequired": "Give a WhatsApp number or an email.",
-    "fieldInvalid": "Please check this field."
+    "fieldInvalid": "Please check this field.",
+    "pageTitle": "Something went wrong.",
+    "pageHint": "Try again or reload the page."
   },
   "legal": {
     "title": "Legal notice & privacy",

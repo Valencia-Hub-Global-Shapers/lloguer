@@ -6,7 +6,7 @@ Mapa primero: habitaciones y pisos entre particulares en toda España. El mapa a
 
 ## Stack
 
-Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase (Postgres/PostGIS, Auth, Storage) · MapLibre GL + OpenStreetMap (sin API key) · i18n es/ca/en
+Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase (Postgres/PostGIS, Auth, Storage) · MapLibre GL + OpenStreetMap (sin API key) · i18n es/va/en
 
 ## Arranque local
 
@@ -62,6 +62,11 @@ Cualquiera puede publicar un anuncio sin registrarse (`/publish`). Cada anuncio 
 4. Correo de acceso de los admins: el servicio de correo integrado de Supabase solo envía a miembros de la organización y con un límite muy bajo. En Authentication → Emails → SMTP Settings configura tu propio SMTP (por ejemplo Resend, el mismo que usas para los enlaces de edición). En Authentication → URL Configuration pon la URL del sitio y añade `https://<tu-dominio>/auth/callback` a las redirecciones.
 5. Da de alta a un admin: la persona entra en `/login`, pide el enlace y lo abre (verá la cuenta creada pero sin acceso). Después, en el SQL Editor: `update profiles set is_admin = true where email = '<su email>';`. Para quitarlo, `is_admin = false`. El cambio se aplica en su siguiente carga de página.
 6. No ejecutes `supabase/seed.sql` en producción (crea usuarios demo con contraseña conocida).
+7. Limpieza programada y avisos: define `CRON_SECRET` en Vercel y guárdalo también en la base de datos:
+   ```sql
+   insert into private_settings (key, value) values ('cron_gate', '<CRON_SECRET>');
+   ```
+   El cron de Vercel (`vercel.json`) llama a `/api/cron/cleanup` a diario: purga anuncios caducados hace más de 30 días (con sus fotos), reintenta borrados de fotos fallidos y barre subidas huérfanas. Define `ADMIN_NOTIFY_EMAILS` (correos separados por comas) para recibir un aviso por cada anuncio pendiente.
 
 ### Mapa y OpenStreetMap
 

@@ -277,6 +277,15 @@ export type Database = {
         Returns: string[];
       };
       ack_photo_deletion: { Args: Record<string, never>; Returns: undefined };
+      purge_expired_listings: {
+        Args: { p_gate: string };
+        /** Photo paths the caller must now remove from Storage. */
+        Returns: string[];
+      };
+      pending_photo_paths: {
+        Args: { p_gate: string };
+        Returns: string[];
+      };
     };
     Enums: {
       listing_type: ListingType;

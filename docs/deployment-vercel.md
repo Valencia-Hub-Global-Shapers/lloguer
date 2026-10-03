@@ -105,7 +105,7 @@ Used to email posters their private edit link and, through Supabase SMTP, admin 
 
 - [ ] Project Settings, Domains: add `<DOMAIN>` and `www.<DOMAIN>`, follow Vercel's DNS instructions,
       and make one redirect to the other.
-- [ ] Wait for the certificate, then confirm `https://<DOMAIN>` loads (it redirects to `/es`, `/ca` or
+- [ ] Wait for the certificate, then confirm `https://<DOMAIN>` loads (it redirects to `/es`, `/va` or
       `/en` by browser language).
 - [ ] If the domain changed after step 1, update Supabase URL Configuration, Turnstile hostnames,
       `NEXT_PUBLIC_SITE_URL` and redeploy.
@@ -123,7 +123,7 @@ Used to email posters their private edit link and, through Supabase SMTP, admin 
 
 ## 7. Smoke test (do all of it before promoting)
 
-- [ ] Landing page loads in es, ca and en; the hero animation plays; "Explore the map" goes to `/map`.
+- [ ] Landing page loads in es, va and en; the hero animation plays; "Explore the map" goes to `/map`.
 - [ ] `/login` shows **only** the magic-link form (no email and password form).
 - [ ] **Publish** a real listing with photos: captcha shows, submit succeeds, the edit link appears
       on screen **and** arrives by email, and the email link opens `/manage/...`.

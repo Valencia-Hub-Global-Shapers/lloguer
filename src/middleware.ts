@@ -8,7 +8,7 @@ function detectLocale(request: NextRequest): string {
   const header = request.headers.get("accept-language") ?? "";
   for (const part of header.split(",")) {
     const tag = part.trim().split(";")[0]?.toLowerCase() ?? "";
-    if (tag.startsWith("ca")) return "ca";
+    if (tag.startsWith("va")) return "va";
     if (tag.startsWith("es")) return "es";
     if (tag.startsWith("en")) return "en";
   }
@@ -52,6 +52,6 @@ export const config = {
     /*
      * Skip static assets, image optimizer, api routes and the auth callback.
      */
-    "/((?!_next/static|_next/image|favicon.ico|api/|auth/callback|maplibre/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|opengraph-image|api/|auth/callback|maplibre/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

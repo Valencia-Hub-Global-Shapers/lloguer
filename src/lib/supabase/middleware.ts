@@ -3,9 +3,19 @@ import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/lib/types/database.types";
 
 export async function updateSession(request: NextRequest, response: NextResponse) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+  // Missing env config must not take the whole site down with a 500: log it,
+  // skip the session refresh and let pages handle the anonymous state.
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("Supabase env vars missing in middleware; session refresh skipped");
+    return { supabase: null, user: null, response };
+  }
+
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() {

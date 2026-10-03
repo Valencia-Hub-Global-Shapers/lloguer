@@ -17,7 +17,7 @@ import {
   type SubmissionValues,
 } from "../schemas";
 import { LISTING_PHOTOS_BUCKET } from "../photos";
-import { editLinkEmail } from "./emails";
+import { editLinkEmail, adminNotificationEmail } from "./emails";
 
 /**
  * Shared secret that proves a write came through these server actions (captcha
@@ -126,6 +126,25 @@ export async function createListing(
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const mail = editLinkEmail(safeLocale, `${siteUrl}/${safeLocale}/manage/${id}/${token}`);
   const emailed = await sendEmail({ to: parsed.data.internal_email, ...mail });
+
+  // Ping moderators (fire and forget): the queue has no badge notifications.
+  const notifyTo = (process.env.ADMIN_NOTIFY_EMAILS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (notifyTo.length > 0) {
+    const notification = adminNotificationEmail(safeLocale, {
+      price: parsed.data.price,
+      place: parsed.data.neighborhood || parsed.data.municipality,
+      isRoom: parsed.data.type === "room",
+      moderationUrl: `${siteUrl}/${safeLocale}/admin/moderation`,
+    });
+    for (const to of notifyTo) {
+      void sendEmail({ to, ...notification }).then((ok) => {
+        if (!ok) console.error("admin notification failed for", to);
+      });
+    }
+  }
 
   return ok({ id, token, emailed });
 }

@@ -3,7 +3,7 @@ import type { Dictionary } from "./types";
 
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   es: () => import("./es.json").then((m) => m.default as Dictionary),
-  ca: () => import("./ca.json").then((m) => m.default as Dictionary),
+  va: () => import("./va.json").then((m) => m.default as Dictionary),
   en: () => import("./en.json").then((m) => m.default as Dictionary),
 };
 

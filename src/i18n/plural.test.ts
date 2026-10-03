@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import es from "./es.json";
-import ca from "./ca.json";
+import va from "./va.json";
 import en from "./en.json";
 import { pluralKey } from "./plural";
 
@@ -19,7 +19,7 @@ describe("pluralKey", () => {
 });
 
 describe("singular strings", () => {
-  const dictionaries = { es, ca, en };
+  const dictionaries = { es, va, en };
   const keys = [
     ["listing", "flatmates"],
     ["listing", "bathrooms"],

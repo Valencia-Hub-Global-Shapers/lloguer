@@ -7,14 +7,14 @@ import { useI18n } from "@/i18n/client";
 import { cn } from "@/lib/utils";
 
 /** Compact ES | VAL | EN switch, as on the Global Shapers Valencia site. */
-const SHORT_LABELS: Record<Locale, string> = { es: "ES", ca: "VAL", en: "EN" };
+const SHORT_LABELS: Record<Locale, string> = { es: "ES", va: "VAL", en: "EN" };
 
 export function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { t } = useI18n();
 
-  const pathWithoutLocale = pathname.replace(/^\/(es|ca|en)/, "") || "/";
+  const pathWithoutLocale = pathname.replace(/^\/(es|va|en)/, "") || "/";
   const qs = searchParams.toString();
 
   return (

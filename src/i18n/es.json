@@ -263,7 +263,9 @@
     "captcha": "No hemos podido verificar que eres una persona. Inténtalo de nuevo.",
     "outsideSpain": "El marcador está fuera de España.",
     "contactRequired": "Indica un WhatsApp o un correo electrónico.",
-    "fieldInvalid": "Revisa este campo."
+    "fieldInvalid": "Revisa este campo.",
+    "pageTitle": "Algo ha salido mal.",
+    "pageHint": "Vuelve a intentarlo o recarga la página."
   },
   "legal": {
     "title": "Aviso legal y privacidad",
