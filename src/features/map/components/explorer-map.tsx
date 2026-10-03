@@ -172,13 +172,16 @@ export function ExplorerMap({
   }, [activeId, pins]);
 
   return (
-    <>
-      <div ref={containerRef} className="absolute inset-0" aria-hidden={false} />
+    // MapLibre puts `position: relative; overflow: hidden` on its container, which
+    // overrides Tailwind's `absolute`. So the sizing wrapper stays outside and the
+    // container just fills it; otherwise the map collapses to zero height.
+    <div className="absolute inset-0">
+      <div ref={containerRef} className="h-full w-full" aria-hidden={false} />
       {failed ? (
         <div className="text-muted-foreground absolute inset-0 grid place-items-center p-6 text-center text-sm">
           {t("common.mapUnavailable")}
         </div>
       ) : null}
-    </>
+    </div>
   );
 }
