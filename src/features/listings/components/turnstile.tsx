@@ -12,9 +12,11 @@ type TurnstileApi = {
       sitekey: string;
       callback: (token: string) => void;
       "expired-callback": () => void;
+      "error-callback": () => void;
     },
   ) => string;
   remove: (id: string) => void;
+  reset: (id: string) => void;
 };
 
 declare global {
@@ -40,9 +42,20 @@ function loadScript(): Promise<void> {
   });
 }
 
-/** Cloudflare Turnstile challenge. Renders nothing when no site key is set. */
-export function TurnstileWidget({ onToken }: { onToken: (token: string | null) => void }) {
+/**
+ * Cloudflare Turnstile challenge. Renders nothing when no site key is set.
+ * `resetSignal` re-runs the challenge: tokens are single-use, so after a failed
+ * submit the parent must bump it to get a fresh token.
+ */
+export function TurnstileWidget({
+  onToken,
+  resetSignal = 0,
+}: {
+  onToken: (token: string | null) => void;
+  resetSignal?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
   const onTokenRef = useRef(onToken);
 
   useEffect(() => {
@@ -51,25 +64,32 @@ export function TurnstileWidget({ onToken }: { onToken: (token: string | null) =
 
   useEffect(() => {
     if (!SITE_KEY || !ref.current) return;
-    let widgetId: string | null = null;
     let cancelled = false;
 
     loadScript()
       .then(() => {
         if (cancelled || !ref.current || !window.turnstile) return;
-        widgetId = window.turnstile.render(ref.current, {
+        widgetIdRef.current = window.turnstile.render(ref.current, {
           sitekey: SITE_KEY,
           callback: (token) => onTokenRef.current(token),
           "expired-callback": () => onTokenRef.current(null),
+          "error-callback": () => onTokenRef.current(null),
         });
       })
       .catch((e) => console.error("turnstile failed to load:", e));
 
     return () => {
       cancelled = true;
-      if (widgetId && window.turnstile) window.turnstile.remove(widgetId);
+      if (widgetIdRef.current && window.turnstile) window.turnstile.remove(widgetIdRef.current);
+      widgetIdRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (resetSignal === 0) return;
+    if (widgetIdRef.current && window.turnstile) window.turnstile.reset(widgetIdRef.current);
+    onTokenRef.current(null);
+  }, [resetSignal]);
 
   return SITE_KEY ? <div ref={ref} /> : null;
 }
