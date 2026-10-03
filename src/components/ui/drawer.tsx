@@ -25,11 +25,12 @@ function DrawerOverlay({
 function DrawerContent({
   className,
   children,
+  overlay = true,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Content> & { overlay?: boolean }) {
   return (
     <DrawerPortal>
-      <DrawerOverlay />
+      {overlay ? <DrawerOverlay /> : null}
       <DrawerPrimitive.Content
         className={cn(
           "bg-background fixed inset-x-0 bottom-0 z-50 flex h-auto flex-col rounded-t-2xl border-t outline-none",

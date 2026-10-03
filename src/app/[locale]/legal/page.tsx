@@ -19,6 +19,10 @@ export default async function LegalPage({
           <p className="text-muted-foreground">{dict.legal.dataBody}</p>
         </section>
         <section>
+          <h2 className="mb-1 font-semibold">{dict.legal.processorsTitle}</h2>
+          <p className="text-muted-foreground">{dict.legal.processorsBody}</p>
+        </section>
+        <section>
           <h2 className="mb-1 font-semibold">{dict.legal.contentTitle}</h2>
           <p className="text-muted-foreground">{dict.legal.contentBody}</p>
         </section>

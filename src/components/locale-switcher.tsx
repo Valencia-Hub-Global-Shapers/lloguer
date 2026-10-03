@@ -27,7 +27,7 @@ export function LocaleSwitcher({ locale }: { locale: Locale }) {
           title={localeLabels[l]}
           aria-current={l === locale ? "true" : undefined}
           className={cn(
-            "px-2 py-1.5 text-[0.72rem] font-semibold tracking-[0.09em] transition-colors",
+            "px-1.5 py-1.5 text-[0.72rem] font-semibold tracking-[0.09em] transition-colors sm:px-2",
             i > 0 && "border-input border-l",
             l === locale ? "text-foreground" : "text-muted-foreground hover:text-foreground",
           )}

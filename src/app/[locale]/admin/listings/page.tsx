@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getAllListings } from "@/features/moderation/server/queries";
 import { StatusBadge } from "@/features/listings/components/status-badge";
@@ -63,7 +64,36 @@ export default async function AdminListingsPage({
         ))}
       </div>
 
-      <div className="overflow-x-auto rounded-xl border">
+      {/* Mobile: cards */}
+      <div className="grid gap-2 sm:hidden">
+        {listings.map((listing) => (
+          <Link
+            key={listing.id}
+            href={`/${locale}/admin/listings/${listing.id}`}
+            className="bg-card flex items-center gap-3 rounded-xl border p-3"
+          >
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-semibold">{listing.price} €</span>
+                <StatusBadge status={listing.status} />
+              </div>
+              <p className="text-muted-foreground mt-0.5 truncate text-sm">
+                {listing.neighborhood ?? listing.municipality}
+              </p>
+              <p className="text-muted-foreground mt-0.5 text-xs">
+                {formatDate(listing.created_at, locale)} · {listing.id.slice(0, 8)}
+              </p>
+            </div>
+            <ChevronRight className="text-muted-foreground size-4 shrink-0" />
+          </Link>
+        ))}
+        {listings.length === 0 ? (
+          <p className="text-muted-foreground p-6 text-center text-sm">—</p>
+        ) : null}
+      </div>
+
+      {/* Desktop: table */}
+      <div className="hidden overflow-x-auto rounded-xl border sm:block">
         <table className="w-full text-sm">
           <thead>
             <tr className="text-muted-foreground border-b text-left text-xs">
