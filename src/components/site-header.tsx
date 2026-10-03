@@ -24,9 +24,7 @@ export async function SiteHeader({
         className="font-logo text-foreground flex items-center gap-2 text-[1.6rem] leading-none font-semibold tracking-tight"
       >
         <LogoMark className="size-8 shrink-0" />
-        <span>
-          My<span className="text-primary">Lloguer</span>
-        </span>
+        <span className="text-primary">Lloguer</span>
       </Link>
 
       <div className="flex-1" />

@@ -1,4 +1,4 @@
-/** MyLloguer mark: a key with a house-shaped bow. Keep in sync with src/app/icon.svg. */
+/** Lloguer mark: a key with a house-shaped bow. Keep in sync with src/app/icon.svg. */
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 64" aria-hidden="true" className={className}>

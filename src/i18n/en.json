@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteName": "MyLloguer",
+    "siteName": "Lloguer",
     "tagline": "Private rentals across Spain",
     "publish": "Publish",
     "login": "Sign in",
@@ -39,7 +39,7 @@
     "t3Body": "Each listing switches off by itself after {days} days, so there are no ghost rooms.",
     "problemTitle": "The problem",
     "problemBody": "Looking for a shared flat today is a mess: offers scattered across WhatsApp groups, stories that vanish and different platforms, with no filters and no way to know if the room is still free.",
-    "solutionBody": "MyLloguer brings it all together in one open board that is searchable and always current.",
+    "solutionBody": "Lloguer brings it all together in one open board that is searchable and always current.",
     "filtersTitle": "Find what fits you",
     "filtersIntro": "Browse the map or filter by what really matters when sharing a flat.",
     "fNeighborhood": "Neighbourhood",
@@ -58,7 +58,7 @@
     "s3Title": "Post",
     "s3Body": "Mark the location, add photos and details, and we review it before publishing.",
     "partnersTitle": "For universities, groups and institutions",
-    "partnersBody": "MyLloguer is a non-profit initiative by Global Shapers Valencia. If you want to share it with your community or work with us, get in touch.",
+    "partnersBody": "Lloguer is a non-profit initiative by Global Shapers Valencia. If you want to share it with your community or work with us, get in touch.",
     "partnersCta": "Get in touch"
   },
   "home": {
@@ -243,7 +243,7 @@
   },
   "legal": {
     "title": "Legal notice & privacy",
-    "intro": "MyLloguer is a non-profit classifieds platform for private rentals and shared flats across Spain, run by Global Shapers Valencia.",
+    "intro": "Lloguer is a non-profit classifieds platform for private rentals and shared flats across Spain, run by Global Shapers Valencia.",
     "dataTitle": "Personal data",
     "dataBody": "We only process what the service needs: your listing content, including the WhatsApp number and contact email you give (both public); your private email (only used to send you the management link, never published, and it can differ from the contact email); and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link: the listing, its photos and your data are erased permanently.",
     "contentTitle": "Content",

@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteName": "MyLloguer",
+    "siteName": "Lloguer",
     "tagline": "Alquiler entre particulares en toda España",
     "publish": "Publica",
     "login": "Inicia sesión",
@@ -39,7 +39,7 @@
     "t3Body": "Cada anuncio se desactiva solo a los {days} días, así que no hay pisos fantasma.",
     "problemTitle": "El problema",
     "problemBody": "Hoy, buscar piso compartido es un caos: ofertas repartidas entre grupos de WhatsApp, historias que desaparecen y plataformas distintas, sin filtros y sin saber si la habitación sigue libre.",
-    "solutionBody": "MyLloguer lo reúne todo en un tablón abierto, buscable y siempre actualizado.",
+    "solutionBody": "Lloguer lo reúne todo en un tablón abierto, buscable y siempre actualizado.",
     "filtersTitle": "Encuentra lo que te encaja",
     "filtersIntro": "Busca en el mapa o filtra por lo que de verdad importa al compartir piso.",
     "fNeighborhood": "Barrio",
@@ -58,7 +58,7 @@
     "s3Title": "Publica",
     "s3Body": "Marca la ubicación, añade fotos y detalles, y lo revisamos para publicarlo.",
     "partnersTitle": "Para universidades, colectivos e instituciones",
-    "partnersBody": "MyLloguer es una iniciativa sin ánimo de lucro de Global Shapers Valencia. Si quieres difundirla entre tu comunidad o colaborar con nosotros, escríbenos.",
+    "partnersBody": "Lloguer es una iniciativa sin ánimo de lucro de Global Shapers Valencia. Si quieres difundirla entre tu comunidad o colaborar con nosotros, escríbenos.",
     "partnersCta": "Escríbenos"
   },
   "home": {
@@ -243,7 +243,7 @@
   },
   "legal": {
     "title": "Aviso legal y privacidad",
-    "intro": "MyLloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
+    "intro": "Lloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
     "dataTitle": "Datos personales",
     "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio, incluidos el WhatsApp y el correo de contacto que indiques (son públicos); tu correo privado (solo para enviarte el enlace de gestión, no se publica y puede ser distinto del de contacto); y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión: se eliminan de forma definitiva el anuncio, sus fotos y tus datos.",
     "contentTitle": "Contenido",

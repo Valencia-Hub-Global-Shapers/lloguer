@@ -1,4 +1,4 @@
-# Deploying MyLloguer on Vercel
+# Deploying Lloguer on Vercel
 
 A step-by-step checklist for the first production deploy. Work through it in order; the
 order matters (for example the database must exist before the app's env vars can be filled in).
@@ -8,7 +8,7 @@ project used for local development and previews (`oivdjumiwtppxuvpirab`).
 
 ## 0. Decisions to make first
 
-- [ ] **Production domain** (for example `mylloguer.org`). It is needed for Supabase redirects,
+- [ ] **Production domain** (for example `lloguer.example`). It is needed for Supabase redirects,
       Turnstile, Resend and `NEXT_PUBLIC_SITE_URL`.
 - [ ] **Region.** Pick one EU region and use it for both Supabase and Vercel functions (see 1 and 4).
       Pages are server-rendered on every request, so distance between the two is user-visible latency.
@@ -57,7 +57,7 @@ Used to email posters their private edit link and, through Supabase SMTP, admin 
 - [ ] Add the DNS records Resend shows (SPF, DKIM, optionally DMARC) and wait until the domain
       shows as verified.
 - [ ] Create an API key, sending access only. This is `RESEND_API_KEY`.
-- [ ] Decide `EMAIL_FROM`, for example `MyLloguer <no-reply@<DOMAIN>>`. It must be on the verified domain.
+- [ ] Decide `EMAIL_FROM`, for example `Lloguer <no-reply@<DOMAIN>>`. It must be on the verified domain.
 - [ ] Use the same Resend account for the SMTP settings in Supabase (step 1).
 
 ## 3. Turnstile and Upstash
@@ -89,7 +89,7 @@ Used to email posters their private edit link and, through Supabase SMTP, admin 
       | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile site key |
       | `TURNSTILE_SECRET_KEY` | Turnstile secret |
       | `RESEND_API_KEY` | Resend key |
-      | `EMAIL_FROM` | `MyLloguer <no-reply@<DOMAIN>>` |
+      | `EMAIL_FROM` | `Lloguer <no-reply@<DOMAIN>>` |
       | `UPSTASH_REDIS_REST_URL` | Upstash REST URL |
       | `UPSTASH_REDIS_REST_TOKEN` | Upstash token |
 

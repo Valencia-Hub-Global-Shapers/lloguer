@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteName": "MyLloguer",
+    "siteName": "Lloguer",
     "tagline": "Lloguer entre particulars a tot Espanya",
     "publish": "Publica",
     "login": "Inicia sessió",
@@ -39,7 +39,7 @@
     "t3Body": "Cada anunci es desactiva sol als {days} dies, així que no hi ha pisos fantasma.",
     "problemTitle": "El problema",
     "problemBody": "Avui, buscar pis compartit és un caos: ofertes repartides entre grups de WhatsApp, històries que desapareixen i plataformes diferents, sense filtres i sense saber si l'habitació continua lliure.",
-    "solutionBody": "MyLloguer ho reuneix tot en un tauler obert, cercable i sempre actualitzat.",
+    "solutionBody": "Lloguer ho reuneix tot en un tauler obert, cercable i sempre actualitzat.",
     "filtersTitle": "Troba el que t'encaixa",
     "filtersIntro": "Cerca al mapa o filtra pel que de veritat importa en compartir pis.",
     "fNeighborhood": "Barri",
@@ -58,7 +58,7 @@
     "s3Title": "Publica",
     "s3Body": "Marca la ubicació, afegeix fotos i detalls, i el revisem per publicar-lo.",
     "partnersTitle": "Per a universitats, col·lectius i institucions",
-    "partnersBody": "MyLloguer és una iniciativa sense ànim de lucre de Global Shapers València. Si vols difondre-la entre la teua comunitat o col·laborar amb nosaltres, escriu-nos.",
+    "partnersBody": "Lloguer és una iniciativa sense ànim de lucre de Global Shapers València. Si vols difondre-la entre la teua comunitat o col·laborar amb nosaltres, escriu-nos.",
     "partnersCta": "Escriu-nos"
   },
   "home": {
@@ -243,7 +243,7 @@
   },
   "legal": {
     "title": "Avís legal i privacitat",
-    "intro": "MyLloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
+    "intro": "Lloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
     "dataTitle": "Dades personals",
     "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci, inclosos el WhatsApp i el correu de contacte que indiques (són públics); el teu correu privat (només per enviar-te l'enllaç de gestió, no es publica i pot ser diferent del de contacte); i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió: s'eliminen de forma definitiva l'anunci, les seues fotos i les teues dades.",
     "contentTitle": "Contingut",

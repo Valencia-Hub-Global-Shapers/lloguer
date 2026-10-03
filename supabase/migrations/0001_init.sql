@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- MyLloguer baseline schema.
+-- Lloguer baseline schema.
 --
 -- Open shared-flat classifieds for Spain: anyone can publish without an
 -- account, every listing goes through manual moderation, and approved listings

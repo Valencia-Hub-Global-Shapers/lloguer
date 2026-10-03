@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const listing = await getPublicListingById(supabase, id).catch(() => null);
   if (!listing) return {};
   return {
-    title: `${listing.price} € · ${listing.neighborhood ?? listing.municipality} | MyLloguer`,
+    title: `${listing.price} € · ${listing.neighborhood ?? listing.municipality} | Lloguer`,
     description: listing.description.slice(0, 160),
   };
 }

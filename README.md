@@ -1,6 +1,6 @@
-# MyLloguer
+# Lloguer
 
-🏡 MyLloguer nace de una iniciativa de Global Shapers Valencia para juntar jóvenes en búsqueda de alquiler, con los mejores caseros que puedan encontrar.
+🏡 Lloguer nace de una iniciativa de Global Shapers Valencia para juntar jóvenes en búsqueda de alquiler, con los mejores caseros que puedan encontrar.
 
 Mapa primero: habitaciones y pisos entre particulares en toda España. El mapa abre en València por defecto; el filtro «Ciudad o barrio» lista los lugares que tienen anuncios activos y lleva el mapa hasta ellos.
 

@@ -13,7 +13,7 @@ insert into auth.users (
 ) values
   ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000',
    'authenticated', 'authenticated', 'admin@mylloguer.com', crypt('globalsh4pers!', gen_salt('bf')), now(),
-   '{"provider":"email","providers":["email"]}', '{"full_name":"Admin MyLloguer"}', now(), now(), '', '', '');
+   '{"provider":"email","providers":["email"]}', '{"full_name":"Admin Lloguer"}', now(), now(), '', '', '');
 
 insert into auth.identities (id, user_id, provider_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
 values

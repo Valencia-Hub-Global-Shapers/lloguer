@@ -24,7 +24,7 @@ function getLimiter(action: RateLimitAction): Ratelimit {
     limiter = new Ratelimit({
       redis: redis!,
       limiter: Ratelimit.slidingWindow(points, window),
-      prefix: `mylloguer:${action}`,
+      prefix: `lloguer:${action}`,
     });
     limiters.set(action, limiter);
   }
