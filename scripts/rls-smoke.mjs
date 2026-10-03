@@ -1,5 +1,5 @@
 /**
- * RLS / transition smoke test against the local Supabase stack.
+ * RLS / anonymous-submission smoke test against the local Supabase stack.
  * Run: node scripts/rls-smoke.mjs  (requires `supabase start` + seeded db)
  */
 const API = "http://127.0.0.1:54321";
@@ -12,11 +12,11 @@ function check(name, cond) {
   if (!cond) failures++;
 }
 
-async function login(email) {
+async function login(email, password) {
   const res = await fetch(`${API}/auth/v1/token?grant_type=password`, {
     method: "POST",
     headers: { apikey: ANON, "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password: "password123" }),
+    body: JSON.stringify({ email, password }),
   });
   const json = await res.json();
   if (!res.ok) throw new Error(`login ${email}: ${JSON.stringify(json)}`);
@@ -44,95 +44,32 @@ const rest = (jwt) => async (path, init = {}) => {
   return { status: res.status, json };
 };
 
-const pub = rest(await login("publisher@mylloguer.dev"));
-const admin = rest(await login("admin@mylloguer.dev"));
+// Demo admin created by supabase/seed.sql
+const admin = rest(await login("admin@mylloguer.com", "globalsh4pers!"));
 const anon = rest(ANON);
 
-// 1. publisher sees all own listings (all statuses)
+// 1. admin sees every listing, all statuses
 {
-  const { json } = await pub("listings?select=id,status,price");
-  check(`publisher sees own listings (${json.length} = 40)`, json.length === 40);
-  globalThis.__approved = json.find((l) => l.status === "approved");
-  globalThis.__pending = json.find((l) => l.status === "pending");
+  const { json } = await admin("listings?select=id,status");
+  check(`admin sees all listings (${json.length} = 40)`, json.length === 40);
 }
 
-// 2. owner edits approved listing -> back to pending + 'edited' event
+// 2. anon reads: base table denied, public view shows only live listings
 {
-  const id = __approved.id;
-  await pub(`listings?id=eq.${id}`, {
-    method: "PATCH",
-    body: JSON.stringify({ price: 999 }),
-  });
-  const { json: after } = await pub(`listings?id=eq.${id}&select=status,price`);
-  check(
-    `owner edit of approved -> pending (got ${after[0].status})`,
-    after[0].status === "pending",
-  );
-  const { json: events } = await pub(
-    `moderation_events?listing_id=eq.${id}&action=eq.edited&select=action`,
-  );
-  check(`'edited' moderation event recorded`, events.length > 0);
-}
-
-// 3. owner cannot insert with status approved
-{
-  const { status } = await pub("listings", {
-    method: "POST",
-    body: JSON.stringify({
-      type: "room",
-      status: "approved",
-      price: 400,
-      municipality: "València",
-      location: "SRID=4326;POINT(-0.37 39.47)",
-      contact_whatsapp: "+34600000000",
-      room_type: "single",
-      description: "texto de prueba suficientemente largo",
-    }),
-  });
-  check(`insert with status=approved rejected (got ${status})`, status >= 400);
-}
-
-// 4. deactivate approved -> draft
-{
-  const { json: rows } = await pub(
-    "listings?status=eq.approved&select=id&limit=1",
-  );
-  const id = rows[0].id;
-  await pub(`listings?id=eq.${id}`, {
-    method: "PATCH",
-    body: JSON.stringify({ status: "draft" }),
-  });
-  const { json: after } = await pub(`listings?id=eq.${id}&select=status`);
-  check(`deactivate approved -> draft (got ${after[0].status})`, after[0].status === "draft");
-
-  // 5. owner cannot self-approve from draft
-  const res = await pub(`listings?id=eq.${id}`, {
-    method: "PATCH",
-    body: JSON.stringify({ status: "approved" }),
-  });
-  const { json: still } = await pub(`listings?id=eq.${id}&select=status`);
-  check(
-    `owner cannot self-approve (http ${res.status}, status ${still[0].status})`,
-    still[0].status === "draft",
-  );
-}
-
-// 6. anon reads: base table denied/empty, public view shows only live listings
-{
-  const { json: base } = await anon("listings?select=id");
-  const baseRows = Array.isArray(base) ? base.length : 0;
-  check(`anon base listings has no rows (got ${baseRows})`, baseRows === 0);
-  const { json: approvedRows } = await admin(
+  const base = await anon("listings?select=id");
+  check(`anon cannot read the base listings table (http ${base.status})`, base.status >= 400);
+  const { json: live } = await admin(
     "listings?status=eq.approved&select=id&expires_at=gt.now()",
   );
   const { json: view } = await anon("public_listings?select=id");
-  check(
-    `anon public_listings = live listings (${view.length} = ${approvedRows.length})`,
-    view.length === approvedRows.length,
-  );
+  check(`anon public_listings = live listings (${view.length} = ${live.length})`, view.length === live.length);
+  const hidden = await anon("public_listings?select=edit_token_hash");
+  check(`public view does not expose edit_token_hash (http ${hidden.status})`, hidden.status >= 400);
+  const settings = await anon("private_settings?select=*");
+  check(`anon cannot read private_settings (http ${settings.status})`, settings.status >= 400);
 }
 
-// 7. admin approves pending
+// 3. admin approves a pending listing
 {
   const { json: rows } = await admin("listings?status=eq.pending&select=id&limit=1");
   const id = rows[0].id;
@@ -141,20 +78,90 @@ const anon = rest(ANON);
     body: JSON.stringify({
       status: "approved",
       approved_at: new Date().toISOString(),
-      expires_at: new Date(Date.now() + 30 * 864e5).toISOString(),
+      expires_at: new Date(Date.now() + 10 * 864e5).toISOString(),
     }),
   });
   const { json: after } = await admin(`listings?id=eq.${id}&select=status`);
   check(`admin approve works (got ${after[0].status})`, after[0].status === "approved");
 }
 
-// 8. publisher cannot read other users' data / profiles
+// 4. anonymous submission flow (no account): only via security-definer functions
 {
-  const { json: profiles } = await pub("profiles?select=id,email");
+  const { createHash, randomBytes } = await import("node:crypto");
+  const token = randomBytes(32).toString("base64url");
+  const hash = createHash("sha256").update(token).digest("hex");
+  const email = `smoke-${Date.now()}@example.com`;
+  const payload = {
+    type: "room",
+    price: 380,
+    neighborhood: "Russafa",
+    municipality: "València",
+    lat: 39.46,
+    lng: -0.37,
+    description: "Habitación de prueba para el smoke test anónimo",
+    room_type: "single",
+    contact_whatsapp: "+34600000000",
+    internal_email: email,
+    photos: [],
+  };
+
+  const direct = await anon("listings", {
+    method: "POST",
+    body: JSON.stringify({
+      type: "room",
+      price: 400,
+      location: "SRID=4326;POINT(-0.37 39.47)",
+      contact_whatsapp: "+34600000000",
+      room_type: "single",
+      description: "directo",
+    }),
+  });
+  check(`anon cannot insert into listings directly (http ${direct.status})`, direct.status >= 400);
+
+  const submitted = await anon("rpc/submit_listing", {
+    method: "POST",
+    body: JSON.stringify({ p_gate: "", p_token_hash: hash, p_payload: payload }),
+  });
+  const id = submitted.json;
+  check(`anon submit_listing returns an id (http ${submitted.status})`, typeof id === "string");
+
+  const { json: pubRows } = await anon(`public_listings?id=eq.${id}&select=id`);
+  check(`new anonymous listing is not public before approval`, pubRows.length === 0);
+
+  const mine = await anon("rpc/get_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_id: id, p_token_hash: hash }),
+  });
   check(
-    `publisher sees only own profile (got ${profiles.length})`,
-    profiles.length === 1,
+    `poster reads own listing with the token (status ${mine.json?.status})`,
+    mine.json?.status === "pending" && mine.json?.edit_token_hash === undefined,
   );
+
+  const wrong = await anon("rpc/get_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_id: id, p_token_hash: "0".repeat(64) }),
+  });
+  check(`wrong token reads nothing`, wrong.json === null);
+
+  const badEdit = await anon("rpc/update_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_gate: "", p_id: id, p_token_hash: "0".repeat(64), p_payload: payload }),
+  });
+  check(`wrong token cannot edit (http ${badEdit.status})`, badEdit.status >= 400);
+
+  const del = await anon("rpc/set_listing_status_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_gate: "", p_id: id, p_token_hash: hash, p_action: "delete" }),
+  });
+  check(`poster can delete with the token (http ${del.status})`, del.status < 300);
+
+  const gone = await anon("rpc/get_listing_by_token", {
+    method: "POST",
+    body: JSON.stringify({ p_id: id, p_token_hash: hash }),
+  });
+  check(`deleted listing is erased, not just hidden`, gone.json === null);
+  const { json: adminRows } = await admin(`listings?id=eq.${id}&select=id`);
+  check(`no row left for admins either`, adminRows.length === 0);
 }
 
 process.exit(failures ? 1 : 0);

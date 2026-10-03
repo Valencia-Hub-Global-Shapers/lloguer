@@ -1,19 +1,35 @@
 import { describe, expect, it } from "vitest";
-import { nearestNeighborhood } from "./geocode";
+import { parseReverseGeocode } from "./geocode";
 
-const neighborhoods = [
-  { name_ca: "Russafa", municipality: "València", lat: 39.463, lng: -0.3735 },
-  { name_ca: "Benimaclet", municipality: "València", lat: 39.485, lng: -0.362 },
-];
-
-describe("nearestNeighborhood", () => {
-  it("finds the closest neighborhood", () => {
-    const n = nearestNeighborhood(neighborhoods, { lat: 39.4635, lng: -0.374 });
-    expect(n?.name_ca).toBe("Russafa");
+describe("parseReverseGeocode", () => {
+  it("extracts neighborhood, municipality and country", () => {
+    expect(
+      parseReverseGeocode({
+        address: { suburb: "Ruzafa", city: "Valencia", country_code: "es" },
+      }),
+    ).toEqual({ neighborhood: "Ruzafa", municipality: "Valencia", country: "es" });
   });
 
-  it("returns null beyond the distance threshold", () => {
-    const n = nearestNeighborhood(neighborhoods, { lat: 40.1, lng: -0.3 });
-    expect(n).toBeNull();
+  it("prefers the most specific neighborhood tag", () => {
+    const r = parseReverseGeocode({
+      address: { neighbourhood: "Sant Francesc", suburb: "Ciutat Vella", city: "Valencia" },
+    });
+    expect(r.neighborhood).toBe("Sant Francesc");
+  });
+
+  it("falls back to town or village when there is no city", () => {
+    expect(parseReverseGeocode({ address: { town: "Paterna" } }).municipality).toBe("Paterna");
+    expect(parseReverseGeocode({ address: { village: "Alcublas" } }).municipality).toBe("Alcublas");
+  });
+
+  it("handles a town with no neighborhood and normalizes the country", () => {
+    const r = parseReverseGeocode({ address: { city: "Cuenca", country_code: "ES" } });
+    expect(r).toEqual({ neighborhood: null, municipality: "Cuenca", country: "es" });
+  });
+
+  it("returns empty values for empty or malformed responses", () => {
+    const empty = { neighborhood: null, municipality: null, country: null };
+    expect(parseReverseGeocode({})).toEqual(empty);
+    expect(parseReverseGeocode(null)).toEqual(empty);
   });
 });

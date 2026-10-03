@@ -40,25 +40,17 @@ export async function getModerationHistory(supabase: Db, listingId: string) {
     .order("created_at", { ascending: false });
   if (error) throw error;
 
-  const actorIds = [...new Set(events.map((e) => e.actor_id))];
+  // Anonymous posters have no actor (actor_id is null)
+  const actorIds = [
+    ...new Set(events.map((e) => e.actor_id).filter((id): id is string => id !== null)),
+  ];
   const { data: actors } = actorIds.length
     ? await supabase.from("public_profiles").select("*").in("id", actorIds)
     : { data: [] };
 
   const actorById = new Map((actors ?? []).map((a) => [a.id, a.full_name]));
-  return events.map((e) => ({ ...e, actor_name: actorById.get(e.actor_id) ?? null }));
-}
-
-/** Latest rejection comment for a listing (owner view). */
-export async function getLatestRejection(supabase: Db, listingId: string) {
-  const { data, error } = await supabase
-    .from("moderation_events")
-    .select("*")
-    .eq("listing_id", listingId)
-    .eq("action", "rejected")
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (error) throw error;
-  return data;
+  return events.map((e) => ({
+    ...e,
+    actor_name: e.actor_id ? (actorById.get(e.actor_id) ?? null) : null,
+  }));
 }

@@ -2,16 +2,12 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Languages } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { localeLabels, locales, type Locale } from "@/i18n/config";
 import { useI18n } from "@/i18n/client";
+import { cn } from "@/lib/utils";
+
+/** Compact ES | VAL | EN switch, as on the Global Shapers Valencia site. */
+const SHORT_LABELS: Record<Locale, string> = { es: "ES", ca: "VAL", en: "EN" };
 
 export function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
@@ -22,25 +18,23 @@ export function LocaleSwitcher({ locale }: { locale: Locale }) {
   const qs = searchParams.toString();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" aria-label={t("common.language")}>
-          <Languages />
-          <span className="hidden sm:inline">{localeLabels[locale]}</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {locales.map((l) => (
-          <DropdownMenuItem key={l} asChild>
-            <Link
-              href={`/${l}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}${qs ? `?${qs}` : ""}`}
-              aria-current={l === locale ? "true" : undefined}
-            >
-              {localeLabels[l]}
-            </Link>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div role="group" aria-label={t("common.language")} className="flex items-center">
+      {locales.map((l, i) => (
+        <Link
+          key={l}
+          href={`/${l}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}${qs ? `?${qs}` : ""}`}
+          hrefLang={l}
+          title={localeLabels[l]}
+          aria-current={l === locale ? "true" : undefined}
+          className={cn(
+            "px-2 py-1.5 text-[0.72rem] font-semibold tracking-[0.09em] transition-colors",
+            i > 0 && "border-input border-l",
+            l === locale ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {SHORT_LABELS[l]}
+        </Link>
+      ))}
+    </div>
   );
 }

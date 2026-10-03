@@ -6,7 +6,7 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type ListingType = "room" | "full_flat";
-export type ListingStatus = "draft" | "pending" | "approved" | "rejected" | "expired" | "deleted";
+export type ListingStatus = "draft" | "pending" | "approved" | "rejected" | "expired";
 export type GenderPref = "any" | "female" | "male" | "non_binary";
 export type RoomType = "single" | "double" | "shared";
 export type TenantPref = "any" | "students" | "workers";
@@ -16,7 +16,6 @@ export type ModerationAction =
   | "rejected"
   | "edited"
   | "deactivated"
-  | "deleted"
   | "republished";
 
 export type ProfileRow = {
@@ -25,7 +24,6 @@ export type ProfileRow = {
   full_name: string | null;
   avatar_url: string | null;
   is_admin: boolean;
-  role_hint: "publisher" | "seeker" | null;
   created_at: string;
 }
 export type ProfileInsert = {
@@ -34,14 +32,12 @@ export type ProfileInsert = {
   full_name?: string | null;
   avatar_url?: string | null;
   is_admin?: boolean;
-  role_hint?: "publisher" | "seeker" | null;
   created_at?: string;
 }
 export type ProfileUpdate = Partial<Omit<ProfileInsert, "id">>;
 
 export type ListingRow = {
   id: string;
-  owner_id: string;
   type: ListingType;
   status: ListingStatus;
   price: number;
@@ -67,18 +63,20 @@ export type ListingRow = {
   bedrooms: number | null;
   views_count: number;
   photos: string[];
-  publisher_kind: "private" | "agency";
-  agency_label: string | null;
+  /** Public contact email, shown on the listing. */
+  contact_email: string | null;
+  /** Private: where the poster's edit link is sent. Never in public views. */
+  internal_email: string | null;
+  /** Private: sha256 of the poster's edit token. */
+  edit_token_hash: string | null;
   expires_at: string | null;
   approved_at: string | null;
   published_version: number;
   created_at: string;
   updated_at: string;
-  deleted_at: string | null;
 }
 export type ListingInsert = {
   id?: string;
-  owner_id: string;
   type: ListingType;
   status?: ListingStatus;
   price: number;
@@ -102,22 +100,22 @@ export type ListingInsert = {
   bathrooms?: number | null;
   bedrooms?: number | null;
   photos?: string[];
-  publisher_kind?: "private" | "agency";
-  agency_label?: string | null;
+  contact_email?: string | null;
+  internal_email?: string | null;
+  edit_token_hash?: string | null;
 }
 export type ListingUpdate = Partial<
-  Omit<ListingInsert, "owner_id"> & {
+  ListingInsert & {
     status: ListingStatus;
     approved_at: string | null;
     expires_at: string | null;
-    deleted_at: string | null;
   }
 >;
 
 export type ModerationEventRow = {
   id: string;
   listing_id: string;
-  actor_id: string;
+  actor_id: string | null;
   action: ModerationAction;
   comment: string | null;
   created_at: string;
@@ -136,16 +134,14 @@ export type ListingViewRow = {
   created_at: string;
 }
 
-export type NeighborhoodRow = {
-  id: number;
-  name_es: string;
-  name_ca: string;
-  name_en: string;
-  slug: string;
-  center: unknown;
+export type PublicPlaceRow = {
   municipality: string;
-  lat: number;
-  lng: number;
+  neighborhood: string | null;
+  listings: number;
+  min_lat: number;
+  min_lng: number;
+  max_lat: number;
+  max_lng: number;
 }
 
 export type PublicListingRow = {
@@ -169,13 +165,11 @@ export type PublicListingRow = {
   tenant_pref: TenantPref;
   contact_external: string | null;
   contact_whatsapp: string | null;
+  contact_email: string | null;
   bathrooms: number | null;
   bedrooms: number | null;
   views_count: number;
   photos: string[];
-  publisher_kind: "private" | "agency";
-  agency_label: string | null;
-  owner_id: string;
   published_version: number;
   created_at: string;
 }
@@ -213,19 +207,6 @@ export type Database = {
         Update: Record<string, never>;
         Relationships: [];
       };
-      neighborhoods: {
-        Row: NeighborhoodRow;
-        Insert: {
-          name_es: string;
-          name_ca: string;
-          name_en: string;
-          slug: string;
-          center: string;
-          municipality: string;
-        };
-        Update: Record<string, never>;
-        Relationships: [];
-      };
     };
     Views: {
       public_listings: {
@@ -236,6 +217,10 @@ export type Database = {
         Row: PublicProfileRow;
         Relationships: [];
       };
+      public_places: {
+        Row: PublicPlaceRow;
+        Relationships: [];
+      };
     };
     Functions: {
       increment_listing_view: {
@@ -244,6 +229,54 @@ export type Database = {
       };
       expire_listings: { Args: Record<string, never>; Returns: number };
       is_admin: { Args: Record<string, never>; Returns: boolean };
+      browse_pins: {
+        Args: {
+          p_min_lat: number;
+          p_min_lng: number;
+          p_max_lat: number;
+          p_max_lng: number;
+          p_cell?: number;
+          p_type?: ListingType | null;
+          p_min_price?: number | null;
+          p_max_price?: number | null;
+          p_city?: string | null;
+          p_hood?: string | null;
+          p_gender?: GenderPref | null;
+          p_bills?: boolean | null;
+          p_pets?: boolean | null;
+          p_smokers?: boolean | null;
+          p_max_flatmates?: number | null;
+          p_avail?: string | null;
+          p_limit?: number;
+        };
+        Returns: {
+          id: string | null;
+          type: ListingType | null;
+          price: number | null;
+          lat: number;
+          lng: number;
+          count: number;
+        }[];
+      };
+      submit_listing: {
+        Args: { p_gate: string; p_token_hash: string; p_payload: Json };
+        Returns: string;
+      };
+      get_listing_by_token: {
+        Args: { p_id: string; p_token_hash: string };
+        Returns: Json | null;
+      };
+      update_listing_by_token: {
+        Args: { p_gate: string; p_id: string; p_token_hash: string; p_payload: Json };
+        /** Photo paths the caller must now remove from Storage. */
+        Returns: string[];
+      };
+      set_listing_status_by_token: {
+        Args: { p_gate: string; p_id: string; p_token_hash: string; p_action: string };
+        /** For "delete": the erased listing's photo paths to remove from Storage. */
+        Returns: string[];
+      };
+      ack_photo_deletion: { Args: Record<string, never>; Returns: undefined };
     };
     Enums: {
       listing_type: ListingType;
@@ -262,4 +295,4 @@ export type Listing = ListingRow;
 export type PublicListing = PublicListingRow;
 export type PublicProfile = PublicProfileRow;
 export type ModerationEvent = ModerationEventRow;
-export type Neighborhood = NeighborhoodRow;
+export type PublicPlace = PublicPlaceRow;

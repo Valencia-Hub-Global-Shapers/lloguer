@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 import { defaultLocale, isLocale } from "@/i18n/config";
 
-const PROTECTED_SEGMENTS = ["publish", "me", "admin"];
+const PROTECTED_SEGMENTS = ["admin"];
 
 function detectLocale(request: NextRequest): string {
   const header = request.headers.get("accept-language") ?? "";

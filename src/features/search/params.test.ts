@@ -4,17 +4,19 @@ import { countActiveFilters, filtersToSearchParams, parseFilters } from "./param
 describe("filter params", () => {
   it("parses a full query string", () => {
     const p = new URLSearchParams(
-      "type=room&min=300&max=650&hood=russafa&bills=1&pets=1&smokers=1&mates=2&avail=2026-09-01",
+      "type=room&min=300&max=650&city=Val%C3%A8ncia&hood=Ruzafa&bills=1&pets=1&smokers=1&mates=2&gender=female&avail=2026-09-01",
     );
     expect(parseFilters(p)).toEqual({
       type: "room",
       minPrice: 300,
       maxPrice: 650,
-      neighborhood: "russafa",
+      city: "València",
+      neighborhood: "Ruzafa",
       billsIncluded: true,
       pets: true,
       smokers: true,
       maxFlatmates: 2,
+      gender: "female",
       availableBefore: "2026-09-01",
     });
   });
@@ -39,7 +41,7 @@ describe("filter params", () => {
   });
 
   it("ignores garbage values", () => {
-    const p = new URLSearchParams("type=villa&min=abc&avail=01-09-2026&bills=yes");
+    const p = new URLSearchParams("type=villa&min=abc&avail=01-09-2026&bills=yes&gender=x");
     expect(parseFilters(p)).toEqual({
       type: undefined,
       minPrice: undefined,
@@ -56,5 +58,7 @@ describe("filter params", () => {
   it("counts active filters", () => {
     expect(countActiveFilters({})).toBe(0);
     expect(countActiveFilters({ type: "room", pets: true, minPrice: 100 })).toBe(3);
+    expect(countActiveFilters({ gender: "male" })).toBe(1);
+    expect(countActiveFilters({ city: "Madrid", neighborhood: "Chamberí" })).toBe(2);
   });
 });

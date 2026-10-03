@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import * as maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import { VALENCIA_CENTER } from "@/lib/utils";
-import { MAPBOX_TOKEN } from "./explorer-map";
-
-const MAP_STYLE = "mapbox://styles/mapbox/light-v11";
+import { MAP_STYLE } from "../style";
 
 /** Mini map with a draggable pin used in the publish/edit form. */
 export function PinPickerMap({
@@ -19,30 +17,29 @@ export function PinPickerMap({
   onChange: (lat: number, lng: number) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-  const markerRef = useRef<mapboxgl.Marker | null>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+  const markerRef = useRef<maplibregl.Marker | null>(null);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
-    mapboxgl.accessToken = MAPBOX_TOKEN;
 
-    const map = new mapboxgl.Map({
+    const map = new maplibregl.Map({
       container: containerRef.current,
       style: MAP_STYLE,
       center: lng != null && lat != null ? [lng, lat] : VALENCIA_CENTER,
       zoom: lat != null ? 14 : 11,
       attributionControl: false,
     });
-    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
-    map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
 
     const el = document.createElement("div");
     el.style.cssText =
-      "width:22px;height:22px;border-radius:50%;background:#e8590c;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:grab";
+      "width:22px;height:22px;border-radius:50%;background:#d6521d;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:grab";
 
-    const marker = new mapboxgl.Marker({ element: el, draggable: true })
+    const marker = new maplibregl.Marker({ element: el, draggable: true })
       .setLngLat(lng != null && lat != null ? [lng, lat] : VALENCIA_CENTER)
       .addTo(map);
 

@@ -1,11 +1,10 @@
 {
   "common": {
-    "siteName": "MyLloguer",
-    "tagline": "Lloguers entre particulars a València i àrea metropolitana",
+    "siteName": "Lloguer",
+    "tagline": "Lloguer entre particulars a tot Espanya",
     "publish": "Publica",
     "login": "Inicia sessió",
     "logout": "Tanca sessió",
-    "myListings": "Els meus anuncis",
     "admin": "Administració",
     "moderation": "Moderació",
     "allListings": "Tots els anuncis",
@@ -22,14 +21,54 @@
     "any": "Qualsevol",
     "legal": "Avís legal i privacitat",
     "language": "Idioma",
-    "view": "Vore"
+    "view": "Vore",
+    "required": "obligatori",
+    "optional": "opcional",
+    "browseMap": "Veure el mapa"
+  },
+  "landing": {
+    "title": "Tots els pisos compartits, en un sol lloc.",
+    "subtitle": "Deixa de cercar entre grups de WhatsApp i històries d'Instagram. Troba o publica una habitació a tot Espanya: gratis, sense registre i amb cada anunci revisat.",
+    "ctaBrowse": "Explorar el mapa",
+    "ctaPublish": "Publicar un anunci",
+    "t1Title": "Gratis i sense registre",
+    "t1Body": "Publiques amb un formulari i reps un enllaç privat per editar o esborrar l'anunci. Sense compte ni contrasenya.",
+    "t2Title": "Revisat a mà",
+    "t2Body": "Una persona revisa cada anunci abans de publicar-lo per evitar trols i publicitat.",
+    "t3Title": "Sempre al dia",
+    "t3Body": "Cada anunci es desactiva sol als {days} dies, així que no hi ha pisos fantasma.",
+    "problemTitle": "El problema",
+    "problemBody": "Avui, buscar pis compartit és un caos: ofertes repartides entre grups de WhatsApp, històries que desapareixen i plataformes diferents, sense filtres i sense saber si l'habitació continua lliure.",
+    "solutionBody": "Lloguer ho reuneix tot en un tauler obert, cercable i sempre actualitzat.",
+    "filtersTitle": "Troba el que t'encaixa",
+    "filtersIntro": "Cerca al mapa o filtra pel que de veritat importa en compartir pis.",
+    "fNeighborhood": "Barri",
+    "fNeighborhoodBody": "Ciutat o barri, en qualsevol punt d'Espanya.",
+    "fPrice": "Preu",
+    "fPriceBody": "Fixa el teu pressupost mensual.",
+    "fFlatmates": "Companys de pis",
+    "fFlatmatesBody": "Tria amb quanta gent vols conviure.",
+    "fGender": "Gènere",
+    "fGenderBody": "Veges només els anuncis que t'accepten.",
+    "howTitle": "Com funciona",
+    "s1Title": "Cerca",
+    "s1Body": "Obri el mapa, tria una zona i ajusta els filtres.",
+    "s2Title": "Contacta",
+    "s2Body": "Escriu directament per WhatsApp o correu a qui publica. Sense intermediaris.",
+    "s3Title": "Publica",
+    "s3Body": "Marca la ubicació, afegeix fotos i detalls, i el revisem per publicar-lo.",
+    "partnersTitle": "Per a universitats, col·lectius i institucions",
+    "partnersBody": "Lloguer és una iniciativa sense ànim de lucre de Global Shapers València. Si vols difondre-la entre la teua comunitat o col·laborar amb nosaltres, escriu-nos.",
+    "partnersCta": "Escriu-nos"
   },
   "home": {
     "emptyTitle": "No hi ha res ací",
     "emptyDescription": "Mou el mapa o amplia els filtres per a vore més anuncis.",
     "emptyReset": "Esborra els filtres",
+    "clusterLabel": "{count} anuncis en aquesta zona",
     "results": "{count} anuncis",
-    "loadError": "No s'han pogut carregar els anuncis."
+    "loadError": "No s'han pogut carregar els anuncis.",
+    "resultsOne": "{count} anunci"
   },
   "filters": {
     "title": "Filtres",
@@ -38,14 +77,17 @@
     "priceMin": "Mínim",
     "priceMax": "Màxim",
     "neighborhood": "Barri",
-    "allNeighborhoods": "Tots els barris",
     "billsIncluded": "Despeses incloses",
     "pets": "S'admeten mascotes",
     "smokers": "S'admeten fumadors",
     "flatmates": "Companyes de pis màx.",
     "availableBefore": "Disponible abans de",
     "apply": "Aplica",
-    "reset": "Esborra"
+    "reset": "Esborra",
+    "gender": "El meu gènere",
+    "genderHint": "Només anuncis que m'accepten",
+    "place": "Ciutat o barri",
+    "allPlaces": "Tot Espanya"
   },
   "listing": {
     "perMonth": "€/mes",
@@ -78,22 +120,25 @@
     "whatsappCta": "Escriu per WhatsApp",
     "externalCta": "Vore contacte extern",
     "views": "{count} visites",
-    "publishedBy": "Publicat per {name}",
     "notFound": "Este anunci no està disponible.",
     "statusDraft": "Esborrany",
     "statusPending": "En revisió",
     "statusApproved": "Actiu",
     "statusRejected": "Rebutjat",
     "statusExpired": "Caducat",
-    "statusDeleted": "Eliminat",
     "moderatorComment": "Comentari del moderador",
     "editAndResubmit": "Edita i torna a enviar",
     "deactivate": "Desactiva",
     "republish": "Torna a publicar",
-    "deleteConfirmTitle": "Eliminar l'anunci?",
-    "deleteConfirmDescription": "L'anunci s'eliminarà i no es podrà recuperar.",
+    "deleteConfirmTitle": "Eliminar l'anunci definitivament?",
+    "deleteConfirmDescription": "S'esborraran de forma permanent l'anunci, les seues fotos i les teues dades de contacte. No es pot desfer.",
     "deactivateConfirmTitle": "Desactivar l'anunci?",
-    "deactivateConfirmDescription": "L'anunci deixarà de ser visible fins que el torns a publicar."
+    "deactivateConfirmDescription": "L'anunci deixarà de ser visible fins que el torns a publicar.",
+    "emailCta": "Escriure per correu",
+    "flatmatesOne": "{count} company de pis",
+    "bathroomsOne": "{count} bany",
+    "bedroomsOne": "{count} habitació",
+    "viewsOne": "{count} visita"
   },
   "publish": {
     "title": "Publica el teu anunci",
@@ -103,8 +148,6 @@
     "stepPhotos": "Fotos i contacte",
     "type": "Què ofereixes?",
     "dropPin": "Arrossega el marcador fins a la ubicació aproximada",
-    "neighborhoodDetected": "Barri detectat",
-    "noNeighborhood": "Acosta el marcador a un barri conegut",
     "price": "Preu mensual (€)",
     "availableFrom": "Disponible des de",
     "description": "Descripció",
@@ -122,23 +165,43 @@
     "photos": "Fotos",
     "photosHint": "Fins a 8 fotos. La primera és obligatòria.",
     "contactWhatsapp": "Telèfon de WhatsApp",
-    "contactExternal": "Enllaç extern de contacte (opcional)",
+    "contactExternal": "Enllaç extern de contacte",
     "submit": "Envia a revisió",
     "submitEdit": "Guarda i torna a enviar",
     "successTitle": "Anunci enviat!",
-    "successDescription": "El teu anunci està en revisió. Es publicarà quan siga aprovat.",
-    "goToMyListings": "Vés als meus anuncis"
-  },
-  "myListings": {
-    "title": "Els meus anuncis",
-    "empty": "Encara no tens cap anunci.",
-    "publishFirst": "Publica el primer"
+    "successDescription": "El revisarem manualment i apareixerà al mapa quan l'aprovem. Es desactivarà sol als 10 dies.",
+    "email": "Correu de contacte",
+    "emailHint": "Es mostrarà a l'anunci, igual que el WhatsApp.",
+    "contactPublicHint": "L'enllaç extern (per exemple, el teu anunci en una altra web) és opcional.",
+    "acceptTerms": "He llegit i accepte",
+    "editLinkTitle": "El teu enllaç privat de gestió",
+    "editLinkEmailed": "També te l'hem enviat per correu. Guarda'l: és l'única manera d'editar el teu anunci.",
+    "editLinkSaveIt": "Guarda'l ara: és l'única manera d'editar, desactivar o esborrar el teu anunci.",
+    "copyLink": "Copiar enllaç",
+    "linkCopied": "Enllaç copiat",
+    "manageListing": "Gestionar anunci",
+    "municipality": "Municipi",
+    "neighborhood": "Barri",
+    "placeHint": "S'omplin sols segons el marcador. Pots corregir-los.",
+    "requiredNote": "Els camps amb asterisc són obligatoris; la resta són opcionals.",
+    "extras": "Extres",
+    "contactGroupTitle": "Com poden contactar-te",
+    "contactAtLeastOne": "Indica almenys una via de contacte públic: WhatsApp o correu. El que poses ací ho veurà qualsevol persona que veja l'anunci.",
+    "oneOfTwo": "almenys un dels dos",
+    "stepSubmit": "Revisió i enviament",
+    "legalLink": "l'avís legal i la privacitat",
+    "internalEmail": "El teu correu privat",
+    "internalEmailHint": "No es publica i pot ser diferent del de contacte. T'enviem ací l'enllaç privat per editar, desactivar o esborrar el teu anunci."
   },
   "auth": {
     "loginTitle": "Inicia sessió",
-    "loginDescription": "Inicia sessió amb Google per a publicar o gestionar els teus anuncis.",
-    "loginWithGoogle": "Continua amb Google",
-    "loginRequired": "Has d'iniciar sessió per a continuar."
+    "loginDescription": "Els admins inicien sessió amb un enllaç enviat al seu correu.",
+    "loginRequired": "Has d'iniciar sessió per a continuar.",
+    "email": "Correu electrònic",
+    "sendLink": "Envia l'enllaç d'accés",
+    "linkSent": "Revisa {email}: t'hem enviat un enllaç d'accés. Pots tancar esta pestanya.",
+    "linkError": "No hem pogut enviar l'enllaç. Revisa l'adreça i torna-ho a provar.",
+    "linkInvalid": "Eixe enllaç ha caducat o ja s'ha usat. Demana'n un de nou."
   },
   "admin": {
     "queueTitle": "Cua de moderació",
@@ -150,9 +213,10 @@
     "rejectComment": "Motiu del rebuig",
     "history": "Historial",
     "status": "Estat",
-    "owner": "Propietari",
     "createdAt": "Creat",
-    "pendingCount": "{count} pendents"
+    "pendingCount": "{count} pendents",
+    "contactEmail": "Correu públic",
+    "internalEmail": "Correu privat"
   },
   "moderationAction": {
     "submitted": "Enviat",
@@ -160,7 +224,6 @@
     "rejected": "Rebutjat",
     "edited": "Editat",
     "deactivated": "Desactivat",
-    "deleted": "Eliminat",
     "republished": "Republicat"
   },
   "errors": {
@@ -172,16 +235,37 @@
     "photoTooLarge": "La foto supera els 5 MB.",
     "photoInvalidType": "Format d'imatge no admés.",
     "tooManyPhotos": "Màxim 8 fotos.",
-    "firstPhotoRequired": "La primera foto és obligatòria."
+    "firstPhotoRequired": "La primera foto és obligatòria.",
+    "captcha": "No hem pogut verificar que ets una persona. Torna-ho a provar.",
+    "outsideSpain": "El marcador és fora d'Espanya.",
+    "contactRequired": "Indica un WhatsApp o un correu electrònic.",
+    "fieldInvalid": "Revisa aquest camp."
   },
   "legal": {
     "title": "Avís legal i privacitat",
-    "intro": "MyLloguer és una plataforma d'anuncis de lloguer entre particulars a València i la seua àrea metropolitana.",
+    "intro": "Lloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
     "dataTitle": "Dades personals",
-    "dataBody": "Només tractem les dades necessàries per al funcionament del servei: el teu compte de Google (nom, correu i avatar) i els anuncis que publiques. No venem dades a tercers.",
+    "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci, inclosos el WhatsApp i el correu de contacte que indiques (són públics); el teu correu privat (només per enviar-te l'enllaç de gestió, no es publica i pot ser diferent del de contacte); i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió: s'eliminen de forma definitiva l'anunci, les seues fotos i les teues dades.",
     "contentTitle": "Contingut",
     "contentBody": "Els anuncis són responsabilitat exclusiva de qui els publica. Moderem els anuncis abans de la publicació, però no n-garantim la veracitat.",
     "contactTitle": "Contacte",
-    "contactBody": "Per a qualsevol consulta pots escriure'ns a hola@mylloguer.example."
+    "contactBody": "Per a qualsevol consulta pots escriure'ns a valencia.globalshapers@gmail.com."
+  },
+  "manage": {
+    "title": "Gestiona el teu anunci",
+    "saved": "Canvis guardats. Tornarem a revisar l'anunci.",
+    "liveUntil": "Visible fins al {date}.",
+    "pendingHint": "Pendent de revisió. Apareixerà al mapa quan l'aprovem.",
+    "expiredHint": "Aquest anunci ha caducat. Pots tornar a publicar-lo i el revisarem de nou.",
+    "rejectedHint": "Corregeix el que s'indica i torna a publicar-lo."
+  },
+  "footer": {
+    "initiative": {
+      "before": "Una iniciativa sense ànim de lucre de",
+      "hub": "Global Shapers València"
+    },
+    "madeIn": "Fet a la Terreta per",
+    "contactEmail": "valencia.globalshapers@gmail.com",
+    "membershipNote": "Global Shapers València és un hub independent i de voluntariat de la Global Shapers Community, una iniciativa del Fòrum Econòmic Mundial. No és una entitat legal ni financerament afiliada al Fòrum Econòmic Mundial."
   }
 }

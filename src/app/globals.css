@@ -1,25 +1,42 @@
 @import "tailwindcss";
 
+/*
+ * Brand: Global Shapers Valencia Hub (valencia-hub-global-shapers.github.io).
+ * Civic-editorial: warm paper ground, flat brand blue, ONE burnt-orange accent
+ * used for calls to action, prices and active markers. Hairline rules instead
+ * of shadows, 3px corners, serif display type with a clean sans for text.
+ */
 :root {
-  --background: #fafaf9;
-  --foreground: #1c1917;
+  /* Paper & ink */
+  --background: #faf7f0;
+  --foreground: #1b1a17;
   --card: #ffffff;
-  --card-foreground: #1c1917;
+  --card-foreground: #1b1a17;
   --popover: #ffffff;
-  --popover-foreground: #1c1917;
-  --primary: #e8590c;
+  --popover-foreground: #1b1a17;
+  --secondary: #f2ede2;
+  --secondary-foreground: #1b1a17;
+  --muted: #f2ede2;
+  --muted-foreground: #6b6559;
+  --accent: #f2ede2;
+  --accent-foreground: #1b1a17;
+  --border: #e4ddce;
+  --input: #d0c7b2;
+
+  /* Burnt Valencia orange: CTAs, prices, active markers */
+  --primary: #d6521d;
   --primary-foreground: #ffffff;
-  --secondary: #f5f5f4;
-  --secondary-foreground: #1c1917;
-  --muted: #f5f5f4;
-  --muted-foreground: #78716c;
-  --accent: #f5f5f4;
-  --accent-foreground: #1c1917;
-  --destructive: #dc2626;
-  --border: #e7e5e4;
-  --input: #e7e5e4;
-  --ring: #e8590c;
-  --radius: 0.5rem;
+  --primary-deep: #b4400e;
+  --ring: #d6521d;
+  --destructive: #c0302a;
+
+  /* Brand blue (from the official Global Shapers Valencia mark) */
+  --brand: #054985;
+  --brand-deep: #04365f;
+  --brand-bright: #0a5fa8;
+  --gold: #e3b23c;
+
+  --radius: 3px;
 }
 
 @theme inline {
@@ -31,6 +48,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-deep: var(--primary-deep);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -41,37 +59,72 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-bright: var(--brand-bright);
+  --color-gold: var(--gold);
+  /* Flat, small corners everywhere */
+  --radius-sm: 2px;
+  --radius-md: var(--radius);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+  --radius-xl: 4px;
+  --font-sans: "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  /* Wordmark only */
+  --font-logo: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
+/* Base layer, so Tailwind utilities (font-sans, border-*, ...) can override it */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--brand);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
 }
 
-h1, h2, h3, h4 {
-  letter-spacing: -0.02em;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* Mapbox marker base */
+/* Map markers */
 .map-price-pill {
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--brand);
   background: var(--card);
-  color: var(--foreground);
+  color: var(--brand);
   padding: 2px 8px;
   font-size: 12px;
   font-weight: 600;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+  box-shadow: 0 1px 2px rgb(4 54 95 / 0.18);
   cursor: pointer;
   transition: transform 150ms ease-out, background-color 150ms ease-out, color 150ms ease-out;
   white-space: nowrap;
@@ -90,11 +143,85 @@ h1, h2, h3, h4 {
   width: 34px;
   height: 34px;
   border-radius: 9999px;
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--brand);
+  color: #ffffff;
   font-size: 13px;
   font-weight: 700;
   border: 2px solid #ffffff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+  box-shadow: 0 1px 3px rgb(4 54 95 / 0.35);
   cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+.map-cluster:hover {
+  background: var(--brand-bright);
+}
+
+/*
+ * Landing hero demo: price pills on a stylised map take turns pinging, lighting up and
+ * opening a listing card. 12 s loop, 4 s per listing (see components/landing-map-demo.tsx).
+ */
+@keyframes demo-pop {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes demo-ping {
+  0% { opacity: 0.55; transform: scale(0.7); }
+  14%, 100% { opacity: 0; transform: scale(2.4); }
+}
+
+@keyframes demo-pill {
+  0%, 33%, 100% {
+    background: var(--card);
+    border-color: var(--brand);
+    color: var(--brand);
+    transform: scale(1);
+    z-index: 10;
+  }
+  4%, 29% {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+    transform: scale(1.1);
+    z-index: 30;
+  }
+}
+
+@keyframes demo-card {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 10px)) scale(0.95);
+    animation-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1.08);
+  }
+  5%, 28% {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 20px)) scale(1);
+    animation-timing-function: ease-in;
+  }
+  32%, 100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 26px)) scale(0.985);
+  }
+}
+
+.demo-pop {
+  transform: translate(-50%, -50%);
+  animation: demo-pop 0.55s cubic-bezier(0.2, 0.9, 0.25, 1.15) backwards;
+}
+.demo-pill { animation: demo-pill 12s ease-in-out infinite backwards; }
+.demo-ring { opacity: 0; animation: demo-ping 12s ease-out infinite backwards; }
+.demo-card {
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 20px));
+  animation: demo-card 12s infinite backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-pop, .demo-ring, .demo-card, .demo-pill { animation: none !important; }
+  .demo-card[data-first] { opacity: 1; }
+  .demo-pill[data-first] {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+  }
 }

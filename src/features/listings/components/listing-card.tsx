@@ -17,7 +17,7 @@ export function ListingCard({
   active?: boolean;
   onHover?: (id: string | null) => void;
 }) {
-  const { locale, t } = useI18n();
+  const { locale, t, plural } = useI18n();
   const firstPhoto = listing.photos[0];
 
   return (
@@ -72,7 +72,7 @@ export function ListingCard({
           {listing.flatmates != null && listing.type === "room" ? (
             <span className="inline-flex items-center gap-1">
               <Users className="size-3" />
-              {t("listing.flatmates", { count: listing.flatmates })}
+              {plural("listing.flatmates", listing.flatmates)}
             </span>
           ) : null}
           {listing.pets ? (

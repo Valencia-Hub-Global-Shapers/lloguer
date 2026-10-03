@@ -8,6 +8,7 @@ import {
   Calendar,
   Cigarette,
   ExternalLink,
+  Mail,
   Eye,
   Home,
   PawPrint,
@@ -16,13 +17,12 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/i18n/client";
 import { formatDate } from "@/lib/utils";
-import type { PublicListing, PublicProfile } from "@/lib/types/database.types";
+import type { PublicListing } from "@/lib/types/database.types";
 import { ListingMiniMap } from "@/features/map/components/listing-mini-map";
 import { StatusBadge } from "./status-badge";
 import { photoUrl } from "../photos";
@@ -38,15 +38,13 @@ function Attr({ icon, label }: { icon: React.ReactNode; label: string }) {
 
 export function ListingDetail({
   listing,
-  owner,
   isPreview,
 }: {
   listing: PublicListing;
-  owner: PublicProfile | null;
-  /** owner/admin preview of a non-public listing */
+  /** admin preview of a non-public listing */
   isPreview: boolean;
 }) {
-  const { locale, t } = useI18n();
+  const { locale, t, plural } = useI18n();
 
   // Fire-and-forget view count (deduped server-side per day)
   useEffect(() => {
@@ -61,7 +59,7 @@ export function ListingDetail({
     <main className="mx-auto w-full max-w-3xl flex-1 p-4 pb-16">
       <div className="mb-3 flex items-center justify-between gap-2">
         <Button asChild variant="ghost" size="sm">
-          <Link href={`/${locale}`}>← {t("common.back")}</Link>
+          <Link href={`/${locale}/map`}>← {t("common.back")}</Link>
         </Button>
         {isPreview ? <StatusBadge status={listing.status} /> : null}
       </div>
@@ -128,13 +126,13 @@ export function ListingDetail({
           <Attr icon={<Wallet />} label={t("listing.deposit", { amount: listing.deposit })} />
         ) : null}
         {listing.type === "room" && listing.flatmates != null ? (
-          <Attr icon={<Users />} label={t("listing.flatmates", { count: listing.flatmates })} />
+          <Attr icon={<Users />} label={plural("listing.flatmates", listing.flatmates)} />
         ) : null}
         {listing.type === "full_flat" && listing.bedrooms != null ? (
-          <Attr icon={<BedDouble />} label={t("listing.bedrooms", { count: listing.bedrooms })} />
+          <Attr icon={<BedDouble />} label={plural("listing.bedrooms", listing.bedrooms)} />
         ) : null}
         {listing.bathrooms != null ? (
-          <Attr icon={<Bath />} label={t("listing.bathrooms", { count: listing.bathrooms })} />
+          <Attr icon={<Bath />} label={plural("listing.bathrooms", listing.bathrooms)} />
         ) : null}
         <Attr icon={<PawPrint />} label={listing.pets ? t("listing.petsYes") : t("listing.petsNo")} />
         <Attr
@@ -153,7 +151,7 @@ export function ListingDetail({
             `listing.tenant${listing.tenant_pref === "any" ? "Any" : listing.tenant_pref === "students" ? "Students" : "Workers"}`,
           )}
         />
-        <Attr icon={<Eye />} label={t("listing.views", { count: listing.views_count })} />
+        <Attr icon={<Eye />} label={plural("listing.views", listing.views_count)} />
       </div>
 
       <Separator className="my-4" />
@@ -178,6 +176,14 @@ export function ListingDetail({
             </a>
           </Button>
         ) : null}
+        {listing.contact_email ? (
+          <Button asChild variant={whatsappDigits ? "outline" : "default"} size="lg">
+            <a href={`mailto:${listing.contact_email}`}>
+              <Mail />
+              {t("listing.emailCta")}
+            </a>
+          </Button>
+        ) : null}
         {listing.contact_external ? (
           <Button asChild variant="outline" size="lg">
             <a href={listing.contact_external} target="_blank" rel="noopener noreferrer">
@@ -187,22 +193,6 @@ export function ListingDetail({
           </Button>
         ) : null}
       </div>
-
-      {owner ? (
-        <div className="mt-6 flex items-center gap-3">
-          <Avatar>
-            {owner.avatar_url ? (
-              <AvatarImage src={owner.avatar_url} alt={owner.full_name ?? ""} />
-            ) : null}
-            <AvatarFallback>
-              {(owner.full_name ?? "?").slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <p className="text-muted-foreground text-sm">
-            {t("listing.publishedBy", { name: owner.full_name ?? "—" })}
-          </p>
-        </div>
-      ) : null}
 
       <div className="mt-6">
         <ListingMiniMap lat={Number(listing.public_lat)} lng={Number(listing.public_lng)} />

@@ -1,4 +1,5 @@
 import type {
+  Listing,
   ListingStatus,
   ListingType,
   RoomType,
@@ -11,13 +12,17 @@ export type Bounds = {
   maxLng: number;
 };
 
-/** Minimal fields for map markers. */
+/**
+ * Map marker. A single listing has an id, type and price; a cluster of several
+ * listings (count > 1) has none of them and sits at the cluster centroid.
+ */
 export type ListingPin = {
-  id: string;
-  type: ListingType;
-  price: number;
+  id: string | null;
+  type: ListingType | null;
+  price: number | null;
   lat: number;
   lng: number;
+  count: number;
 };
 
 /** Fields rendered in result cards. */
@@ -49,7 +54,6 @@ export const LISTING_STATUSES: ListingStatus[] = [
   "rejected",
   "expired",
   "draft",
-  "deleted",
 ];
 
 export const STATUS_I18N_KEYS: Record<ListingStatus, string> = {
@@ -58,7 +62,6 @@ export const STATUS_I18N_KEYS: Record<ListingStatus, string> = {
   approved: "listing.statusApproved",
   rejected: "listing.statusRejected",
   expired: "listing.statusExpired",
-  deleted: "listing.statusDeleted",
 };
 
 /** PostgREST returns geography columns as GeoJSON. */
@@ -74,3 +77,10 @@ export function parseGeoPoint(location: unknown): { lat: number; lng: number } |
   }
   return null;
 }
+
+/** Poster view returned by get_listing_by_token(): exact coords, no hash/owner. */
+export type PosterListing = Omit<Listing, "location" | "edit_token_hash"> & {
+  lat: number;
+  lng: number;
+  rejection_comment: string | null;
+};

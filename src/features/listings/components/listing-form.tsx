@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { FieldLabel } from "@/components/field-label";
+import { SectionEyebrow } from "@/components/section-eyebrow";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,14 +25,18 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useI18n } from "@/i18n/client";
-import type { Neighborhood } from "@/lib/types/database.types";
 import { PinPickerMap } from "@/features/map/components/pin-picker-map";
-import { hasMapboxToken } from "@/features/map/components/explorer-map";
-import { nearestNeighborhood } from "@/features/map/geocode";
+import { reverseGeocode } from "@/features/map/geocode";
 import { VALENCIA_CENTER } from "@/lib/utils";
-import { listingFormSchema, type ListingFormInput, type ListingFormValues } from "../schemas";
-import { createListing, updateListing } from "../server/actions";
+import {
+  listingFormSchema,
+  submissionSchema,
+  type SubmissionInput,
+  type SubmissionValues,
+} from "../schemas";
+import { createListing, updateListing, type CreatedListing } from "../server/actions";
 import { PhotoUploader } from "./photo-uploader";
+import { captchaEnabled, TurnstileWidget } from "./turnstile";
 
 const nullableNumber = {
   setValueAs: (v: unknown) => (v === "" || v == null ? null : Number(v)),
@@ -36,23 +44,29 @@ const nullableNumber = {
 
 export function ListingForm({
   mode,
-  userId,
   listingId,
-  neighborhoods,
+  token,
   defaults,
 }: {
   mode: "create" | "edit";
-  userId: string;
+  /** edit mode: the poster's secret edit token */
   listingId?: string;
-  neighborhoods: Pick<Neighborhood, "name_ca" | "municipality" | "lat" | "lng">[];
-  defaults: ListingFormValues;
+  token?: string;
+  defaults: SubmissionValues;
 }) {
   const { locale, t } = useI18n();
   const router = useRouter();
-  const [success, setSuccess] = useState(false);
+  const [created, setCreated] = useState<CreatedListing | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  const form = useForm<ListingFormValues, unknown, ListingFormInput>({
-    resolver: zodResolver(listingFormSchema),
+  // Edit mode only validates the listing content (no email/terms/captcha)
+  const schema = mode === "create" ? submissionSchema : listingFormSchema;
+  const form = useForm<SubmissionValues, unknown, SubmissionInput>({
+    resolver: zodResolver(schema) as unknown as Resolver<
+      SubmissionValues,
+      unknown,
+      SubmissionInput
+    >,
     defaultValues: defaults,
     mode: "onBlur",
   });
@@ -68,19 +82,27 @@ export function ListingForm({
   const type = watch("type");
   const lat = watch("lat");
   const lng = watch("lng");
-  const neighborhood = watch("neighborhood");
 
-  // Initial neighborhood detection for new listings
+  // Fill municipality/neighborhood from the pin. Both stay editable: the lookup
+  // can fail (no token, offline, a spot without a named neighborhood).
+  const geocodeRequest = useRef(0);
+  const fillPlaceFromPin = async (pinLat: number, pinLng: number) => {
+    const request = ++geocodeRequest.current;
+    const place = await reverseGeocode(pinLat, pinLng);
+    if (!place || request !== geocodeRequest.current) return;
+    if (place.country && place.country !== "es") {
+      form.setError("lat", { message: "outsideSpain" });
+      return;
+    }
+    form.clearErrors("lat");
+    setValue("municipality", place.municipality ?? "", { shouldValidate: true });
+    setValue("neighborhood", place.neighborhood ?? "");
+  };
+
+  // New listings start on the default map position: detect its place too
   useEffect(() => {
-    if (mode === "create" && !form.getValues("neighborhood")) {
-      const n = nearestNeighborhood(neighborhoods, {
-        lat: form.getValues("lat"),
-        lng: form.getValues("lng"),
-      });
-      if (n) {
-        setValue("neighborhood", n.name_ca);
-        setValue("municipality", n.municipality);
-      }
+    if (mode === "create" && !form.getValues("municipality")) {
+      void fillPlaceFromPin(form.getValues("lat"), form.getValues("lng"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -88,40 +110,74 @@ export function ListingForm({
   const onPin = (newLat: number, newLng: number) => {
     setValue("lat", newLat, { shouldValidate: true });
     setValue("lng", newLng, { shouldValidate: true });
-    const n = nearestNeighborhood(neighborhoods, { lat: newLat, lng: newLng });
-    setValue("neighborhood", n?.name_ca ?? "", { shouldValidate: true });
-    setValue("municipality", n?.municipality ?? "");
+    void fillPlaceFromPin(newLat, newLng);
   };
 
   const onSubmit = handleSubmit(async (values) => {
-    const result =
-      mode === "create" ? await createListing(values) : await updateListing(listingId!, values);
+    if (mode === "create") {
+      if (captchaEnabled && !captchaToken) {
+        toast.error(t("errors.captcha"));
+        return;
+      }
+      const result = await createListing(
+        { ...values, captcha_token: captchaToken ?? undefined },
+        locale,
+      );
+      if (!result.ok) {
+        toast.error(t(result.error));
+        return;
+      }
+      setCreated(result.data);
+      window.scrollTo({ top: 0 });
+      return;
+    }
+
+    const result = await updateListing(listingId!, token!, values);
     if (!result.ok) {
       toast.error(t(result.error));
       return;
     }
-    if (mode === "create") {
-      setSuccess(true);
-    } else {
-      toast.success(t("publish.submitEdit"));
-      router.push(`/${locale}/me/listings`);
-      router.refresh();
-    }
+    toast.success(t("manage.saved"));
+    router.refresh();
   });
 
   const fieldError = (key: string | undefined) =>
-    key ? <p className="text-destructive text-xs">{t(key)}</p> : null;
+    key ? (
+      <p className="text-destructive text-xs">
+        {t(
+          key === "validation" ? "errors.fieldInvalid" : key.includes(".") ? key : `errors.${key}`,
+        )}
+      </p>
+    ) : null;
 
-  if (success) {
+  if (created) {
+    const editUrl = `${window.location.origin}/${locale}/manage/${created.id}/${created.token}`;
     return (
       <Card className="mx-auto mt-16 w-full max-w-md text-center">
         <CardContent className="flex flex-col items-center gap-3 p-8">
           <CheckCircle2 className="text-primary size-10" />
           <h1 className="text-xl font-bold tracking-tight">{t("publish.successTitle")}</h1>
           <p className="text-muted-foreground text-sm">{t("publish.successDescription")}</p>
-          <Button onClick={() => router.push(`/${locale}/me/listings`)}>
-            {t("publish.goToMyListings")}
-          </Button>
+          <div className="bg-muted w-full rounded-lg p-3 text-left">
+            <p className="mb-1 text-xs font-semibold">{t("publish.editLinkTitle")}</p>
+            <p className="text-muted-foreground mb-2 text-xs">
+              {created.emailed ? t("publish.editLinkEmailed") : t("publish.editLinkSaveIt")}
+            </p>
+            <p className="font-mono text-xs break-all">{editUrl}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                void navigator.clipboard.writeText(editUrl);
+                toast.success(t("publish.linkCopied"));
+              }}
+            >
+              <Copy />
+              {t("publish.copyLink")}
+            </Button>
+            <Button onClick={() => router.push(editUrl)}>{t("publish.manageListing")}</Button>
+          </div>
         </CardContent>
       </Card>
     );
@@ -132,15 +188,20 @@ export function ListingForm({
       <h1 className="text-2xl font-bold tracking-tight">
         {mode === "create" ? t("publish.title") : t("publish.editTitle")}
       </h1>
+      <p className="text-muted-foreground -mt-3 text-sm">
+        <span className="text-primary">*</span> {t("publish.requiredNote")}
+      </p>
 
       {/* 1. Type + location */}
       <Card>
         <CardHeader>
-          <CardTitle>1 · {t("publish.stepLocation")}</CardTitle>
+          <CardTitle>
+            <SectionEyebrow index={1}>{t("publish.stepLocation")}</SectionEyebrow>
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-1.5">
-            <Label>{t("publish.type")}</Label>
+            <FieldLabel required>{t("publish.type")}</FieldLabel>
             <ToggleGroup
               type="single"
               value={type}
@@ -154,40 +215,28 @@ export function ListingForm({
           </div>
 
           <div className="grid gap-1.5">
-            <Label>{t("publish.dropPin")}</Label>
-            {hasMapboxToken ? (
-              <PinPickerMap lat={lat} lng={lng} onChange={onPin} />
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Input
-                  type="number"
-                  step="any"
-                  placeholder="lat"
-                  {...register("lat", { valueAsNumber: true })}
-                />
-                <Input
-                  type="number"
-                  step="any"
-                  placeholder="lng"
-                  {...register("lng", { valueAsNumber: true })}
-                />
-              </div>
-            )}
+            <FieldLabel required>{t("publish.dropPin")}</FieldLabel>
+            <PinPickerMap lat={lat} lng={lng} onChange={onPin} />
             {fieldError(errors.lat?.message || errors.lng?.message)}
-            <p className="text-muted-foreground text-sm">
-              {neighborhood
-                ? `${t("publish.neighborhoodDetected")}: ${neighborhood}`
-                : t("publish.noNeighborhood")}
-            </p>
-            {fieldError(errors.neighborhood?.message)}
-            <input type="hidden" {...register("neighborhood")} />
-            <input type="hidden" {...register("municipality")} />
-            {hasMapboxToken ? (
-              <>
-                <input type="hidden" {...register("lat", { valueAsNumber: true })} />
-                <input type="hidden" {...register("lng", { valueAsNumber: true })} />
-              </>
-            ) : null}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-1.5">
+                <FieldLabel htmlFor="municipality" required>
+                  {t("publish.municipality")}
+                </FieldLabel>
+                <Input id="municipality" autoComplete="off" {...register("municipality")} />
+                {fieldError(errors.municipality?.message)}
+              </div>
+              <div className="grid gap-1.5">
+                <FieldLabel htmlFor="neighborhood" optional>
+                  {t("publish.neighborhood")}
+                </FieldLabel>
+                <Input id="neighborhood" autoComplete="off" {...register("neighborhood")} />
+                {fieldError(errors.neighborhood?.message)}
+              </div>
+            </div>
+            <p className="text-muted-foreground text-xs">{t("publish.placeHint")}</p>
+            <input type="hidden" {...register("lat", { valueAsNumber: true })} />
+            <input type="hidden" {...register("lng", { valueAsNumber: true })} />
           </div>
         </CardContent>
       </Card>
@@ -195,24 +244,32 @@ export function ListingForm({
       {/* 2. Details */}
       <Card>
         <CardHeader>
-          <CardTitle>2 · {t("publish.stepDetails")}</CardTitle>
+          <CardTitle>
+            <SectionEyebrow index={2}>{t("publish.stepDetails")}</SectionEyebrow>
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <Label htmlFor="price">{t("publish.price")}</Label>
+              <FieldLabel htmlFor="price" required>
+                {t("publish.price")}
+              </FieldLabel>
               <Input id="price" type="number" min={0} inputMode="numeric" {...register("price")} />
               {fieldError(errors.price?.message)}
             </div>
             <div className="grid gap-1.5">
-              <Label htmlFor="available_from">{t("publish.availableFrom")}</Label>
+              <FieldLabel htmlFor="available_from" optional>
+                {t("publish.availableFrom")}
+              </FieldLabel>
               <Input id="available_from" type="date" {...register("available_from")} />
               {fieldError(errors.available_from?.message)}
             </div>
           </div>
 
           <div className="grid gap-1.5">
-            <Label htmlFor="description">{t("publish.description")}</Label>
+            <FieldLabel htmlFor="description" required>
+              {t("publish.description")}
+            </FieldLabel>
             <Textarea
               id="description"
               rows={5}
@@ -226,7 +283,7 @@ export function ListingForm({
             {type === "room" ? (
               <>
                 <div className="grid gap-1.5">
-                  <Label>{t("publish.roomType")}</Label>
+                  <FieldLabel required>{t("publish.roomType")}</FieldLabel>
                   <Select
                     value={watch("room_type") ?? ""}
                     onValueChange={(v) =>
@@ -247,7 +304,9 @@ export function ListingForm({
                   {fieldError(errors.room_type?.message)}
                 </div>
                 <div className="grid gap-1.5">
-                  <Label htmlFor="flatmates">{t("publish.flatmates")}</Label>
+                  <FieldLabel htmlFor="flatmates" optional>
+                    {t("publish.flatmates")}
+                  </FieldLabel>
                   <Input
                     id="flatmates"
                     type="number"
@@ -259,7 +318,9 @@ export function ListingForm({
               </>
             ) : (
               <div className="grid gap-1.5">
-                <Label htmlFor="bedrooms">{t("publish.bedrooms")}</Label>
+                <FieldLabel htmlFor="bedrooms" required>
+                  {t("publish.bedrooms")}
+                </FieldLabel>
                 <Input
                   id="bedrooms"
                   type="number"
@@ -271,7 +332,9 @@ export function ListingForm({
               </div>
             )}
             <div className="grid gap-1.5">
-              <Label htmlFor="bathrooms">{t("publish.bathrooms")}</Label>
+              <FieldLabel htmlFor="bathrooms" optional>
+                {t("publish.bathrooms")}
+              </FieldLabel>
               <Input
                 id="bathrooms"
                 type="number"
@@ -284,11 +347,11 @@ export function ListingForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <Label>{t("publish.preferredGender")}</Label>
+              <FieldLabel optional>{t("publish.preferredGender")}</FieldLabel>
               <Select
                 value={watch("preferred_gender")}
                 onValueChange={(v) =>
-                  setValue("preferred_gender", v as ListingFormValues["preferred_gender"])
+                  setValue("preferred_gender", v as SubmissionValues["preferred_gender"])
                 }
               >
                 <SelectTrigger>
@@ -303,12 +366,10 @@ export function ListingForm({
               </Select>
             </div>
             <div className="grid gap-1.5">
-              <Label>{t("publish.tenantPref")}</Label>
+              <FieldLabel optional>{t("publish.tenantPref")}</FieldLabel>
               <Select
                 value={watch("tenant_pref")}
-                onValueChange={(v) =>
-                  setValue("tenant_pref", v as ListingFormValues["tenant_pref"])
-                }
+                onValueChange={(v) => setValue("tenant_pref", v as SubmissionValues["tenant_pref"])}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -324,7 +385,9 @@ export function ListingForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <Label htmlFor="deposit">{t("publish.deposit")}</Label>
+              <FieldLabel htmlFor="deposit" optional>
+                {t("publish.deposit")}
+              </FieldLabel>
               <Input
                 id="deposit"
                 type="number"
@@ -335,7 +398,10 @@ export function ListingForm({
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-1.5">
+            <FieldLabel optional>{t("publish.extras")}</FieldLabel>
+          </div>
+          <div className="-mt-2 grid gap-3 sm:grid-cols-3">
             {(
               [
                 ["bills_included", "publish.billsIncluded"],
@@ -343,7 +409,10 @@ export function ListingForm({
                 ["smokers", "publish.smokers"],
               ] as const
             ).map(([key, labelKey]) => (
-              <div key={key} className="flex items-center justify-between gap-3 rounded-lg border p-3">
+              <div
+                key={key}
+                className="flex items-center justify-between gap-3 rounded-lg border p-3"
+              >
                 <Label htmlFor={`form-${key}`} className="text-xs">
                   {t(labelKey)}
                 </Label>
@@ -361,23 +430,30 @@ export function ListingForm({
       {/* 3. Photos + contact */}
       <Card>
         <CardHeader>
-          <CardTitle>3 · {t("publish.stepPhotos")}</CardTitle>
+          <CardTitle>
+            <SectionEyebrow index={3}>{t("publish.stepPhotos")}</SectionEyebrow>
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-1.5">
-            <Label>{t("publish.photos")}</Label>
+            <FieldLabel required>{t("publish.photos")}</FieldLabel>
             <PhotoUploader
-              userId={userId}
-              folder={listingId ?? "draft"}
               value={watch("photos") ?? []}
               onChange={(paths) => setValue("photos", paths, { shouldValidate: true })}
             />
             {fieldError(errors.photos?.message as string | undefined)}
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <fieldset className="grid gap-4 rounded-lg border p-4">
+            <legend className="px-1 text-sm font-semibold">
+              {t("publish.contactGroupTitle")} <span className="text-primary">*</span>
+            </legend>
+            <p className="text-muted-foreground -mt-2 text-xs">{t("publish.contactAtLeastOne")}</p>
+
             <div className="grid gap-1.5">
-              <Label htmlFor="contact_whatsapp">{t("publish.contactWhatsapp")}</Label>
+              <FieldLabel htmlFor="contact_whatsapp" note={t("publish.oneOfTwo")}>
+                {t("publish.contactWhatsapp")}
+              </FieldLabel>
               <Input
                 id="contact_whatsapp"
                 type="tel"
@@ -386,19 +462,97 @@ export function ListingForm({
               />
               {fieldError(errors.contact_whatsapp?.message)}
             </div>
+
             <div className="grid gap-1.5">
-              <Label htmlFor="contact_external">{t("publish.contactExternal")}</Label>
+              <FieldLabel htmlFor="contact_email" note={t("publish.oneOfTwo")}>
+                {t("publish.email")}
+              </FieldLabel>
               <Input
-                id="contact_external"
-                type="url"
-                placeholder="https://…"
-                {...register("contact_external")}
+                id="contact_email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...register("contact_email")}
               />
-              {fieldError(errors.contact_external?.message)}
+              <p className="text-muted-foreground text-xs">{t("publish.emailHint")}</p>
+              {fieldError(errors.contact_email?.message)}
             </div>
+          </fieldset>
+
+          <div className="grid gap-1.5">
+            <FieldLabel htmlFor="contact_external" optional>
+              {t("publish.contactExternal")}
+            </FieldLabel>
+            <Input
+              id="contact_external"
+              type="url"
+              placeholder="https://…"
+              {...register("contact_external")}
+            />
+            {fieldError(errors.contact_external?.message)}
           </div>
+          <p className="text-muted-foreground text-xs">{t("publish.contactPublicHint")}</p>
         </CardContent>
       </Card>
+
+      {mode === "create" ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <SectionEyebrow index={4}>{t("publish.stepSubmit")}</SectionEyebrow>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-1.5">
+              <FieldLabel htmlFor="internal_email" required>
+                {t("publish.internalEmail")}
+              </FieldLabel>
+              <Input
+                id="internal_email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...register("internal_email")}
+              />
+              <p className="text-muted-foreground text-xs">{t("publish.internalEmailHint")}</p>
+              {fieldError(errors.internal_email?.message)}
+            </div>
+
+            {/* Honeypot: invisible to people, tempting to bots */}
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden
+              className="absolute -left-[9999px] h-0 w-0 opacity-0"
+              {...register("website")}
+            />
+
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="accept_terms"
+                checked={watch("accept_terms") === true}
+                onCheckedChange={(checked) =>
+                  setValue("accept_terms", (checked === true) as true, { shouldValidate: true })
+                }
+              />
+              <Label htmlFor="accept_terms" className="text-sm leading-snug font-normal">
+                {t("publish.acceptTerms")}{" "}
+                <Link href={`/${locale}/legal`} target="_blank" className="text-brand underline">
+                  {t("publish.legalLink")}
+                </Link>
+                <span aria-hidden className="text-primary ml-0.5">
+                  *
+                </span>
+                <span className="sr-only"> ({t("common.required")})</span>
+              </Label>
+            </div>
+            {fieldError(errors.accept_terms?.message)}
+
+            <TurnstileWidget onToken={setCaptchaToken} />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Button type="submit" size="lg" disabled={isSubmitting}>
         {isSubmitting
@@ -411,7 +565,7 @@ export function ListingForm({
   );
 }
 
-export const createDefaults: ListingFormValues = {
+export const createDefaults: SubmissionValues = {
   type: "room",
   lat: VALENCIA_CENTER[1],
   lng: VALENCIA_CENTER[0],
@@ -433,4 +587,8 @@ export const createDefaults: ListingFormValues = {
   contact_whatsapp: "",
   contact_external: "",
   photos: [],
+  contact_email: "",
+  internal_email: "",
+  accept_terms: false as unknown as true,
+  website: "",
 };

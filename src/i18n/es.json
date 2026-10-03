@@ -1,11 +1,10 @@
 {
   "common": {
-    "siteName": "MyLloguer",
-    "tagline": "Alquiler entre particulares en València y área metropolitana",
+    "siteName": "Lloguer",
+    "tagline": "Alquiler entre particulares en toda España",
     "publish": "Publica",
     "login": "Inicia sesión",
     "logout": "Cierra sesión",
-    "myListings": "Mis anuncios",
     "admin": "Administración",
     "moderation": "Moderación",
     "allListings": "Todos los anuncios",
@@ -22,14 +21,54 @@
     "any": "Cualquiera",
     "legal": "Aviso legal y privacidad",
     "language": "Idioma",
-    "view": "Ver"
+    "view": "Ver",
+    "required": "obligatorio",
+    "optional": "opcional",
+    "browseMap": "Ver el mapa"
+  },
+  "landing": {
+    "title": "Todos los pisos compartidos, en un solo sitio.",
+    "subtitle": "Deja de buscar entre grupos de WhatsApp e historias de Instagram. Encuentra o publica una habitación en toda España: gratis, sin registro y con cada anuncio revisado.",
+    "ctaBrowse": "Explorar el mapa",
+    "ctaPublish": "Publicar un anuncio",
+    "t1Title": "Gratis y sin registro",
+    "t1Body": "Publicas con un formulario y recibes un enlace privado para editar o borrar tu anuncio. Sin cuenta ni contraseña.",
+    "t2Title": "Revisado a mano",
+    "t2Body": "Una persona revisa cada anuncio antes de publicarlo para evitar trolls y publicidad.",
+    "t3Title": "Siempre al día",
+    "t3Body": "Cada anuncio se desactiva solo a los {days} días, así que no hay pisos fantasma.",
+    "problemTitle": "El problema",
+    "problemBody": "Hoy, buscar piso compartido es un caos: ofertas repartidas entre grupos de WhatsApp, historias que desaparecen y plataformas distintas, sin filtros y sin saber si la habitación sigue libre.",
+    "solutionBody": "Lloguer lo reúne todo en un tablón abierto, buscable y siempre actualizado.",
+    "filtersTitle": "Encuentra lo que te encaja",
+    "filtersIntro": "Busca en el mapa o filtra por lo que de verdad importa al compartir piso.",
+    "fNeighborhood": "Barrio",
+    "fNeighborhoodBody": "Ciudad o barrio, en cualquier punto de España.",
+    "fPrice": "Precio",
+    "fPriceBody": "Fija tu presupuesto mensual.",
+    "fFlatmates": "Compañeros de piso",
+    "fFlatmatesBody": "Elige con cuánta gente quieres convivir.",
+    "fGender": "Género",
+    "fGenderBody": "Ve solo los anuncios que te aceptan.",
+    "howTitle": "Cómo funciona",
+    "s1Title": "Busca",
+    "s1Body": "Abre el mapa, elige una zona y ajusta los filtros.",
+    "s2Title": "Contacta",
+    "s2Body": "Escribe directamente por WhatsApp o correo a quien publica. Sin intermediarios.",
+    "s3Title": "Publica",
+    "s3Body": "Marca la ubicación, añade fotos y detalles, y lo revisamos para publicarlo.",
+    "partnersTitle": "Para universidades, colectivos e instituciones",
+    "partnersBody": "Lloguer es una iniciativa sin ánimo de lucro de Global Shapers Valencia. Si quieres difundirla entre tu comunidad o colaborar con nosotros, escríbenos.",
+    "partnersCta": "Escríbenos"
   },
   "home": {
     "emptyTitle": "No hay nada aquí",
     "emptyDescription": "Mueve el mapa o amplía los filtros para ver más anuncios.",
     "emptyReset": "Borrar filtros",
+    "clusterLabel": "{count} anuncios en esta zona",
     "results": "{count} anuncios",
-    "loadError": "No se han podido cargar los anuncios."
+    "loadError": "No se han podido cargar los anuncios.",
+    "resultsOne": "{count} anuncio"
   },
   "filters": {
     "title": "Filtros",
@@ -38,14 +77,17 @@
     "priceMin": "Mínimo",
     "priceMax": "Máximo",
     "neighborhood": "Barrio",
-    "allNeighborhoods": "Todos los barrios",
     "billsIncluded": "Gastos incluidos",
     "pets": "Se admiten mascotas",
     "smokers": "Se admiten fumadores",
     "flatmates": "Compañeros de piso máx.",
     "availableBefore": "Disponible antes de",
     "apply": "Aplicar",
-    "reset": "Borrar"
+    "reset": "Borrar",
+    "gender": "Mi género",
+    "genderHint": "Solo anuncios que me aceptan",
+    "place": "Ciudad o barrio",
+    "allPlaces": "Toda España"
   },
   "listing": {
     "perMonth": "€/mes",
@@ -78,22 +120,25 @@
     "whatsappCta": "Escribir por WhatsApp",
     "externalCta": "Ver contacto externo",
     "views": "{count} visitas",
-    "publishedBy": "Publicado por {name}",
     "notFound": "Este anuncio no está disponible.",
     "statusDraft": "Borrador",
     "statusPending": "En revisión",
     "statusApproved": "Activo",
     "statusRejected": "Rechazado",
     "statusExpired": "Caducado",
-    "statusDeleted": "Eliminado",
     "moderatorComment": "Comentario del moderador",
     "editAndResubmit": "Editar y reenviar",
     "deactivate": "Desactivar",
     "republish": "Republicar",
-    "deleteConfirmTitle": "¿Eliminar el anuncio?",
-    "deleteConfirmDescription": "El anuncio se eliminará y no se podrá recuperar.",
+    "deleteConfirmTitle": "¿Eliminar el anuncio definitivamente?",
+    "deleteConfirmDescription": "Se borrarán de forma permanente el anuncio, sus fotos y tus datos de contacto. No se puede deshacer.",
     "deactivateConfirmTitle": "¿Desactivar el anuncio?",
-    "deactivateConfirmDescription": "El anuncio dejará de ser visible hasta que lo vuelvas a publicar."
+    "deactivateConfirmDescription": "El anuncio dejará de ser visible hasta que lo vuelvas a publicar.",
+    "emailCta": "Escribir por correo",
+    "flatmatesOne": "{count} compañero de piso",
+    "bathroomsOne": "{count} baño",
+    "bedroomsOne": "{count} habitación",
+    "viewsOne": "{count} visita"
   },
   "publish": {
     "title": "Publica tu anuncio",
@@ -103,8 +148,6 @@
     "stepPhotos": "Fotos y contacto",
     "type": "¿Qué ofreces?",
     "dropPin": "Arrastra el marcador hasta la ubicación aproximada",
-    "neighborhoodDetected": "Barrio detectado",
-    "noNeighborhood": "Acerca el marcador a un barrio conocido",
     "price": "Precio mensual (€)",
     "availableFrom": "Disponible desde",
     "description": "Descripción",
@@ -122,23 +165,43 @@
     "photos": "Fotos",
     "photosHint": "Hasta 8 fotos. La primera es obligatoria.",
     "contactWhatsapp": "Teléfono de WhatsApp",
-    "contactExternal": "Enlace externo de contacto (opcional)",
+    "contactExternal": "Enlace externo de contacto",
     "submit": "Enviar a revisión",
     "submitEdit": "Guardar y reenviar",
     "successTitle": "¡Anuncio enviado!",
-    "successDescription": "Tu anuncio está en revisión. Se publicará cuando sea aprobado.",
-    "goToMyListings": "Ir a mis anuncios"
-  },
-  "myListings": {
-    "title": "Mis anuncios",
-    "empty": "Todavía no tienes ningún anuncio.",
-    "publishFirst": "Publica el primero"
+    "successDescription": "Lo revisaremos manualmente y aparecerá en el mapa cuando lo aprobemos. Se desactivará solo a los 10 días.",
+    "email": "Correo de contacto",
+    "emailHint": "Se mostrará en el anuncio, igual que el WhatsApp.",
+    "contactPublicHint": "El enlace externo (por ejemplo, tu anuncio en otra web) es opcional.",
+    "acceptTerms": "He leído y acepto",
+    "editLinkTitle": "Tu enlace privado de gestión",
+    "editLinkEmailed": "Te lo hemos enviado también por email. Guárdalo: es la única forma de editar tu anuncio.",
+    "editLinkSaveIt": "Guárdalo ahora: es la única forma de editar, desactivar o borrar tu anuncio.",
+    "copyLink": "Copiar enlace",
+    "linkCopied": "Enlace copiado",
+    "manageListing": "Gestionar anuncio",
+    "municipality": "Municipio",
+    "neighborhood": "Barrio",
+    "placeHint": "Se rellenan solos según el marcador. Puedes corregirlos.",
+    "requiredNote": "Los campos con asterisco son obligatorios; el resto son opcionales.",
+    "extras": "Extras",
+    "contactGroupTitle": "Cómo pueden contactarte",
+    "contactAtLeastOne": "Indica al menos una vía de contacto público: WhatsApp o correo. Lo que pongas aquí lo verá cualquiera que vea el anuncio.",
+    "oneOfTwo": "al menos uno de los dos",
+    "stepSubmit": "Revisión y envío",
+    "legalLink": "el aviso legal y la privacidad",
+    "internalEmail": "Tu correo privado",
+    "internalEmailHint": "No se publica y puede ser distinto del de contacto. Te enviamos aquí el enlace privado para editar, desactivar o borrar tu anuncio."
   },
   "auth": {
     "loginTitle": "Inicia sesión",
-    "loginDescription": "Inicia sesión con Google para publicar o gestionar tus anuncios.",
-    "loginWithGoogle": "Continuar con Google",
-    "loginRequired": "Debes iniciar sesión para continuar."
+    "loginDescription": "Los admins inician sesión con un enlace enviado a su correo.",
+    "loginRequired": "Debes iniciar sesión para continuar.",
+    "email": "Correo electrónico",
+    "sendLink": "Enviar enlace de acceso",
+    "linkSent": "Revisa {email}: te hemos enviado un enlace de acceso. Puedes cerrar esta pestaña.",
+    "linkError": "No hemos podido enviar el enlace. Revisa la dirección e inténtalo de nuevo.",
+    "linkInvalid": "Ese enlace ha caducado o ya se ha usado. Pide uno nuevo."
   },
   "admin": {
     "queueTitle": "Cola de moderación",
@@ -150,9 +213,10 @@
     "rejectComment": "Motivo del rechazo",
     "history": "Historial",
     "status": "Estado",
-    "owner": "Propietario",
     "createdAt": "Creado",
-    "pendingCount": "{count} pendientes"
+    "pendingCount": "{count} pendientes",
+    "contactEmail": "Correo público",
+    "internalEmail": "Correo privado"
   },
   "moderationAction": {
     "submitted": "Enviado",
@@ -160,7 +224,6 @@
     "rejected": "Rechazado",
     "edited": "Editado",
     "deactivated": "Desactivado",
-    "deleted": "Eliminado",
     "republished": "Republicado"
   },
   "errors": {
@@ -172,16 +235,37 @@
     "photoTooLarge": "La foto supera los 5 MB.",
     "photoInvalidType": "Formato de imagen no admitido.",
     "tooManyPhotos": "Máximo 8 fotos.",
-    "firstPhotoRequired": "La primera foto es obligatoria."
+    "firstPhotoRequired": "La primera foto es obligatoria.",
+    "captcha": "No hemos podido verificar que eres una persona. Inténtalo de nuevo.",
+    "outsideSpain": "El marcador está fuera de España.",
+    "contactRequired": "Indica un WhatsApp o un correo electrónico.",
+    "fieldInvalid": "Revisa este campo."
   },
   "legal": {
     "title": "Aviso legal y privacidad",
-    "intro": "MyLloguer es una plataforma de anuncios de alquiler entre particulares en València y su área metropolitana.",
+    "intro": "Lloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
     "dataTitle": "Datos personales",
-    "dataBody": "Solo tratamos los datos necesarios para el funcionamiento del servicio: tu cuenta de Google (nombre, correo y avatar) y los anuncios que publicas. No vendemos datos a terceros.",
+    "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio, incluidos el WhatsApp y el correo de contacto que indiques (son públicos); tu correo privado (solo para enviarte el enlace de gestión, no se publica y puede ser distinto del de contacto); y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión: se eliminan de forma definitiva el anuncio, sus fotos y tus datos.",
     "contentTitle": "Contenido",
     "contentBody": "Los anuncios son responsabilidad exclusiva de quien los publica. Moderamos los anuncios antes de su publicación, pero no garantizamos su veracidad.",
     "contactTitle": "Contacto",
-    "contactBody": "Para cualquier consulta puedes escribirnos a hola@mylloguer.example."
+    "contactBody": "Para cualquier consulta puedes escribirnos a valencia.globalshapers@gmail.com."
+  },
+  "manage": {
+    "title": "Gestiona tu anuncio",
+    "saved": "Cambios guardados. Volveremos a revisar el anuncio.",
+    "liveUntil": "Visible hasta el {date}.",
+    "pendingHint": "Pendiente de revisión. Aparecerá en el mapa cuando lo aprobemos.",
+    "expiredHint": "Este anuncio ha caducado. Puedes volver a publicarlo y lo revisaremos de nuevo.",
+    "rejectedHint": "Corrige lo indicado y vuelve a publicarlo."
+  },
+  "footer": {
+    "initiative": {
+      "before": "Una iniciativa sin ánimo de lucro de",
+      "hub": "Global Shapers Valencia"
+    },
+    "madeIn": "Hecho en la Terreta por",
+    "contactEmail": "valencia.globalshapers@gmail.com",
+    "membershipNote": "Global Shapers Valencia es un hub independiente y de voluntariado de la Global Shapers Community, una iniciativa del Foro Económico Mundial. No es una entidad legal ni financieramente afiliada al Foro Económico Mundial."
   }
 }

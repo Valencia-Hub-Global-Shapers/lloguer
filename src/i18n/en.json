@@ -1,11 +1,10 @@
 {
   "common": {
-    "siteName": "MyLloguer",
-    "tagline": "Private-room and flat rentals in Valencia and its metro area",
+    "siteName": "Lloguer",
+    "tagline": "Private rentals across Spain",
     "publish": "Publish",
     "login": "Sign in",
     "logout": "Sign out",
-    "myListings": "My listings",
     "admin": "Admin",
     "moderation": "Moderation",
     "allListings": "All listings",
@@ -22,14 +21,54 @@
     "any": "Any",
     "legal": "Legal notice & privacy",
     "language": "Language",
-    "view": "View"
+    "view": "View",
+    "required": "required",
+    "optional": "optional",
+    "browseMap": "Browse the map"
+  },
+  "landing": {
+    "title": "Every shared flat, in one place.",
+    "subtitle": "Stop digging through WhatsApp groups and Instagram stories. Find or post a room anywhere in Spain: free, no signup, and every listing reviewed.",
+    "ctaBrowse": "Explore the map",
+    "ctaPublish": "Post a listing",
+    "t1Title": "Free, no signup",
+    "t1Body": "Post with a simple form and get a private link to edit or delete your listing. No account or password.",
+    "t2Title": "Reviewed by hand",
+    "t2Body": "A person checks every listing before it goes live to keep out trolls and ads.",
+    "t3Title": "Always up to date",
+    "t3Body": "Each listing switches off by itself after {days} days, so there are no ghost rooms.",
+    "problemTitle": "The problem",
+    "problemBody": "Looking for a shared flat today is a mess: offers scattered across WhatsApp groups, stories that vanish and different platforms, with no filters and no way to know if the room is still free.",
+    "solutionBody": "Lloguer brings it all together in one open board that is searchable and always current.",
+    "filtersTitle": "Find what fits you",
+    "filtersIntro": "Browse the map or filter by what really matters when sharing a flat.",
+    "fNeighborhood": "Neighbourhood",
+    "fNeighborhoodBody": "City or neighbourhood, anywhere in Spain.",
+    "fPrice": "Price",
+    "fPriceBody": "Set your monthly budget.",
+    "fFlatmates": "Flatmates",
+    "fFlatmatesBody": "Choose how many people you want to live with.",
+    "fGender": "Gender",
+    "fGenderBody": "See only the listings that accept you.",
+    "howTitle": "How it works",
+    "s1Title": "Search",
+    "s1Body": "Open the map, pick an area and adjust the filters.",
+    "s2Title": "Get in touch",
+    "s2Body": "Message the poster directly by WhatsApp or email. No middlemen.",
+    "s3Title": "Post",
+    "s3Body": "Mark the location, add photos and details, and we review it before publishing.",
+    "partnersTitle": "For universities, groups and institutions",
+    "partnersBody": "Lloguer is a non-profit initiative by Global Shapers Valencia. If you want to share it with your community or work with us, get in touch.",
+    "partnersCta": "Get in touch"
   },
   "home": {
     "emptyTitle": "Nothing here",
     "emptyDescription": "Move the map or widen the filters to see more listings.",
     "emptyReset": "Clear filters",
+    "clusterLabel": "{count} listings in this area",
     "results": "{count} listings",
-    "loadError": "Listings could not be loaded."
+    "loadError": "Listings could not be loaded.",
+    "resultsOne": "{count} listing"
   },
   "filters": {
     "title": "Filters",
@@ -38,14 +77,17 @@
     "priceMin": "Min",
     "priceMax": "Max",
     "neighborhood": "Neighborhood",
-    "allNeighborhoods": "All neighborhoods",
     "billsIncluded": "Bills included",
     "pets": "Pets allowed",
     "smokers": "Smokers allowed",
     "flatmates": "Max flatmates",
     "availableBefore": "Available before",
     "apply": "Apply",
-    "reset": "Clear"
+    "reset": "Clear",
+    "gender": "My gender",
+    "genderHint": "Only listings that accept me",
+    "place": "City or neighborhood",
+    "allPlaces": "All of Spain"
   },
   "listing": {
     "perMonth": "€/month",
@@ -78,22 +120,25 @@
     "whatsappCta": "Message on WhatsApp",
     "externalCta": "View external contact",
     "views": "{count} views",
-    "publishedBy": "Published by {name}",
     "notFound": "This listing is not available.",
     "statusDraft": "Draft",
     "statusPending": "In review",
     "statusApproved": "Live",
     "statusRejected": "Rejected",
     "statusExpired": "Expired",
-    "statusDeleted": "Deleted",
     "moderatorComment": "Moderator comment",
     "editAndResubmit": "Edit and resubmit",
     "deactivate": "Deactivate",
     "republish": "Republish",
-    "deleteConfirmTitle": "Delete listing?",
-    "deleteConfirmDescription": "The listing will be deleted and cannot be recovered.",
+    "deleteConfirmTitle": "Delete the listing permanently?",
+    "deleteConfirmDescription": "The listing, its photos and your contact details will be erased permanently. This cannot be undone.",
     "deactivateConfirmTitle": "Deactivate listing?",
-    "deactivateConfirmDescription": "The listing will stop being visible until you republish it."
+    "deactivateConfirmDescription": "The listing will stop being visible until you republish it.",
+    "emailCta": "Send an email",
+    "flatmatesOne": "{count} flatmate",
+    "bathroomsOne": "{count} bathroom",
+    "bedroomsOne": "{count} bedroom",
+    "viewsOne": "{count} view"
   },
   "publish": {
     "title": "Publish your listing",
@@ -103,8 +148,6 @@
     "stepPhotos": "Photos & contact",
     "type": "What are you offering?",
     "dropPin": "Drag the marker to the approximate location",
-    "neighborhoodDetected": "Detected neighborhood",
-    "noNeighborhood": "Move the marker closer to a known neighborhood",
     "price": "Monthly price (€)",
     "availableFrom": "Available from",
     "description": "Description",
@@ -122,23 +165,43 @@
     "photos": "Photos",
     "photosHint": "Up to 8 photos. The first one is required.",
     "contactWhatsapp": "WhatsApp number",
-    "contactExternal": "External contact link (optional)",
+    "contactExternal": "External contact link",
     "submit": "Submit for review",
     "submitEdit": "Save and resubmit",
     "successTitle": "Listing submitted!",
-    "successDescription": "Your listing is under review. It will go live once approved.",
-    "goToMyListings": "Go to my listings"
-  },
-  "myListings": {
-    "title": "My listings",
-    "empty": "You don't have any listings yet.",
-    "publishFirst": "Publish your first one"
+    "successDescription": "We will review it manually and it will show on the map once approved. It switches off by itself after 10 days.",
+    "email": "Contact email",
+    "emailHint": "It will be shown on the listing, like the WhatsApp number.",
+    "contactPublicHint": "The external link (for example, your ad on another site) is optional.",
+    "acceptTerms": "I have read and accept",
+    "editLinkTitle": "Your private management link",
+    "editLinkEmailed": "We also emailed it to you. Keep it: it is the only way to edit your listing.",
+    "editLinkSaveIt": "Save it now: it is the only way to edit, deactivate or delete your listing.",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "manageListing": "Manage listing",
+    "municipality": "Municipality",
+    "neighborhood": "Neighborhood",
+    "placeHint": "Filled in automatically from the pin. You can correct them.",
+    "requiredNote": "Fields marked with an asterisk are required; the rest are optional.",
+    "extras": "Extras",
+    "contactGroupTitle": "How people can reach you",
+    "contactAtLeastOne": "Give at least one public way to reach you: WhatsApp or email. Whatever you put here is visible to anyone viewing the listing.",
+    "oneOfTwo": "at least one of the two",
+    "stepSubmit": "Review and submit",
+    "legalLink": "the legal notice and privacy policy",
+    "internalEmail": "Your private email",
+    "internalEmailHint": "It is not published and can differ from the contact email. We send the private link to edit, deactivate or delete your listing here."
   },
   "auth": {
     "loginTitle": "Sign in",
-    "loginDescription": "Sign in with Google to publish or manage your listings.",
-    "loginWithGoogle": "Continue with Google",
-    "loginRequired": "You must sign in to continue."
+    "loginDescription": "Admins sign in with a link sent to their email.",
+    "loginRequired": "You must sign in to continue.",
+    "email": "Email",
+    "sendLink": "Send sign-in link",
+    "linkSent": "Check {email} for a sign-in link. You can close this tab.",
+    "linkError": "We could not send the link. Check the address and try again.",
+    "linkInvalid": "That sign-in link has expired or was already used. Request a new one."
   },
   "admin": {
     "queueTitle": "Moderation queue",
@@ -150,9 +213,10 @@
     "rejectComment": "Reason for rejection",
     "history": "History",
     "status": "Status",
-    "owner": "Owner",
     "createdAt": "Created",
-    "pendingCount": "{count} pending"
+    "pendingCount": "{count} pending",
+    "contactEmail": "Public email",
+    "internalEmail": "Private email"
   },
   "moderationAction": {
     "submitted": "Submitted",
@@ -160,7 +224,6 @@
     "rejected": "Rejected",
     "edited": "Edited",
     "deactivated": "Deactivated",
-    "deleted": "Deleted",
     "republished": "Republished"
   },
   "errors": {
@@ -172,16 +235,37 @@
     "photoTooLarge": "Photo exceeds 5 MB.",
     "photoInvalidType": "Unsupported image format.",
     "tooManyPhotos": "Maximum 8 photos.",
-    "firstPhotoRequired": "The first photo is required."
+    "firstPhotoRequired": "The first photo is required.",
+    "captcha": "We could not verify you are human. Please try again.",
+    "outsideSpain": "The pin is outside Spain.",
+    "contactRequired": "Give a WhatsApp number or an email.",
+    "fieldInvalid": "Please check this field."
   },
   "legal": {
     "title": "Legal notice & privacy",
-    "intro": "MyLloguer is a private rental classifieds platform for Valencia and its metropolitan area.",
+    "intro": "Lloguer is a non-profit classifieds platform for private rentals and shared flats across Spain, run by Global Shapers Valencia.",
     "dataTitle": "Personal data",
-    "dataBody": "We only process the data needed to run the service: your Google account (name, email and avatar) and the listings you publish. We do not sell data to third parties.",
+    "dataBody": "We only process what the service needs: your listing content, including the WhatsApp number and contact email you give (both public); your private email (only used to send you the management link, never published, and it can differ from the contact email); and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link: the listing, its photos and your data are erased permanently.",
     "contentTitle": "Content",
     "contentBody": "Listings are the sole responsibility of their publishers. We moderate listings before publication but cannot guarantee their accuracy.",
     "contactTitle": "Contact",
-    "contactBody": "For any enquiry you can write to hola@mylloguer.example."
+    "contactBody": "For any question you can write to us at valencia.globalshapers@gmail.com."
+  },
+  "manage": {
+    "title": "Manage your listing",
+    "saved": "Changes saved. We will review the listing again.",
+    "liveUntil": "Live until {date}.",
+    "pendingHint": "Waiting for review. It will show on the map once approved.",
+    "expiredHint": "This listing has expired. You can republish it and we will review it again.",
+    "rejectedHint": "Fix what is mentioned and republish it."
+  },
+  "footer": {
+    "initiative": {
+      "before": "A non-profit initiative of",
+      "hub": "Global Shapers Valencia"
+    },
+    "madeIn": "Made in La Terreta by",
+    "contactEmail": "valencia.globalshapers@gmail.com",
+    "membershipNote": "Global Shapers Valencia is an independent, volunteer-led hub of the Global Shapers Community, a World Economic Forum initiative. It is not a legal or financial affiliate of the World Economic Forum."
   }
 }
