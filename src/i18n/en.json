@@ -23,7 +23,32 @@
     "language": "Language",
     "view": "View",
     "required": "required",
-    "optional": "optional"
+    "optional": "optional",
+    "browseMap": "Browse the map"
+  },
+  "landing": {
+    "eyebrow": "Rentals between individuals across Spain",
+    "title": "Find a room or shared flat on the map.",
+    "subtitle": "MyLloguer is a free, non-profit board of rental listings between individuals. No agencies, no fees and no account needed.",
+    "ctaBrowse": "Explore the map",
+    "ctaPublish": "Post a listing",
+    "whatTitle": "What is MyLloguer",
+    "whatBody": "An open map where people post the room or flat they offer and anyone looking for a place finds it right away. It covers all of Spain and opens on València.",
+    "f1Title": "Map first",
+    "f1Body": "See where every listing is and filter by price, type, bills, pets or flatmates.",
+    "f2Title": "No account",
+    "f2Body": "You post with your email and get a private link to edit, deactivate or delete your listing whenever you like.",
+    "f3Title": "Moderated and fresh",
+    "f3Body": "We review every listing before it goes live and it expires after {days} days, so what you see is up to date.",
+    "howTitle": "How it works",
+    "s1Title": "Search",
+    "s1Body": "Open the map, pick a city or neighbourhood and adjust the filters.",
+    "s2Title": "Get in touch",
+    "s2Body": "Message the poster directly by WhatsApp or email. There are no middlemen.",
+    "s3Title": "Post",
+    "s3Body": "Drop a pin on the map, add photos and details, and we review it before publishing.",
+    "nonprofitTitle": "Free and non-profit",
+    "nonprofitBody": "MyLloguer is a volunteer project by Global Shapers Valencia to make shared housing easier to find. We never charge anyone or sell your data."
   },
   "home": {
     "emptyTitle": "Nothing here",

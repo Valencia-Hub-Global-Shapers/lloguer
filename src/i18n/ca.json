@@ -23,7 +23,32 @@
     "language": "Idioma",
     "view": "Vore",
     "required": "obligatori",
-    "optional": "opcional"
+    "optional": "opcional",
+    "browseMap": "Veure el mapa"
+  },
+  "landing": {
+    "eyebrow": "Lloguer entre particulars a tot Espanya",
+    "title": "Troba habitació o pis compartit al mapa.",
+    "subtitle": "MyLloguer és un tauler gratuït i sense ànim de lucre d'anuncis de lloguer entre particulars. Sense agències, sense comissions i sense crear un compte.",
+    "ctaBrowse": "Explorar el mapa",
+    "ctaPublish": "Publicar un anunci",
+    "whatTitle": "Què és MyLloguer",
+    "whatBody": "Un mapa obert on la gent publica l'habitació o el pis que ofereix i qui busca allotjament el troba a l'instant. Funciona a tot Espanya i s'obri a València.",
+    "f1Title": "Primer el mapa",
+    "f1Body": "Mira on és cada anunci i filtra per preu, tipus, despeses, mascotes o companys de pis.",
+    "f2Title": "Sense compte",
+    "f2Body": "Publiques amb el teu correu i reps un enllaç privat per editar, desactivar o esborrar l'anunci quan vulgues.",
+    "f3Title": "Moderat i vigent",
+    "f3Body": "Revisem cada anunci abans de publicar-lo i caduca als {days} dies, així que el que veus està al dia.",
+    "howTitle": "Com funciona",
+    "s1Title": "Cerca",
+    "s1Body": "Obri el mapa, tria una ciutat o barri i ajusta els filtres.",
+    "s2Title": "Contacta",
+    "s2Body": "Escriu directament per WhatsApp o correu a qui publica. No hi ha intermediaris.",
+    "s3Title": "Publica",
+    "s3Body": "Posa un pin al mapa, afegeix fotos i detalls, i el revisem per publicar-lo.",
+    "nonprofitTitle": "Gratis i sense ànim de lucre",
+    "nonprofitBody": "MyLloguer és un projecte de voluntariat de Global Shapers València per facilitar l'accés a l'habitatge compartit. No cobrem a ningú ni venem les teues dades."
   },
   "home": {
     "emptyTitle": "No hi ha res ací",

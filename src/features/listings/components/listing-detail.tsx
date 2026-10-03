@@ -59,7 +59,7 @@ export function ListingDetail({
     <main className="mx-auto w-full max-w-3xl flex-1 p-4 pb-16">
       <div className="mb-3 flex items-center justify-between gap-2">
         <Button asChild variant="ghost" size="sm">
-          <Link href={`/${locale}`}>← {t("common.back")}</Link>
+          <Link href={`/${locale}/map`}>← {t("common.back")}</Link>
         </Button>
         {isPreview ? <StatusBadge status={listing.status} /> : null}
       </div>

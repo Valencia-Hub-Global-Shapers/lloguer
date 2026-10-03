@@ -30,6 +30,9 @@ export async function SiteHeader({
       </Link>
 
       <div className="flex-1" />
+      <Button asChild size="sm" variant="ghost" className="hidden sm:inline-flex">
+        <Link href={`/${locale}/map`}>{dict.common.browseMap}</Link>
+      </Button>
       <Button asChild size="sm">
         <Link href={`/${locale}/publish`}>
           <Plus />
