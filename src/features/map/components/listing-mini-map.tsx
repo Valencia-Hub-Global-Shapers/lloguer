@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { MAP_STYLE } from "../style";
+import { ensureMapWorker } from "../worker";
 
 /** Static-ish mini map showing the (truncated) public location of a listing. */
 export function ListingMiniMap({ lat, lng }: { lat: number; lng: number }) {
@@ -11,6 +12,7 @@ export function ListingMiniMap({ lat, lng }: { lat: number; lng: number }) {
 
   useEffect(() => {
     if (!containerRef.current) return;
+    ensureMapWorker();
 
     const map = new maplibregl.Map({
       container: containerRef.current,

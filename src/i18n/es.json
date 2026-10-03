@@ -27,7 +27,7 @@
     "browseMap": "Ver el mapa"
   },
   "landing": {
-    "title": "Todos los pisos compartidos, en un solo sitio.",
+    "title": "Todos los pisos asequibles, en un solo sitio.",
     "subtitle": "Deja de buscar entre grupos de WhatsApp e historias de Instagram. Encuentra o publica una habitación en toda España: gratis, sin registro y con cada anuncio revisado.",
     "ctaBrowse": "Explorar el mapa",
     "ctaPublish": "Publicar un anuncio",
@@ -243,7 +243,7 @@
   },
   "legal": {
     "title": "Aviso legal y privacidad",
-    "intro": "Lloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos compartidos entre particulares en España, impulsada por Global Shapers Valencia.",
+    "intro": "Lloguer es una plataforma sin ánimo de lucro de anuncios de alquiler y pisos asequibles entre particulares en España, impulsada por Global Shapers Valencia.",
     "dataTitle": "Datos personales",
     "dataBody": "Solo tratamos los datos necesarios para el servicio: el contenido de tu anuncio, incluidos el WhatsApp y el correo de contacto que indiques (son públicos); tu correo privado (solo para enviarte el enlace de gestión, no se publica y puede ser distinto del de contacto); y un identificador cifrado de ese enlace. No hace falta cuenta. No vendemos datos a terceros. Puedes borrar tu anuncio en cualquier momento desde tu enlace de gestión: se eliminan de forma definitiva el anuncio, sus fotos y tus datos.",
     "contentTitle": "Contenido",

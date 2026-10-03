@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n/client";
 import { VALENCIA_CENTER } from "@/lib/utils";
 import { formatCount } from "../clustering";
 import { MAP_STYLE } from "../style";
+import { ensureMapWorker } from "../worker";
 
 const MAX_CLUSTER_CLICK_ZOOM = 16;
 
@@ -42,6 +43,7 @@ export function ExplorerMap({
   // Init map once
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
+    ensureMapWorker();
 
     const map = new maplibregl.Map({
       container: containerRef.current,

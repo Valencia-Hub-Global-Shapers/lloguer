@@ -102,7 +102,7 @@ export async function createListing(
 
   const ip = await getClientIp();
   if (!(await checkRateLimit("publish", ip))) return err("errors.rateLimited");
-  if (!(await verifyCaptcha(parsed.data.captcha_token, ip))) return err("errors.captcha");
+  if (!(await verifyCaptcha(parsed.data.captcha_token))) return err("errors.captcha");
 
   const token = generateEditToken();
   const supabase = await createClient();

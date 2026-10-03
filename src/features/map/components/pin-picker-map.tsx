@@ -5,6 +5,7 @@ import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { VALENCIA_CENTER } from "@/lib/utils";
 import { MAP_STYLE } from "../style";
+import { ensureMapWorker } from "../worker";
 
 /** Mini map with a draggable pin used in the publish/edit form. */
 export function PinPickerMap({
@@ -24,6 +25,7 @@ export function PinPickerMap({
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
+    ensureMapWorker();
 
     const map = new maplibregl.Map({
       container: containerRef.current,
