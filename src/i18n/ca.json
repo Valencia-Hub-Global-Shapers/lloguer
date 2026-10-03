@@ -59,7 +59,8 @@
     "s3Body": "Marca la ubicació, afegeix fotos i detalls, i el revisem per publicar-lo.",
     "partnersTitle": "Per a universitats, col·lectius i institucions",
     "partnersBody": "MyLloguer és una iniciativa sense ànim de lucre de Global Shapers València. Si vols difondre-la entre la teua comunitat o col·laborar amb nosaltres, escriu-nos.",
-    "partnersCta": "Escriu-nos"
+    "partnersCta": "Escriu-nos",
+    "demoLabel": "Exemple"
   },
   "home": {
     "emptyTitle": "No hi ha res ací",

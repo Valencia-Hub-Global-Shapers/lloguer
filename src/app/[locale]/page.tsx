@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Mail, ShieldCheck, Timer, UserRoundX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LandingMapDemo } from "@/components/landing-map-demo";
 import { SectionEyebrow } from "@/components/section-eyebrow";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -43,35 +44,48 @@ export default async function LandingPage({
   return (
     <main className="flex-1">
       <section className="border-b px-4 py-16 sm:py-24">
-        <div className="mx-auto w-full max-w-[1120px]">
-          <p className="text-brand text-[0.72rem] font-semibold tracking-[0.16em] uppercase">
-            {f.initiative.before}{" "}
-            <a
-              href={HUB_SITE_URL}
-              target="_blank"
-              rel="noopener"
-              className="underline-offset-4 hover:underline"
-            >
-              {f.initiative.hub}
-            </a>
-          </p>
-          <h1 className="font-display mt-4 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-6xl">
-            {l.title}
-          </h1>
-          <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed">
-            {l.subtitle}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <Link href={`/${locale}/map`}>
-                {l.ctaBrowse}
-                <ArrowRight />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href={`/${locale}/publish`}>{l.ctaPublish}</Link>
-            </Button>
+        <div className="mx-auto grid w-full max-w-[1120px] items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <p className="text-brand text-[0.72rem] font-semibold tracking-[0.16em] uppercase">
+              {f.initiative.before}{" "}
+              <a
+                href={HUB_SITE_URL}
+                target="_blank"
+                rel="noopener"
+                className="underline-offset-4 hover:underline"
+              >
+                {f.initiative.hub}
+              </a>
+            </p>
+            <h1 className="font-display mt-4 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-6xl">
+              {l.title}
+            </h1>
+            <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed">
+              {l.subtitle}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg">
+                <Link href={`/${locale}/map`}>
+                  {l.ctaBrowse}
+                  <ArrowRight />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href={`/${locale}/publish`}>{l.ctaPublish}</Link>
+              </Button>
+            </div>
           </div>
+          <LandingMapDemo
+            labels={{
+              example: l.demoLabel,
+              perMonth: dict.listing.perMonth,
+              billsIncluded: dict.listing.billsIncluded,
+              flatmates: dict.listing.flatmates,
+              room: dict.listing.typeRoom,
+              double: dict.listing.roomDouble,
+              single: dict.listing.roomSingle,
+            }}
+          />
         </div>
       </section>
 
@@ -80,8 +94,12 @@ export default async function LandingPage({
           {trust.map(({ icon: Icon, title, body }) => (
             <li key={title}>
               <Icon className="text-brand size-5" aria-hidden />
-              <h3 className="font-display mt-3 text-lg font-semibold">{title}</h3>
-              <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{body}</p>
+              <h3 className="font-display mt-3 text-lg font-semibold">
+                {title}
+              </h3>
+              <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                {body}
+              </p>
             </li>
           ))}
         </ul>
@@ -93,7 +111,9 @@ export default async function LandingPage({
           <p className="text-muted-foreground mt-4 max-w-3xl text-lg leading-relaxed">
             {l.problemBody}
           </p>
-          <p className="font-display mt-4 max-w-3xl text-2xl leading-snug">{l.solutionBody}</p>
+          <p className="font-display mt-4 max-w-3xl text-2xl leading-snug">
+            {l.solutionBody}
+          </p>
         </div>
       </section>
 
@@ -106,7 +126,9 @@ export default async function LandingPage({
           <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {filters.map((item) => (
               <li key={item.title} className="border-t pt-4">
-                <h3 className="font-display text-lg font-semibold">{item.title}</h3>
+                <h3 className="font-display text-lg font-semibold">
+                  {item.title}
+                </h3>
                 <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
                   {item.body}
                 </p>
@@ -125,8 +147,12 @@ export default async function LandingPage({
                 <span className="text-primary font-display text-3xl tabular-nums">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="font-display mt-2 text-lg font-semibold">{s.title}</h3>
-                <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{s.body}</p>
+                <h3 className="font-display mt-2 text-lg font-semibold">
+                  {s.title}
+                </h3>
+                <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                  {s.body}
+                </p>
               </li>
             ))}
           </ol>

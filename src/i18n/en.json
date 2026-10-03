@@ -59,7 +59,8 @@
     "s3Body": "Mark the location, add photos and details, and we review it before publishing.",
     "partnersTitle": "For universities, groups and institutions",
     "partnersBody": "MyLloguer is a non-profit initiative by Global Shapers Valencia. If you want to share it with your community or work with us, get in touch.",
-    "partnersCta": "Get in touch"
+    "partnersCta": "Get in touch",
+    "demoLabel": "Example"
   },
   "home": {
     "emptyTitle": "Nothing here",

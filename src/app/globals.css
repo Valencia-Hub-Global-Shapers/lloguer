@@ -155,3 +155,34 @@
 .map-cluster:hover {
   background: var(--brand-bright);
 }
+
+/* Landing hero: pings on a stylised map turn into listing cards (12 s loop, 4 s per listing) */
+@keyframes demo-ping {
+  0% { transform: scale(0.6); opacity: 0.55; }
+  70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes demo-card {
+  0% { opacity: 0; transform: translate(-50%, calc(-100% - 6px)) scale(0.96); }
+  5%, 28% { opacity: 1; transform: translate(-50%, calc(-100% - 14px)) scale(1); }
+  33%, 100% { opacity: 0; transform: translate(-50%, calc(-100% - 14px)) scale(1); }
+}
+
+@keyframes demo-pin {
+  0%, 33%, 100% { background: var(--brand); transform: scale(1); }
+  3%, 30% { background: var(--primary); transform: scale(1.35); }
+}
+
+.demo-ping { animation: demo-ping 2.4s ease-out infinite; }
+.demo-card {
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 14px));
+  animation: demo-card 12s ease-out infinite backwards;
+}
+.demo-pin { animation: demo-pin 12s ease-out infinite backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-ping, .demo-pin { animation: none !important; }
+  .demo-card { animation: none !important; }
+  .demo-card[data-first] { opacity: 1; }
+}
