@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoMark } from "@/components/logo-mark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -38,6 +38,14 @@ export async function SiteHeader({
         </Link>
       </Button>
       <LocaleSwitcher locale={locale} />
+      {profile?.profile?.is_admin ? (
+        <Button asChild size="sm" variant="ghost" className="hidden sm:inline-flex">
+          <Link href={`/${locale}/admin/moderation`}>
+            <ShieldCheck />
+            {dict.common.moderation}
+          </Link>
+        </Button>
+      ) : null}
       {profile ? (
         <UserMenu
           locale={locale}

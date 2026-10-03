@@ -201,7 +201,10 @@
     "sendLink": "Enviar enlace de acceso",
     "linkSent": "Revisa {email}: te hemos enviado un enlace de acceso. Puedes cerrar esta pestaña.",
     "linkError": "No hemos podido enviar el enlace. Revisa la dirección e inténtalo de nuevo.",
-    "linkInvalid": "Ese enlace ha caducado o ya se ha usado. Pide uno nuevo."
+    "linkInvalid": "Ese enlace ha caducado o ya se ha usado. Pide uno nuevo.",
+    "signedOut": "Has cerrado sesión.",
+    "alreadySignedIn": "Ya has iniciado sesión.",
+    "continue": "Continuar"
   },
   "admin": {
     "queueTitle": "Cola de moderación",

@@ -201,7 +201,10 @@
     "sendLink": "Send sign-in link",
     "linkSent": "Check {email} for a sign-in link. You can close this tab.",
     "linkError": "We could not send the link. Check the address and try again.",
-    "linkInvalid": "That sign-in link has expired or was already used. Request a new one."
+    "linkInvalid": "That sign-in link has expired or was already used. Request a new one.",
+    "signedOut": "You have signed out.",
+    "alreadySignedIn": "You are already signed in.",
+    "continue": "Continue"
   },
   "admin": {
     "queueTitle": "Moderation queue",

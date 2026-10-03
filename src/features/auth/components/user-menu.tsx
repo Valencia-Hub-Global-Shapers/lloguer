@@ -40,7 +40,9 @@ export function UserMenu({
   const signOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push(`/${locale}`);
+    // Only admins ever hold a session, so send them straight back to the login
+    // form with a confirmation, ready to request a fresh magic link.
+    router.push(`/${locale}/login?signedout=1`);
     router.refresh();
   };
 
