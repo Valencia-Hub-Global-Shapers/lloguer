@@ -156,33 +156,72 @@
   background: var(--brand-bright);
 }
 
-/* Landing hero: pings on a stylised map turn into listing cards (12 s loop, 4 s per listing) */
+/*
+ * Landing hero demo: price pills on a stylised map take turns pinging, lighting up and
+ * opening a listing card. 12 s loop, 4 s per listing (see components/landing-map-demo.tsx).
+ */
+@keyframes demo-pop {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
 @keyframes demo-ping {
-  0% { transform: scale(0.6); opacity: 0.55; }
-  70%, 100% { transform: scale(2.6); opacity: 0; }
+  0% { opacity: 0.55; transform: scale(0.7); }
+  14%, 100% { opacity: 0; transform: scale(2.4); }
+}
+
+@keyframes demo-pill {
+  0%, 33%, 100% {
+    background: var(--card);
+    border-color: var(--brand);
+    color: var(--brand);
+    transform: scale(1);
+    z-index: 10;
+  }
+  4%, 29% {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+    transform: scale(1.1);
+    z-index: 30;
+  }
 }
 
 @keyframes demo-card {
-  0% { opacity: 0; transform: translate(-50%, calc(-100% - 6px)) scale(0.96); }
-  5%, 28% { opacity: 1; transform: translate(-50%, calc(-100% - 14px)) scale(1); }
-  33%, 100% { opacity: 0; transform: translate(-50%, calc(-100% - 14px)) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 10px)) scale(0.95);
+    animation-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1.08);
+  }
+  5%, 28% {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 20px)) scale(1);
+    animation-timing-function: ease-in;
+  }
+  32%, 100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 26px)) scale(0.985);
+  }
 }
 
-@keyframes demo-pin {
-  0%, 33%, 100% { background: var(--brand); transform: scale(1); }
-  3%, 30% { background: var(--primary); transform: scale(1.35); }
+.demo-pop {
+  transform: translate(-50%, -50%);
+  animation: demo-pop 0.55s cubic-bezier(0.2, 0.9, 0.25, 1.15) backwards;
 }
-
-.demo-ping { animation: demo-ping 2.4s ease-out infinite; }
+.demo-pill { animation: demo-pill 12s ease-in-out infinite backwards; }
+.demo-ring { opacity: 0; animation: demo-ping 12s ease-out infinite backwards; }
 .demo-card {
   opacity: 0;
-  transform: translate(-50%, calc(-100% - 14px));
-  animation: demo-card 12s ease-out infinite backwards;
+  transform: translate(-50%, calc(-100% - 20px));
+  animation: demo-card 12s infinite backwards;
 }
-.demo-pin { animation: demo-pin 12s ease-out infinite backwards; }
 
 @media (prefers-reduced-motion: reduce) {
-  .demo-ping, .demo-pin { animation: none !important; }
-  .demo-card { animation: none !important; }
+  .demo-pop, .demo-ring, .demo-card, .demo-pill { animation: none !important; }
   .demo-card[data-first] { opacity: 1; }
+  .demo-pill[data-first] {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+  }
 }

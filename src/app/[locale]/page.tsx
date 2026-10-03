@@ -80,6 +80,7 @@ export default async function LandingPage({
               perMonth: dict.listing.perMonth,
               billsIncluded: dict.listing.billsIncluded,
               flatmates: dict.listing.flatmates,
+              filters: [l.fNeighborhood, l.fPrice, l.fFlatmates, l.fGender],
               room: dict.listing.typeRoom,
               double: dict.listing.roomDouble,
               single: dict.listing.roomSingle,
