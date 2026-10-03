@@ -1,6 +1,6 @@
 # Lloguer
 
-🏡 Lloguer nace de una iniciativa de Global Shapers Valencia para juntar jóvenes en búsqueda de alquiler, con los mejores caseros que puedan encontrar.
+🏡 Lloguer — mapa abierto de vivienda asequible y pisos compartidos entre particulares en toda España: gratis, sin registro y con cada anuncio revisado a mano. Una iniciativa sin ánimo de lucro de Global Shapers Valencia.
 
 Mapa primero: habitaciones y pisos entre particulares en toda España. El mapa abre en València por defecto; el filtro «Ciudad o barrio» lista los lugares que tienen anuncios activos y lleva el mapa hasta ellos.
 
