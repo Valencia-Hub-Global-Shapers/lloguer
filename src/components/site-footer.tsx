@@ -28,9 +28,6 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           <Link href={`/${locale}/legal`} className={linkClass}>
             {dict.common.legal}
           </Link>
-          <a href={`mailto:${f.contactEmail}`} className={linkClass}>
-            {f.contactEmail}
-          </a>
           <a href={HUB_INSTAGRAM_URL} target="_blank" rel="noopener" className={linkClass}>
             Instagram
           </a>
