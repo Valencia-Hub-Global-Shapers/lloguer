@@ -23,6 +23,10 @@ Datos demo opcionales: ejecuta `supabase/seed.sql` en el SQL Editor del dashboar
 
 El stack local con Docker (`npm run supabase:start`, `db:reset`, `test:rls`) sigue disponible pero es opcional.
 
+## Despliegue
+
+Guía paso a paso para producción en Vercel + Supabase: [`docs/deployment-vercel.md`](docs/deployment-vercel.md).
+
 ## Scripts
 
 | Comando | Descripción |
