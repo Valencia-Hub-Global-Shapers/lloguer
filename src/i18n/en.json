@@ -1,7 +1,7 @@
 {
   "common": {
     "siteName": "Lloguer",
-    "tagline": "Private rentals across Spain",
+    "tagline": "Affordable housing, between individuals, across Spain",
     "publish": "Publish",
     "login": "Sign in",
     "logout": "Sign out",
@@ -28,8 +28,8 @@
     "browseMap": "Browse the map"
   },
   "landing": {
-    "title": "Every shared flat, in one place.",
-    "subtitle": "Stop digging through WhatsApp groups and Instagram stories. Find or post a room anywhere in Spain: free, no signup, and every listing reviewed.",
+    "title": "Finding affordable housing, in one place.",
+    "subtitle": "Stop digging through WhatsApp groups and Instagram stories. Find or post a room or a flat anywhere in Spain: free, no signup, and every listing reviewed.",
     "ctaBrowse": "Explore the map",
     "ctaPublish": "Post a listing",
     "t1Title": "Free, no signup",
@@ -39,8 +39,8 @@
     "t3Title": "Always up to date",
     "t3Body": "Each listing switches off by itself after {days} days, so there are no ghost rooms.",
     "problemTitle": "The problem",
-    "problemBody": "Looking for a shared flat today is a mess: offers scattered across WhatsApp groups, stories that vanish and different platforms, with no filters and no way to know if the room is still free.",
-    "solutionBody": "Lloguer brings it all together in one open board that is searchable and always current.",
+    "problemBody": "Finding housing today is a mess: offers scattered across WhatsApp groups, stories that vanish and different platforms, with no filters and no way to know if the room is still free.",
+    "solutionBody": "Lloguer brings it all together in one open board that is searchable and always current, with no middlemen.",
     "filtersTitle": "Find what fits you",
     "filtersIntro": "Browse the map or filter by what really matters when sharing a flat.",
     "fNeighborhood": "Neighbourhood",
@@ -267,9 +267,11 @@
   },
   "legal": {
     "title": "Legal notice & privacy",
-    "intro": "Lloguer is a non-profit classifieds platform for private rentals and shared flats across Spain, run by Global Shapers Valencia.",
+    "intro": "Lloguer is a non-profit classifieds platform for affordable housing between individuals across Spain, run by Global Shapers Valencia.",
     "dataTitle": "Personal data",
     "dataBody": "We only process what the service needs: your listing content, including the WhatsApp number and contact email you give (both public); your private email (only used to send you the management link, never published, and it can differ from the contact email); and an encrypted identifier of that link. No account is needed. We do not sell data to third parties. You can delete your listing at any time from your management link: the listing, its photos and your data are erased permanently.",
+    "processorsTitle": "Services that process data",
+    "processorsBody": "To run, Lloguer uses third-party services that may process data: Vercel (hosting), Supabase (database, authentication and photo storage), Resend (email delivery), Upstash (usage limits) and Cloudflare Turnstile (anti-spam verification).",
     "contentTitle": "Content",
     "contentBody": "Listings are the sole responsibility of their publishers. We moderate listings before publication but cannot guarantee their accuracy.",
     "contactTitle": "Contact",

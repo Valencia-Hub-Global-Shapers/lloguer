@@ -1,7 +1,7 @@
 {
   "common": {
     "siteName": "Lloguer",
-    "tagline": "Lloguer entre particulars a tot Espanya",
+    "tagline": "Habitatge assequible, entre particulars, a tot Espanya",
     "publish": "Publica",
     "login": "Inicia sessió",
     "logout": "Tanca sessió",
@@ -28,8 +28,8 @@
     "browseMap": "Veure el mapa"
   },
   "landing": {
-    "title": "Tots els pisos compartits, en un sol lloc.",
-    "subtitle": "Deixa de cercar entre grups de WhatsApp i històries d'Instagram. Troba o publica una habitació a tot Espanya: gratis, sense registre i amb cada anunci revisat.",
+    "title": "Trobar habitatge assequible, en un sol lloc.",
+    "subtitle": "Deixa de cercar entre grups de WhatsApp i històries d'Instagram. Troba o publica una habitació o un pis a tot Espanya: gratis, sense registre i amb cada anunci revisat.",
     "ctaBrowse": "Explorar el mapa",
     "ctaPublish": "Publicar un anunci",
     "t1Title": "Gratis i sense registre",
@@ -39,8 +39,8 @@
     "t3Title": "Sempre al dia",
     "t3Body": "Cada anunci es desactiva sol als {days} dies, així que no hi ha pisos fantasma.",
     "problemTitle": "El problema",
-    "problemBody": "Avui, buscar pis compartit és un caos: ofertes repartides entre grups de WhatsApp, històries que desapareixen i plataformes diferents, sense filtres i sense saber si l'habitació continua lliure.",
-    "solutionBody": "Lloguer ho reuneix tot en un tauler obert, cercable i sempre actualitzat.",
+    "problemBody": "Avui, trobar habitatge és un caos: ofertes repartides entre grups de WhatsApp, històries que desapareixen i plataformes diferents, sense filtres i sense saber si l'habitació continua lliure.",
+    "solutionBody": "Lloguer ho reuneix tot en un tauler obert, cercable i sempre actualitzat, sense intermediaris.",
     "filtersTitle": "Troba el que t'encaixa",
     "filtersIntro": "Cerca al mapa o filtra pel que de veritat importa en compartir pis.",
     "fNeighborhood": "Barri",
@@ -267,9 +267,11 @@
   },
   "legal": {
     "title": "Avís legal i privacitat",
-    "intro": "Lloguer és una plataforma sense ànim de lucre d'anuncis de lloguer i pisos compartits entre particulars a Espanya, impulsada per Global Shapers València.",
+    "intro": "Lloguer és una plataforma sense ànim de lucre d'anuncis d'habitatge assequible entre particulars a Espanya, impulsada per Global Shapers València.",
     "dataTitle": "Dades personals",
     "dataBody": "Només tractem les dades necessàries per al servei: el contingut del teu anunci, inclosos el WhatsApp i el correu de contacte que indiques (són públics); el teu correu privat (només per enviar-te l'enllaç de gestió, no es publica i pot ser diferent del de contacte); i un identificador xifrat d'aquest enllaç. No cal compte. No venem dades a tercers. Pots esborrar el teu anunci en qualsevol moment des del teu enllaç de gestió: s'eliminen de forma definitiva l'anunci, les seues fotos i les teues dades.",
+    "processorsTitle": "Serveis que tracten dades",
+    "processorsBody": "Per funcionar, Lloguer usa serveis de tercers que poden tractar dades: Vercel (allotjament), Supabase (base de dades, autenticació i emmagatzematge de fotos), Resend (enviament de correu), Upstash (límits d'ús) i Cloudflare Turnstile (verificació anti-spam).",
     "contentTitle": "Contingut",
     "contentBody": "Els anuncis són responsabilitat exclusiva de qui els publica. Moderem els anuncis abans de la publicació, però no n-garantim la veracitat.",
     "contactTitle": "Contacte",
