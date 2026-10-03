@@ -201,7 +201,10 @@
     "sendLink": "Envia l'enllaç d'accés",
     "linkSent": "Revisa {email}: t'hem enviat un enllaç d'accés. Pots tancar esta pestanya.",
     "linkError": "No hem pogut enviar l'enllaç. Revisa l'adreça i torna-ho a provar.",
-    "linkInvalid": "Eixe enllaç ha caducat o ja s'ha usat. Demana'n un de nou."
+    "linkInvalid": "Eixe enllaç ha caducat o ja s'ha usat. Demana'n un de nou.",
+    "signedOut": "Has tancat sessió.",
+    "alreadySignedIn": "Ja has iniciat sessió.",
+    "continue": "Continua"
   },
   "admin": {
     "queueTitle": "Cua de moderació",

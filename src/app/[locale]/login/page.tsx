@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getDictionary, interpolate } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/config";
@@ -17,14 +19,17 @@ export default async function LoginPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ next?: string; error?: string }>;
+  searchParams: Promise<{ next?: string; error?: string; signedout?: string }>;
 }) {
   const { locale } = await params;
-  const { next, error } = await searchParams;
+  const { next, error, signedout } = await searchParams;
   const dict = await getDictionary(locale);
 
+  const target = next && next.startsWith("/") ? next : `/${locale}`;
   const current = await getCurrentProfile();
-  if (current) redirect(next && next.startsWith("/") ? next : `/${locale}`);
+  // A used/expired link must stay visible even when a stale session exists;
+  // otherwise we silently bounce home and the user has no way to understand it.
+  if (current && error !== "link_invalid") redirect(target);
 
   return (
     <main className="flex flex-1 items-center justify-center p-4">
@@ -39,8 +44,22 @@ export default async function LoginPage({
               {dict.auth.linkInvalid}
             </p>
           ) : null}
-          <MagicLinkForm next={next ?? `/${locale}`} />
-          {showEmailLogin ? <EmailSignInForm next={next ?? `/${locale}`} /> : null}
+          {signedout === "1" ? (
+            <p className="text-muted-foreground text-sm">{dict.auth.signedOut}</p>
+          ) : null}
+          {current ? (
+            <div className="grid gap-3">
+              <p className="text-muted-foreground text-sm">{dict.auth.alreadySignedIn}</p>
+              <Button asChild>
+                <Link href={target}>{dict.auth.continue}</Link>
+              </Button>
+            </div>
+          ) : (
+            <>
+              <MagicLinkForm next={target} />
+              {showEmailLogin ? <EmailSignInForm next={target} /> : null}
+            </>
+          )}
         </CardContent>
       </Card>
     </main>
