@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Bounds, ListingPin } from "@/features/listings/types";
@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n/client";
 import { VALENCIA_CENTER } from "@/lib/utils";
 import { formatCount } from "../clustering";
 import { MAP_STYLE } from "../style";
+import { ensureMapWorker } from "../worker";
 
 const MAX_CLUSTER_CLICK_ZOOM = 16;
 
@@ -32,6 +33,7 @@ export function ExplorerMap({
   focusBounds,
 }: Props) {
   const { t } = useI18n();
+  const [failed, setFailed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
@@ -42,14 +44,24 @@ export function ExplorerMap({
   // Init map once
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
+    ensureMapWorker();
 
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: MAP_STYLE,
-      center: VALENCIA_CENTER,
-      zoom: 11.5,
-      attributionControl: false,
-    });
+    let map: maplibregl.Map;
+    try {
+      map = new maplibregl.Map({
+        container: containerRef.current,
+        style: MAP_STYLE,
+        center: VALENCIA_CENTER,
+        zoom: 11.5,
+        attributionControl: false,
+      });
+    } catch (e) {
+      // No WebGL2 (MapLibre v6 requires it) or the context could not start.
+      console.error("map init failed:", e);
+      setFailed(true);
+      return;
+    }
+    map.on("error", (e) => console.error("map error:", e.error));
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
     map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
 
@@ -159,5 +171,17 @@ export function ExplorerMap({
     }
   }, [activeId, pins]);
 
-  return <div ref={containerRef} className="absolute inset-0" aria-hidden={false} />;
+  return (
+    // MapLibre puts `position: relative; overflow: hidden` on its container, which
+    // overrides Tailwind's `absolute`. So the sizing wrapper stays outside and the
+    // container just fills it; otherwise the map collapses to zero height.
+    <div className="absolute inset-0">
+      <div ref={containerRef} className="h-full w-full" aria-hidden={false} />
+      {failed ? (
+        <div className="text-muted-foreground absolute inset-0 grid place-items-center p-6 text-center text-sm">
+          {t("common.mapUnavailable")}
+        </div>
+      ) : null}
+    </div>
+  );
 }

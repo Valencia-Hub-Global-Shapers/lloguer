@@ -83,7 +83,7 @@ Used to email posters their private edit link and, through Supabase SMTP, admin 
       | Variable | Value |
       | --- | --- |
       | `NEXT_PUBLIC_SUPABASE_URL` | prod Project URL |
-      | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | prod anon key |
+      | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | prod pub key |
       | `NEXT_PUBLIC_SITE_URL` | `https://<DOMAIN>` (no trailing slash) |
       | `SUBMIT_GATE_SECRET` | the exact value inserted in `private_settings` |
       | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile site key |

@@ -4,9 +4,12 @@ import { Redis } from "@upstash/redis";
 export type RateLimitAction = "publish" | "edit" | "view";
 
 const LIMITS: Record<RateLimitAction, { points: number; window: `${number} ${"s" | "m" | "h" | "d"}` }> = {
-  publish: { points: 5, window: "1 d" },
-  edit: { points: 20, window: "1 d" },
-  view: { points: 30, window: "1 m" },
+  // Generous per-IP caps: many real users share an IP (offices, halls, VPNs,
+  // mobile carriers). The per-poster throttle in submit_listing is the real
+  // anti-spam control; this just stops floods.
+  publish: { points: 20, window: "1 d" },
+  edit: { points: 60, window: "1 d" },
+  view: { points: 60, window: "1 m" },
 };
 
 const enabled = Boolean(

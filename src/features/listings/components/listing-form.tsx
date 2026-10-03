@@ -58,6 +58,7 @@ export function ListingForm({
   const router = useRouter();
   const [created, setCreated] = useState<CreatedListing | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
 
   // Edit mode only validates the listing content (no email/terms/captcha)
   const schema = mode === "create" ? submissionSchema : listingFormSchema;
@@ -125,6 +126,9 @@ export function ListingForm({
       );
       if (!result.ok) {
         toast.error(t(result.error));
+        // Turnstile tokens are single-use: ask for a fresh one so a retry works.
+        setCaptchaToken(null);
+        setCaptchaReset((n) => n + 1);
         return;
       }
       setCreated(result.data);
@@ -209,8 +213,8 @@ export function ListingForm({
                 if (v === "room" || v === "full_flat") setValue("type", v);
               }}
             >
-              <ToggleGroupItem value="room">{t("listing.typeRoom")}</ToggleGroupItem>
               <ToggleGroupItem value="full_flat">{t("listing.typeFullFlat")}</ToggleGroupItem>
+              <ToggleGroupItem value="room">{t("listing.typeRoom")}</ToggleGroupItem>
             </ToggleGroup>
           </div>
 
@@ -218,7 +222,7 @@ export function ListingForm({
             <FieldLabel required>{t("publish.dropPin")}</FieldLabel>
             <PinPickerMap lat={lat} lng={lng} onChange={onPin} />
             {fieldError(errors.lat?.message || errors.lng?.message)}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="grid gap-1.5">
                 <FieldLabel htmlFor="municipality" required>
                   {t("publish.municipality")}
@@ -249,7 +253,7 @@ export function ListingForm({
           </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-1.5">
               <FieldLabel htmlFor="price" required>
                 {t("publish.price")}
@@ -279,7 +283,7 @@ export function ListingForm({
             {fieldError(errors.description?.message)}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {type === "room" ? (
               <>
                 <div className="grid gap-1.5">
@@ -345,7 +349,7 @@ export function ListingForm({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-1.5">
               <FieldLabel optional>{t("publish.preferredGender")}</FieldLabel>
               <Select
@@ -383,7 +387,7 @@ export function ListingForm({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-1.5">
               <FieldLabel htmlFor="deposit" optional>
                 {t("publish.deposit")}
@@ -549,7 +553,7 @@ export function ListingForm({
             </div>
             {fieldError(errors.accept_terms?.message)}
 
-            <TurnstileWidget onToken={setCaptchaToken} />
+            <TurnstileWidget onToken={setCaptchaToken} resetSignal={captchaReset} />
           </CardContent>
         </Card>
       ) : null}
