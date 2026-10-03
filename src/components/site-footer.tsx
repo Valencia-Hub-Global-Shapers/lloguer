@@ -14,7 +14,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
     <footer className="text-muted-foreground mt-auto border-t px-4 py-6 text-xs">
       <div className="mx-auto flex w-full max-w-[1120px] flex-wrap items-center justify-between gap-x-6 gap-y-2">
         <p>
-          {f.initiative.before}{" "}
+          {f.madeIn}{" "}
           <a
             href={HUB_SITE_URL}
             target="_blank"
