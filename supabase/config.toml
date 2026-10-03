@@ -1,4 +1,4 @@
-project_id = "my-lloguer"
+project_id = "lloguer"
 
 [api]
 enabled = true
