@@ -237,7 +237,10 @@
     "openPublic": "Ver anuncio público",
     "photos": "Fotos",
     "prevPhoto": "Foto anterior",
-    "nextPhoto": "Foto siguiente"
+    "nextPhoto": "Foto siguiente",
+    "deleteTitle": "¿Eliminar el anuncio?",
+    "deleteDescription": "Se borrarán de forma permanente el anuncio, sus fotos y sus datos. No se puede deshacer.",
+    "deleted": "Anuncio eliminado"
   },
   "moderationAction": {
     "submitted": "Enviado",

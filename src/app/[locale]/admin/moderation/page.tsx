@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getPendingListings } from "@/features/moderation/server/queries";
 import { ModerateActions } from "@/features/moderation/components/moderate-actions";
+import { DeleteListingButton } from "@/features/moderation/components/delete-listing-button";
 import { photoUrl } from "@/features/listings/photos";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { formatDate } from "@/lib/utils";
@@ -60,7 +61,10 @@ export default async function ModerationPage({
                     {dict.common.view}
                   </Link>
                 </div>
-                <ModerateActions listingId={listing.id} />
+                <div className="flex items-center gap-2">
+                  <ModerateActions listingId={listing.id} />
+                  <DeleteListingButton listingId={listing.id} />
+                </div>
               </div>
             </article>
           ))}

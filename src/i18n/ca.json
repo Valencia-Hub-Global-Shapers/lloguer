@@ -237,7 +237,10 @@
     "openPublic": "Vore l'anunci públic",
     "photos": "Fotos",
     "prevPhoto": "Foto anterior",
-    "nextPhoto": "Foto següent"
+    "nextPhoto": "Foto següent",
+    "deleteTitle": "Eliminar l'anunci?",
+    "deleteDescription": "S'esborraran de manera permanent l'anunci, les seues fotos i les seues dades. No es pot desfer.",
+    "deleted": "Anunci eliminat"
   },
   "moderationAction": {
     "submitted": "Enviat",

@@ -20,6 +20,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getListingForAdmin } from "@/features/listings/server/queries";
 import { getModerationHistory } from "@/features/moderation/server/queries";
 import { ModerateActions } from "@/features/moderation/components/moderate-actions";
+import { DeleteListingButton } from "@/features/moderation/components/delete-listing-button";
 import { PhotoGallery } from "@/features/moderation/components/photo-gallery";
 import { StatusBadge } from "@/features/listings/components/status-badge";
 import { ListingMiniMap } from "@/features/map/components/listing-mini-map";
@@ -112,7 +113,7 @@ export default async function AdminListingDetailPage({
           {listing.price} € · {listing.neighborhood ?? listing.municipality}
         </h1>
         <StatusBadge status={listing.status} />
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
           {listing.status === "pending" ? (
             <ModerateActions listingId={listing.id} />
           ) : (
@@ -123,6 +124,10 @@ export default async function AdminListingDetailPage({
               </Link>
             </Button>
           )}
+          <DeleteListingButton
+            listingId={listing.id}
+            redirectTo={`/${locale}/admin/listings`}
+          />
         </div>
       </div>
 
