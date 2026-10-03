@@ -7,7 +7,17 @@ import { MAP_STYLE } from "../style";
 import { ensureMapWorker } from "../worker";
 
 /** Static-ish mini map showing the (truncated) public location of a listing. */
-export function ListingMiniMap({ lat, lng }: { lat: number; lng: number }) {
+export function ListingMiniMap({
+  lat,
+  lng,
+  interactive = false,
+  className,
+}: {
+  lat: number;
+  lng: number;
+  interactive?: boolean;
+  className?: string;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -19,9 +29,13 @@ export function ListingMiniMap({ lat, lng }: { lat: number; lng: number }) {
       style: MAP_STYLE,
       center: [lng, lat],
       zoom: 13,
-      interactive: false,
+      interactive,
       attributionControl: false,
     });
+    if (interactive) {
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+      map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
+    }
 
     const el = document.createElement("div");
     el.style.cssText =
@@ -29,12 +43,12 @@ export function ListingMiniMap({ lat, lng }: { lat: number; lng: number }) {
     new maplibregl.Marker({ element: el }).setLngLat([lng, lat]).addTo(map);
 
     return () => map.remove();
-  }, [lat, lng]);
+  }, [lat, lng, interactive]);
 
   return (
     <div
       ref={containerRef}
-      className="h-48 w-full rounded-xl border"
+      className={className ?? "h-48 w-full rounded-xl border"}
       aria-label="Approximate location map"
     />
   );

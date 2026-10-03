@@ -21,7 +21,7 @@ export default async function AdminLayout({
   const pendingCount = await getPendingCount(supabase).catch(() => 0);
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 p-4 pb-16">
+    <main className="mx-auto w-full max-w-5xl flex-1 p-4 pb-16">
       <nav className="mb-4 flex items-center gap-4 border-b pb-3">
         <Link
           href={`/${locale}/admin/moderation`}

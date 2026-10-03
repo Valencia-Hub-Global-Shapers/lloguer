@@ -222,7 +222,7 @@ export function ListingForm({
             <FieldLabel required>{t("publish.dropPin")}</FieldLabel>
             <PinPickerMap lat={lat} lng={lng} onChange={onPin} />
             {fieldError(errors.lat?.message || errors.lng?.message)}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="grid gap-1.5">
                 <FieldLabel htmlFor="municipality" required>
                   {t("publish.municipality")}
@@ -253,7 +253,7 @@ export function ListingForm({
           </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-1.5">
               <FieldLabel htmlFor="price" required>
                 {t("publish.price")}
@@ -283,7 +283,7 @@ export function ListingForm({
             {fieldError(errors.description?.message)}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {type === "room" ? (
               <>
                 <div className="grid gap-1.5">
@@ -349,7 +349,7 @@ export function ListingForm({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-1.5">
               <FieldLabel optional>{t("publish.preferredGender")}</FieldLabel>
               <Select
@@ -387,7 +387,7 @@ export function ListingForm({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-1.5">
               <FieldLabel htmlFor="deposit" optional>
                 {t("publish.deposit")}

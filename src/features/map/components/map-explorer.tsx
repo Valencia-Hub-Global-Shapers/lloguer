@@ -248,7 +248,7 @@ export function MapExplorer({ initialData, initialBounds, places }: Props) {
           activeSnapPoint={snap}
           setActiveSnapPoint={setSnap}
         >
-          <DrawerContent className="max-h-[92dvh]" aria-label="Results">
+          <DrawerContent overlay={false} className="max-h-[92dvh]" aria-label="Results">
             <DrawerHandle />
             <div className="min-h-0 flex-1 overflow-y-auto pb-6">{list}</div>
           </DrawerContent>
