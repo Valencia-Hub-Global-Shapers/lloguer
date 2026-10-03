@@ -77,7 +77,6 @@ export default async function LandingPage({
           </div>
           <LandingMapDemo
             labels={{
-              example: l.demoLabel,
               perMonth: dict.listing.perMonth,
               billsIncluded: dict.listing.billsIncluded,
               flatmates: dict.listing.flatmates,

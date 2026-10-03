@@ -12,7 +12,6 @@ type Pin = {
 };
 
 type Labels = {
-  example: string;
   perMonth: string;
   billsIncluded: string;
   /** Contains a {count} placeholder. */
@@ -34,7 +33,7 @@ const QUIET_PINS: ReadonlyArray<[number, number]> = [
 /**
  * Tiny looping illustration for the landing hero: pings on a stylised map take
  * turns turning into sample listing cards. Pure CSS (see `.demo-*` in globals.css),
- * decorative only and labelled as an example.
+ * decorative only.
  */
 export function LandingMapDemo({ labels }: { labels: Labels }) {
   const pins: Pin[] = [
@@ -102,10 +101,6 @@ export function LandingMapDemo({ labels }: { labels: Labels }) {
           <path d="M0 20 L130 300 M230 0 L400 210" strokeWidth="3" />
         </g>
       </svg>
-
-      <span className="bg-card text-muted-foreground absolute top-2 left-2 rounded-sm border px-1.5 py-0.5 text-[0.65rem] font-semibold tracking-[0.12em] uppercase">
-        {labels.example}
-      </span>
 
       {QUIET_PINS.map(([x, y]) => (
         <span
