@@ -16,6 +16,11 @@ const COPY: Record<Locale, { subject: string; body: (url: string) => string }> =
     body: (url) =>
       `We received your listing and will review it soon.\n\nUse this link to edit, deactivate or delete it. It is private, so do not share it.\n\n${url}\n\nListings switch off by themselves 10 days after approval.`,
   },
+  pt: {
+    subject: "O teu anúncio no Lloguer: ligação para o gerir",
+    body: (url) =>
+      `Recebemos o teu anúncio e vamos revê-lo em breve.\n\nCom esta ligação podes editá-lo, desativá-lo ou eliminá-lo. É privada: não a partilhes.\n\n${url}\n\nOs anúncios desativam-se sozinhos 10 dias depois de serem aprovados.`,
+  },
 };
 
 export function editLinkEmail(locale: Locale, url: string) {
@@ -39,6 +44,10 @@ const ADMIN_COPY: Record<
     subject: "New pending listing on Lloguer",
     body: (d) => `${d.type} · ${d.price} €/month · ${d.place}\n\nReview the moderation queue: ${d.url}`,
   },
+  pt: {
+    subject: "Novo anúncio pendente no Lloguer",
+    body: (d) => `${d.type} · ${d.price} €/mês · ${d.place}\n\nRevê a fila de moderação: ${d.url}`,
+  },
 };
 
 /** Notification for moderators when a new listing enters the queue. */
@@ -47,8 +56,10 @@ export function adminNotificationEmail(
   d: { price: number; place: string; isRoom: boolean; moderationUrl: string },
 ) {
   const type = d.isRoom
-    ? ({ es: "Habitación", va: "Habitació", en: "Room" } as const)[locale]
-    : ({ es: "Piso completo", va: "Pis complet", en: "Full flat" } as const)[locale];
+    ? ({ es: "Habitación", va: "Habitació", en: "Room", pt: "Quarto" } as const)[locale]
+    : ({ es: "Piso completo", va: "Pis complet", en: "Full flat", pt: "Casa inteira" } as const)[
+        locale
+      ];
   const copy = ADMIN_COPY[locale];
   return {
     subject: copy.subject,

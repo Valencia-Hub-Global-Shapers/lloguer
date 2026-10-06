@@ -11,6 +11,7 @@ function detectLocale(request: NextRequest): string {
     if (tag.startsWith("va")) return "va";
     if (tag.startsWith("es")) return "es";
     if (tag.startsWith("en")) return "en";
+    if (tag.startsWith("pt")) return "pt";
   }
   return defaultLocale;
 }

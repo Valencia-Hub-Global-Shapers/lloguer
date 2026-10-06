@@ -5,6 +5,7 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   es: () => import("./es.json").then((m) => m.default as Dictionary),
   va: () => import("./va.json").then((m) => m.default as Dictionary),
   en: () => import("./en.json").then((m) => m.default as Dictionary),
+  pt: () => import("./pt.json").then((m) => m.default as Dictionary),
 };
 
 /** Accepts any string; falls back to the default locale for unknown values. */

@@ -28,7 +28,7 @@ Dev runs against the **cloud Supabase project** — no Docker required. `.env` h
 
 ## Architecture
 
-- `src/app` — routing only (thin). Locale segment `[locale]` (es default, va = "Valencià", en). Pages/layouts are RSC; `"use client"` only at leaves (map, filters, forms, sheets).
+- `src/app` — routing only (thin). Locale segment `[locale]` (es default, va = "Valencià", en, pt = "Português"). Pages/layouts are RSC; `"use client"` only at leaves (map, filters, forms, sheets).
 - `src/features/<name>/{components,server,schemas.ts,types.ts}` — features never import each other's `server/` modules; shared code lives in `src/lib`.
 - `src/lib/supabase/{server,client,middleware}.ts` — single entry points. **No service-role key anywhere**; privileged work runs in security-definer DB functions.
 - `src/components/ui` — shadcn-style primitives (Tailwind v4, CSS vars in `globals.css`).

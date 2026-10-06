@@ -2,39 +2,52 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Check, ChevronDown } from "lucide-react";
 import { localeLabels, locales, type Locale } from "@/i18n/config";
 import { useI18n } from "@/i18n/client";
-import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-/** Compact ES | VAL | EN switch, as on the Global Shapers Valencia site. */
-const SHORT_LABELS: Record<Locale, string> = { es: "ES", va: "VAL", en: "EN" };
+const SHORT_LABELS: Record<Locale, string> = { es: "ES", va: "VAL", en: "EN", pt: "PT" };
 
+/** Language dropdown: shows the current language code and lists every locale. */
 export function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { t } = useI18n();
 
-  const pathWithoutLocale = pathname.replace(/^\/(es|va|en)/, "") || "/";
+  const pathWithoutLocale = pathname.replace(/^\/(es|va|en|pt)/, "") || "/";
   const qs = searchParams.toString();
 
   return (
-    <div role="group" aria-label={t("common.language")} className="flex items-center">
-      {locales.map((l, i) => (
-        <Link
-          key={l}
-          href={`/${l}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}${qs ? `?${qs}` : ""}`}
-          hrefLang={l}
-          title={localeLabels[l]}
-          aria-current={l === locale ? "true" : undefined}
-          className={cn(
-            "px-1.5 py-1.5 text-[0.72rem] font-semibold tracking-[0.09em] transition-colors sm:px-2",
-            i > 0 && "border-input border-l",
-            l === locale ? "text-foreground" : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {SHORT_LABELS[l]}
-        </Link>
-      ))}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        aria-label={t("common.language")}
+        className="text-foreground hover:bg-accent flex items-center gap-1 rounded-sm px-2 py-1.5 text-[0.72rem] font-semibold tracking-[0.09em] outline-none transition-colors"
+      >
+        {SHORT_LABELS[locale]}
+        <ChevronDown className="size-3.5" aria-hidden />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {locales.map((l) => (
+          <DropdownMenuItem key={l} asChild>
+            <Link
+              href={`/${l}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}${qs ? `?${qs}` : ""}`}
+              hrefLang={l}
+              lang={l}
+              aria-current={l === locale ? "true" : undefined}
+              className="justify-between"
+            >
+              {localeLabels[l]}
+              {l === locale ? <Check aria-hidden /> : null}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
