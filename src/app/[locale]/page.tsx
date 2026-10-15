@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Mail, ShieldCheck, Timer, UserRoundX } from "lucide-react";
@@ -46,18 +47,30 @@ export default async function LandingPage({
       <section className="border-b px-4 py-16 sm:py-24">
         <div className="mx-auto grid w-full max-w-[1120px] items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
-            <p className="text-brand text-[0.72rem] font-semibold tracking-[0.16em] uppercase">
-              {f.initiative.before}{" "}
-              <a
-                href={HUB_SITE_URL}
-                target="_blank"
-                rel="noopener"
-                className="underline-offset-4 hover:underline"
-              >
-                {f.initiative.hub}
-              </a>
-            </p>
-            <h1 className="font-display mt-4 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-6xl">
+            <a
+              href={HUB_SITE_URL}
+              target="_blank"
+              rel="noopener"
+              className="group inline-flex items-center gap-3"
+            >
+              <Image
+                src="/global-shapers-valencia.png"
+                alt=""
+                width={231}
+                height={200}
+                priority
+                className="h-16 w-auto shrink-0 sm:h-[4.5rem]"
+              />
+              <span className="flex flex-col leading-tight">
+                <span className="text-muted-foreground text-[0.68rem] font-semibold tracking-[0.16em] text-balance uppercase">
+                  {f.initiative.before}
+                </span>
+                <span className="text-brand text-sm font-semibold underline decoration-1 underline-offset-4 group-hover:decoration-2">
+                  {f.initiative.hub}
+                </span>
+              </span>
+            </a>
+            <h1 className="font-display mt-6 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-6xl">
               {l.title}
             </h1>
             <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed">
