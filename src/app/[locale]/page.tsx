@@ -54,18 +54,18 @@ export default async function LandingPage({
               className="group inline-flex items-center gap-3"
             >
               <Image
-                src="/global-shapers-valencia-mark.png"
+                src="/global-shapers-valencia.png"
                 alt=""
-                width={200}
+                width={231}
                 height={200}
                 priority
-                className="size-10 shrink-0"
+                className="h-16 w-auto shrink-0 sm:h-[4.5rem]"
               />
               <span className="flex flex-col leading-tight">
-                <span className="text-muted-foreground text-[0.68rem] font-semibold tracking-[0.16em] uppercase">
+                <span className="text-muted-foreground text-[0.68rem] font-semibold tracking-[0.16em] text-balance uppercase">
                   {f.initiative.before}
                 </span>
-                <span className="text-brand text-sm font-semibold underline-offset-4 group-hover:underline">
+                <span className="text-brand text-sm font-semibold underline decoration-1 underline-offset-4 group-hover:decoration-2">
                   {f.initiative.hub}
                 </span>
               </span>
