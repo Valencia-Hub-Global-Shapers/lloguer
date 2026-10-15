@@ -51,29 +51,26 @@ export default async function LandingPage({
               href={HUB_SITE_URL}
               target="_blank"
               rel="noopener"
-              className="mb-5 inline-block opacity-90 transition-opacity hover:opacity-100"
+              className="group inline-flex items-center gap-3"
             >
               <Image
-                src="/global-shapers-valencia.png"
-                alt={f.initiative.hub}
-                width={231}
+                src="/global-shapers-valencia-mark.png"
+                alt=""
+                width={200}
                 height={200}
                 priority
-                className="h-16 w-auto sm:h-20"
+                className="size-10 shrink-0"
               />
+              <span className="flex flex-col leading-tight">
+                <span className="text-muted-foreground text-[0.68rem] font-semibold tracking-[0.16em] uppercase">
+                  {f.initiative.before}
+                </span>
+                <span className="text-brand text-sm font-semibold underline-offset-4 group-hover:underline">
+                  {f.initiative.hub}
+                </span>
+              </span>
             </a>
-            <p className="text-brand text-[0.72rem] font-semibold tracking-[0.16em] uppercase">
-              {f.initiative.before}{" "}
-              <a
-                href={HUB_SITE_URL}
-                target="_blank"
-                rel="noopener"
-                className="underline-offset-4 hover:underline"
-              >
-                {f.initiative.hub}
-              </a>
-            </p>
-            <h1 className="font-display mt-4 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-6xl">
+            <h1 className="font-display mt-6 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-6xl">
               {l.title}
             </h1>
             <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed">
