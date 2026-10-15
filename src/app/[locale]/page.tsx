@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Mail, ShieldCheck, Timer, UserRoundX } from "lucide-react";
@@ -46,6 +47,21 @@ export default async function LandingPage({
       <section className="border-b px-4 py-16 sm:py-24">
         <div className="mx-auto grid w-full max-w-[1120px] items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
+            <a
+              href={HUB_SITE_URL}
+              target="_blank"
+              rel="noopener"
+              className="mb-5 inline-block opacity-90 transition-opacity hover:opacity-100"
+            >
+              <Image
+                src="/global-shapers-valencia.png"
+                alt={f.initiative.hub}
+                width={231}
+                height={200}
+                priority
+                className="h-16 w-auto sm:h-20"
+              />
+            </a>
             <p className="text-brand text-[0.72rem] font-semibold tracking-[0.16em] uppercase">
               {f.initiative.before}{" "}
               <a
