@@ -28,39 +28,164 @@
     "browseMap": "Browse the map"
   },
   "landing": {
-    "title": "Finding affordable housing, in one place.",
-    "subtitle": "Stop digging through WhatsApp groups and Instagram stories. Find or post a room or a flat anywhere in Spain: free, no signup, and every listing reviewed.",
+    "kicker": "Rooms, person to person",
+    "title": "The rooms posted in stories, now on a map.",
+    "subtitle": "Lloguer is not another property portal. It gathers the listings that never reach them: the room someone posts in an Instagram story or a WhatsApp group, so it does not vanish in 24 hours.",
     "ctaBrowse": "Explore the map",
     "ctaPublish": "Post a listing",
-    "t1Title": "Free, no signup",
-    "t1Body": "Post with a simple form and get a private link to edit or delete your listing. No account or password.",
+    "heroPoints": [
+      "No signup",
+      "Reviewed by hand",
+      "Deleted after {days} days",
+      "Free"
+    ],
+    "demoCaption": "From a story that expires in 24 hours to a reviewed listing on the map.",
+    "demoGroup": "Flats & flatmates València",
+    "demoSender": "Marta",
+    "demoPost1": "Leaving my room on Blasco Ibáñez 🙌 €300 + bills, we're 3 flatmates. Move in next month, message me!",
+    "demoStoryUser": "lauu.rm",
+    "demoStoryAge": "5h",
+    "demoReviewed": "Reviewed",
+    "demoExpires": "Expires in {days} days",
+    "demoFilters": [
+      "Area",
+      "Price",
+      "Flatmates",
+      "Gender"
+    ],
+    "whatTitle": "What Lloguer is",
+    "whatLead": "We don't compete with property portals. Lloguer exists for the listings that never make it there.",
+    "whatBody": "When someone leaves for Erasmus, moves cities or needs a flatmate, they don't put their room on a portal: they post it in a story, send it to a WhatsApp group or tell their friends. These are person-to-person listings, often more affordable, and they get lost within hours.",
+    "sources": [
+      {
+        "title": "Instagram stories",
+        "body": "Gone after 24 hours, and only seen by people who already follow you."
+      },
+      {
+        "title": "WhatsApp and Telegram groups",
+        "body": "Hundreds of messages a day, with no way to search by area or price."
+      },
+      {
+        "title": "Word of mouth",
+        "body": "Posters at uni, a friend of a friend. If you're not in the loop, you never hear about it."
+      }
+    ],
+    "solutionBody": "Lloguer gives them a permanent home: an open map you can search by area, price and number of flatmates.",
+    "isTitle": "Lloguer is",
+    "isItems": [
+      "Rooms and flats people leave behind, person to person.",
+      "A free, non-profit noticeboard.",
+      "Direct contact with the poster, by WhatsApp or email."
+    ],
+    "isNotTitle": "Lloguer is not",
+    "isNotItems": [
+      "A property portal or an agency.",
+      "A place where you pay to promote your listing.",
+      "A middleman: we take no fees and handle no payments."
+    ],
+    "trustTitle": "Why you can trust it",
+    "trustLead": "The good parts of WhatsApp groups, without the bad ones.",
+    "t1Title": "No signup",
+    "t1Body": "Post with a simple form and get a private link to edit, renew or delete your listing. No account, no password, no app.",
     "t2Title": "Reviewed by hand",
-    "t2Body": "A person checks every listing before it goes live to keep out trolls and ads.",
-    "t3Title": "Always up to date",
-    "t3Body": "Each listing switches off by itself after {days} days, so there are no ghost rooms.",
-    "problemTitle": "The problem",
-    "problemBody": "Finding housing today is a mess: offers scattered across WhatsApp groups, stories that vanish and different platforms, with no filters and no way to know if the room is still free.",
-    "solutionBody": "Lloguer brings it all together in one open board that is searchable and always current, with no middlemen.",
-    "filtersTitle": "Find what fits you",
-    "filtersIntro": "Browse the map or filter by what really matters when sharing a flat.",
-    "fNeighborhood": "Neighbourhood",
-    "fNeighborhoodBody": "City or neighbourhood, anywhere in Spain.",
-    "fPrice": "Price",
-    "fPriceBody": "Set your monthly budget.",
-    "fFlatmates": "Flatmates",
-    "fFlatmatesBody": "Choose how many people you want to live with.",
-    "fGender": "Gender",
-    "fGenderBody": "See only the listings that accept you.",
+    "t2Body": "A person checks every listing before it goes live, keeping out scams, fake listings and ads.",
+    "t3Title": "Deleted after {days} days",
+    "t3Body": "Every listing expires by itself after {days} days, so what you see on the map is still available. No ghost rooms.",
+    "t4Title": "Free, no middlemen",
+    "t4Body": "We charge nothing, to posters or to seekers. You talk directly to the person leaving the room.",
     "howTitle": "How it works",
-    "s1Title": "Search",
-    "s1Body": "Open the map, pick an area and adjust the filters.",
-    "s2Title": "Get in touch",
-    "s2Body": "Message the poster directly by WhatsApp or email. No middlemen.",
-    "s3Title": "Post",
-    "s3Body": "Mark the location, add photos and details, and we review it before publishing.",
+    "howPostTitle": "If you're leaving a room",
+    "howPostSteps": [
+      "Drop a pin where it is and add the price, a few photos and how to reach you.",
+      "We review it by hand before it goes live. You get a private link by email.",
+      "It stays up for {days} days. Still free? Renew it with your link. If not, it disappears by itself."
+    ],
+    "howSearchTitle": "If you're looking for a room",
+    "howSearchSteps": [
+      "Open the map in your city or neighbourhood, anywhere in Spain.",
+      "Filter by price, number of flatmates and listings that accept your gender.",
+      "Message the poster directly, by WhatsApp or email."
+    ],
     "partnersTitle": "For universities, groups and institutions",
     "partnersBody": "Lloguer is a non-profit initiative by Global Shapers Valencia. If you want to share it with your community or work with us, get in touch.",
-    "partnersCta": "Get in touch"
+    "partnersCta": "Get in touch",
+    "demoStoryText": "Room for rent in Benimaclet, move in November",
+    "demoStoryMore": "more info ⬇️",
+    "demoStoryMention": "@marta.vlc",
+    "demoFlyerUser": "pablo.gs",
+    "demoFlyerAge": "1h",
+    "demoFlyerTitle1": "ROOM",
+    "demoFlyerTitle2": "FOR RENT!",
+    "demoFlyerPlace": "In Ruzafa, next to the market",
+    "demoFlyerDate": "Available from 1 November",
+    "demoFlyerPeople": "3 people in the flat in total",
+    "demoFlyerCta": "DM for more info!",
+    "titleBefore": "The rooms posted in",
+    "titleWords": [
+      "stories",
+      "statuses",
+      "WhatsApp groups"
+    ],
+    "titleAfter": "now on a map.",
+    "marqueeLabel": "What the listings on Lloguer sound like",
+    "marquee": [
+      {
+        "src": "story",
+        "text": "Leaving my room on Blasco Ibáñez, €300 + bills"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Anyone looking? A room is free in Benimaclet"
+      },
+      {
+        "src": "flyer",
+        "text": "ROOM FOR RENT! Russafa, from November"
+      },
+      {
+        "src": "story",
+        "text": "Looking for a flatmate this year, Campanar, €280"
+      },
+      {
+        "src": "telegram",
+        "text": "Off on Erasmus, my room is up for grabs 🙌"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Flat of 3, move in next month, DM for info"
+      },
+      {
+        "src": "story",
+        "text": "Double room in El Carme, bills included"
+      },
+      {
+        "src": "flyer",
+        "text": "Looking for a girl to share in Algirós"
+      },
+      {
+        "src": "telegram",
+        "text": "Sublet for July and August in Patraix"
+      },
+      {
+        "src": "whatsapp",
+        "text": "We're lovely, come and see us 😜"
+      }
+    ],
+    "v1Account": "Create account",
+    "v1Password": "Password",
+    "v1Link": "Your private link",
+    "v2Spam": "Earn €500 a month! Click here",
+    "v2Real": "Room in Benimaclet · €320",
+    "v2Approved": "Approved",
+    "v2Rejected": "Rejected",
+    "v3Left": "days on the map",
+    "v3Gone": "Deleted automatically",
+    "v4Items": [
+      "Fees",
+      "Promoted ads",
+      "Subscriptions"
+    ],
+    "finalTitle": "Leaving your room?",
+    "finalBody": "Don't let it get lost in a 24-hour story. Post it on Lloguer, free and without signing up."
   },
   "home": {
     "emptyTitle": "Nothing here",

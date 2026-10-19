@@ -28,39 +28,164 @@
     "browseMap": "Veure el mapa"
   },
   "landing": {
-    "title": "Trobar habitatge assequible, en un sol lloc.",
-    "subtitle": "Deixa de cercar entre grups de WhatsApp i històries d'Instagram. Troba o publica una habitació o un pis a tot Espanya: gratis, sense registre i amb cada anunci revisat.",
+    "kicker": "Habitacions de persona a persona",
+    "title": "Els pisos que s'anuncien en stories, ara en un mapa.",
+    "subtitle": "Lloguer no és un altre portal immobiliari. Reuneix els anuncis que mai hi arriben: l'habitació que algú deixa en una story d'Instagram o en un grup de WhatsApp, perquè no desaparega en 24 hores.",
     "ctaBrowse": "Explorar el mapa",
     "ctaPublish": "Publicar un anunci",
-    "t1Title": "Gratis i sense registre",
-    "t1Body": "Publiques amb un formulari i reps un enllaç privat per editar o esborrar l'anunci. Sense compte ni contrasenya.",
+    "heroPoints": [
+      "Sense registre",
+      "Revisat a mà",
+      "S'esborra als {days} dies",
+      "Gratis"
+    ],
+    "demoCaption": "D'una story que caduca en 24 hores a un anunci revisat al mapa.",
+    "demoGroup": "Pisos i companys València",
+    "demoSender": "Marta",
+    "demoPost1": "Deixe la meua habitació a Blasco Ibáñez 🙌 300 € + despeses, som 3 companys. Per a entrar d'ací a un mes, escriviu-me!",
+    "demoStoryUser": "lauu.rm",
+    "demoStoryAge": "5 h",
+    "demoReviewed": "Revisat",
+    "demoExpires": "Caduca en {days} dies",
+    "demoFilters": [
+      "Barri",
+      "Preu",
+      "Companys",
+      "Gènere"
+    ],
+    "whatTitle": "Què és Lloguer",
+    "whatLead": "No competim amb els portals immobiliaris. Lloguer existeix per als anuncis que mai hi arriben.",
+    "whatBody": "Quan algú se'n va d'Erasmus, canvia de ciutat o busca company, no puja l'habitació a un portal: la penja en una story, l'envia a un grup de WhatsApp o ho conta als amics. Són anuncis de persona a persona, sovint més assequibles, que es perden en hores.",
+    "sources": [
+      {
+        "title": "Stories d'Instagram",
+        "body": "Desapareixen a les 24 hores i només les veu qui ja et segueix."
+      },
+      {
+        "title": "Grups de WhatsApp i Telegram",
+        "body": "Centenars de missatges al dia, sense manera de cercar per barri o per preu."
+      },
+      {
+        "title": "El boca-orella",
+        "body": "Cartells a la facultat, l'amic d'un amic. Si no estàs en el cercle, no te n'assabentes."
+      }
+    ],
+    "solutionBody": "Lloguer els dona un lloc fix: un mapa obert on es poden cercar per barri, preu i companys de pis.",
+    "isTitle": "Lloguer és",
+    "isItems": [
+      "Habitacions i pisos que deixa la gent, de persona a persona.",
+      "Un tauler gratuït i sense ànim de lucre.",
+      "Contacte directe amb qui publica, per WhatsApp o correu."
+    ],
+    "isNotTitle": "Lloguer no és",
+    "isNotItems": [
+      "Un portal immobiliari ni una agència.",
+      "Un lloc on pagar per destacar el teu anunci.",
+      "Un intermediari: no cobrem comissions ni gestionem pagaments."
+    ],
+    "trustTitle": "Per què pots fiar-te'n",
+    "trustLead": "El millor dels grups de WhatsApp, sense el pitjor.",
+    "t1Title": "Sense registre",
+    "t1Body": "Publiques amb un formulari i reps un enllaç privat per editar, renovar o esborrar l'anunci. Sense compte, sense contrasenya, sense app.",
     "t2Title": "Revisat a mà",
-    "t2Body": "Una persona revisa cada anunci abans de publicar-lo per evitar trols i publicitat.",
-    "t3Title": "Sempre al dia",
-    "t3Body": "Cada anunci es desactiva sol als {days} dies, així que no hi ha pisos fantasma.",
-    "problemTitle": "El problema",
-    "problemBody": "Avui, trobar habitatge és un caos: ofertes repartides entre grups de WhatsApp, històries que desapareixen i plataformes diferents, sense filtres i sense saber si l'habitació continua lliure.",
-    "solutionBody": "Lloguer ho reuneix tot en un tauler obert, cercable i sempre actualitzat, sense intermediaris.",
-    "filtersTitle": "Troba el que t'encaixa",
-    "filtersIntro": "Cerca al mapa o filtra pel que de veritat importa en compartir pis.",
-    "fNeighborhood": "Barri",
-    "fNeighborhoodBody": "Ciutat o barri, en qualsevol punt d'Espanya.",
-    "fPrice": "Preu",
-    "fPriceBody": "Fixa el teu pressupost mensual.",
-    "fFlatmates": "Companys de pis",
-    "fFlatmatesBody": "Tria amb quanta gent vols conviure.",
-    "fGender": "Gènere",
-    "fGenderBody": "Veges només els anuncis que t'accepten.",
+    "t2Body": "Una persona revisa cada anunci abans de publicar-lo. Així deixem fora estafes, anuncis falsos i publicitat.",
+    "t3Title": "S'esborra als {days} dies",
+    "t3Body": "Cada anunci caduca sol als {days} dies, així que el que veus al mapa continua disponible. No hi ha pisos fantasma.",
+    "t4Title": "Gratis i sense intermediaris",
+    "t4Body": "No cobrem res, ni a qui publica ni a qui busca. Parles directament amb qui deixa l'habitació.",
     "howTitle": "Com funciona",
-    "s1Title": "Cerca",
-    "s1Body": "Obri el mapa, tria una zona i ajusta els filtres.",
-    "s2Title": "Contacta",
-    "s2Body": "Escriu directament per WhatsApp o correu a qui publica. Sense intermediaris.",
-    "s3Title": "Publica",
-    "s3Body": "Marca la ubicació, afegeix fotos i detalls, i el revisem per publicar-lo.",
+    "howPostTitle": "Si deixes una habitació",
+    "howPostSteps": [
+      "Marca al mapa on és i afegeix el preu, unes fotos i com contactar-te.",
+      "El revisem a mà abans de publicar-lo. Et arriba un enllaç privat al correu.",
+      "Es veu durant {days} dies. Si continua lliure, el renoves amb el teu enllaç; si no, desapareix sol."
+    ],
+    "howSearchTitle": "Si busques habitació",
+    "howSearchSteps": [
+      "Obri el mapa a la teua ciutat o el teu barri, en qualsevol punt d'Espanya.",
+      "Filtra per preu, nombre de companys i anuncis que accepten el teu gènere.",
+      "Escriu directament a qui publica, per WhatsApp o per correu."
+    ],
     "partnersTitle": "Per a universitats, col·lectius i institucions",
     "partnersBody": "Lloguer és una iniciativa sense ànim de lucre de Global Shapers València. Si vols difondre-la entre la teua comunitat o col·laborar amb nosaltres, escriu-nos.",
-    "partnersCta": "Escriu-nos"
+    "partnersCta": "Escriu-nos",
+    "demoStoryText": "Es lloga habitació a Benimaclet per a entrar al novembre",
+    "demoStoryMore": "+ info ⬇️",
+    "demoStoryMention": "@marta.vlc",
+    "demoFlyerUser": "pablo.gs",
+    "demoFlyerAge": "1 h",
+    "demoFlyerTitle1": "ES LLOGA",
+    "demoFlyerTitle2": "HABITACIÓ!",
+    "demoFlyerPlace": "A Russafa, al costat del mercat",
+    "demoFlyerDate": "Disponible des de l'1 de novembre",
+    "demoFlyerPeople": "Pis de 3 persones en total",
+    "demoFlyerCta": "Més info per MD!",
+    "titleBefore": "Els pisos que s'anuncien en",
+    "titleWords": [
+      "stories",
+      "estats",
+      "grups de WhatsApp"
+    ],
+    "titleAfter": "ara en un mapa.",
+    "marqueeLabel": "Així sonen els anuncis que reuneix Lloguer",
+    "marquee": [
+      {
+        "src": "story",
+        "text": "Deixe la meua hab. a Blasco Ibáñez, 300 € + despeses"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Algú busca pis? Queda lliure una hab. a Benimaclet"
+      },
+      {
+        "src": "flyer",
+        "text": "ES LLOGA HABITACIÓ! Russafa, des de novembre"
+      },
+      {
+        "src": "story",
+        "text": "Busque company per al curs, Campanar, 280 €"
+      },
+      {
+        "src": "telegram",
+        "text": "Me'n vaig d'Erasmus i deixe la meua habitació 🙌"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Pis de 3, entrada d'ací a un mes, + info per MD"
+      },
+      {
+        "src": "story",
+        "text": "Hab. doble al Carme, despeses incloses"
+      },
+      {
+        "src": "flyer",
+        "text": "Es busca xica per a pis a Algirós"
+      },
+      {
+        "src": "telegram",
+        "text": "Sublloguer juliol i agost a Patraix"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Som molt majos, veniu a veure'ns 😜"
+      }
+    ],
+    "v1Account": "Crear compte",
+    "v1Password": "Contrasenya",
+    "v1Link": "El teu enllaç privat",
+    "v2Spam": "Guanya 500 € al mes! Fes clic ací",
+    "v2Real": "Hab. a Benimaclet · 320 €",
+    "v2Approved": "Aprovat",
+    "v2Rejected": "Rebutjat",
+    "v3Left": "dies al mapa",
+    "v3Gone": "Esborrat automàticament",
+    "v4Items": [
+      "Comissions",
+      "Destacats",
+      "Quotes"
+    ],
+    "finalTitle": "Deixes la teua habitació?",
+    "finalBody": "Que no es perda en una story de 24 hores. Publica-la a Lloguer, gratis i sense registre."
   },
   "home": {
     "emptyTitle": "No hi ha res ací",
