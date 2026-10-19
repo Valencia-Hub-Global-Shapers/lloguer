@@ -1,28 +1,59 @@
-import { ChevronDown, Minus, Plus, Receipt, Users } from "lucide-react";
+import {
+  BadgeCheck,
+  ChevronDown,
+  Minus,
+  Plus,
+  Receipt,
+  Users,
+} from "lucide-react";
 
 type Tone = "blue" | "orange" | "gold";
+
+/** Where the listing was first posted, before it reached Lloguer. */
+type Source = "story" | "flyer" | "whatsapp";
 
 type Pin = {
   x: number;
   y: number;
-  /** Seconds into the 12 s loop at which this listing takes its turn. */
+  /** Seconds into the 18 s loop at which this listing takes its turn. */
   delay: number;
+  source: Source;
   place: string;
   roomType: string;
   price: number;
   flatmates: number;
+  billsIncluded: boolean;
   tone: Tone;
 };
 
-type Labels = {
+export type LandingDemoLabels = {
   perMonth: string;
   billsIncluded: string;
+  billsNotIncluded: string;
   /** Contains a {count} placeholder. */
   flatmates: string;
   room: string;
   double: string;
   single: string;
-  filters: [string, string, string, string];
+  filters: string[];
+  reviewed: string;
+  expires: string;
+  storyUser: string;
+  storyAge: string;
+  storyText: string;
+  storyMore: string;
+  storyMention: string;
+  flyerUser: string;
+  flyerAge: string;
+  flyerTitle1: string;
+  flyerTitle2: string;
+  flyerPlace: string;
+  flyerDate: string;
+  flyerPeople: string;
+  flyerCta: string;
+  group: string;
+  sender: string;
+  post: string;
 };
 
 /** Stylised basemap palette, tuned to the paper ground and brand blue. */
@@ -34,6 +65,14 @@ const WATER = "#cfdeed";
 const PARK = "#dfe6cd";
 
 /**
+ * Posts start centred in the demo and fly into their pin. Positions are in % of the
+ * demo box; the flight is in container units (the box is 4:3, so 1% of its height is
+ * 0.75cqw).
+ */
+const POST_X = 50;
+const POST_Y = 50;
+
+/**
  * Other listings on the map: they only pop in. They sit in the bands the cards never
  * cover (top and bottom), so a card never hides half of one.
  */
@@ -41,11 +80,11 @@ const QUIET_PILLS: ReadonlyArray<[number, number, number]> = [
   [20, 18, 420],
   [76, 18, 510],
   [30, 92, 395],
-  [72, 92, 360],
+  [74, 92, 360],
 ];
 const QUIET_CLUSTERS: ReadonlyArray<[number, number, string]> = [
   [10, 80, "12"],
-  [90, 78, "7"],
+  [90, 76, "7"],
 ];
 
 const TONES: Record<Tone, { wall: string; accent: string }> = {
@@ -57,7 +96,11 @@ const TONES: Record<Tone, { wall: string; accent: string }> = {
 function RoomThumb({ tone }: { tone: Tone }) {
   const { wall, accent } = TONES[tone];
   return (
-    <svg viewBox="0 0 56 56" className="size-full">
+    <svg
+      viewBox="0 0 56 56"
+      preserveAspectRatio="xMidYMid slice"
+      className="size-full"
+    >
       <rect width="56" height="56" fill={wall} />
       <rect y="40" width="56" height="16" fill="#000" opacity="0.07" />
       <rect x="31" y="9" width="17" height="21" rx="1" fill="#fffdf8" />
@@ -155,10 +198,205 @@ function BaseMap() {
   );
 }
 
-function ListingCard({ pin, labels }: { pin: Pin; labels: Labels }) {
+/** Progress bars and poster line shared by both story mock-ups. */
+function StoryHeader({
+  user,
+  age,
+  delay,
+  dark,
+}: {
+  user: string;
+  age: string;
+  delay: number;
+  dark?: boolean;
+}) {
+  const ink = dark ? "text-[#1b1a17]" : "text-white";
+  const track = dark ? "bg-black/15" : "bg-white/45";
+  return (
+    <div className="absolute inset-x-0 top-0 z-10 px-[1.4cqw] pt-[1.4cqw]">
+      <div className="flex gap-[0.6cqw]">
+        <span className={`h-[0.45cqw] flex-1 rounded-full ${track}`}>
+          <span
+            className={`demo-progress block h-full rounded-full ${dark ? "bg-[#1b1a17]" : "bg-white"}`}
+            style={{ animationDelay: `${delay}s` }}
+          />
+        </span>
+        <span className={`h-[0.45cqw] flex-1 rounded-full ${track}`} />
+      </div>
+      <div
+        className={`mt-[1.2cqw] flex items-center gap-[1cqw] text-[max(7px,1.9cqw)] font-semibold ${ink}`}
+      >
+        <span className="size-[3.6cqw] shrink-0 rounded-full border border-white bg-[linear-gradient(135deg,#e3b23c,#d6521d)]" />
+        <span className="truncate">{user}</span>
+        <span className="font-normal opacity-70">{age}</span>
+      </div>
+    </div>
+  );
+}
+
+/** An Instagram-style story: a street photo at sunset with the ad typed on top. */
+function StoryPost({
+  labels,
+  delay,
+}: {
+  labels: LandingDemoLabels;
+  delay: number;
+}) {
+  return (
+    <div className="relative h-[60cqw] w-[34cqw] overflow-hidden rounded-[1.2cqw] bg-[linear-gradient(180deg,#b7b6cf_0%,#e3b3b4_42%,#f3a477_70%,#f0915e_100%)] shadow-[0_8px_24px_-8px_rgb(27_26_23/0.45)]">
+      <svg
+        viewBox="0 0 100 176"
+        preserveAspectRatio="xMidYMax slice"
+        className="absolute inset-0 size-full"
+      >
+        <path d="M0 70 h16 v-8 h10 v114 H0 Z" fill="#7a5a52" />
+        <path d="M74 56 h12 v-6 h14 v126 H74 Z" fill="#8a6a5c" />
+        <path d="M46 132 l4 -22 l4 22 Z M44 132 h12 v14 H44 Z" fill="#6d5a63" />
+        <ellipse cx="14" cy="128" rx="20" ry="24" fill="#3f5a3a" />
+        <ellipse cx="88" cy="132" rx="18" ry="22" fill="#3c5537" />
+        <path d="M80 92 v84" stroke="#2a2a2a" strokeWidth="1.6" />
+        <path d="M76 92 h8 l-1 6 h-6 Z" fill="#2a2a2a" />
+        <path d="M0 150 L36 140 h28 L100 152 V176 H0 Z" fill="#4b4a4f" />
+        <rect x="14" y="152" width="16" height="9" rx="2.5" fill="#2e2e33" />
+        <rect x="62" y="150" width="15" height="8" rx="2.5" fill="#d9d9de" />
+      </svg>
+      <StoryHeader
+        user={labels.storyUser}
+        age={labels.storyAge}
+        delay={delay}
+      />
+      <div className="absolute inset-x-[2cqw] top-[12cqw] flex flex-col items-center gap-[2cqw] text-center">
+        <p className="text-[max(8px,2.5cqw)] leading-tight font-bold text-balance text-[#1b1a17]">
+          {labels.storyText}
+        </p>
+        <p className="text-[max(8px,2.3cqw)] font-bold text-[#1b1a17]">
+          {labels.storyMore}
+        </p>
+        <span className="rounded-[1cqw] bg-white px-[1.8cqw] py-[0.9cqw] text-[max(7px,2.1cqw)] font-medium text-[#1b1a17] underline underline-offset-2">
+          {labels.storyMention}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** The other classic: a home-made "room for rent" flyer shared as a story. */
+function FlyerPost({
+  labels,
+  delay,
+}: {
+  labels: LandingDemoLabels;
+  delay: number;
+}) {
+  const photos: Tone[] = ["blue", "gold", "orange", "blue", "gold"];
+  return (
+    <div className="relative h-[60cqw] w-[34cqw] overflow-hidden rounded-[1.2cqw] bg-[#e7e3db] shadow-[0_8px_24px_-8px_rgb(27_26_23/0.45)]">
+      <StoryHeader
+        user={labels.flyerUser}
+        age={labels.flyerAge}
+        delay={delay}
+        dark
+      />
+      <div className="absolute inset-x-[2cqw] top-[8.5cqw] bottom-[2.5cqw] flex flex-col items-center gap-[1.2cqw] rounded-[0.6cqw] bg-[#fbf5ea] px-[1.6cqw] py-[2cqw] text-center">
+        <p className="font-sans text-[max(9px,3.6cqw)] leading-[0.95] font-extrabold tracking-tight">
+          <span className="text-brand block">{labels.flyerTitle1}</span>
+          <span className="text-primary block">{labels.flyerTitle2}</span>
+        </p>
+        <span className="text-brand w-full rounded-[0.8cqw] bg-[#f6dcc8] px-[1cqw] py-[0.6cqw] text-[max(6px,1.6cqw)] leading-tight font-semibold">
+          {labels.flyerPlace}
+        </span>
+        <div className="grid min-h-0 w-full flex-1 grid-cols-6 grid-rows-[3fr_2fr] gap-[0.6cqw]">
+          {photos.map((tone, i) => (
+            <span
+              key={i}
+              className={`min-h-0 overflow-hidden rounded-[0.5cqw] ${i < 2 ? "col-span-3" : "col-span-2"}`}
+            >
+              <RoomThumb tone={tone} />
+            </span>
+          ))}
+        </div>
+        <span className="bg-brand w-full rounded-[0.8cqw] px-[1cqw] py-[0.5cqw] text-[max(6px,1.55cqw)] leading-tight font-semibold text-white">
+          {labels.flyerDate}
+        </span>
+        <span className="bg-primary w-full rounded-[0.8cqw] px-[1cqw] py-[0.5cqw] text-[max(6px,1.55cqw)] leading-tight font-semibold text-white">
+          {labels.flyerPeople}
+        </span>
+        <span className="text-brand text-[max(7px,1.9cqw)] font-extrabold">
+          {labels.flyerCta}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** A message lost in a busy WhatsApp group. */
+function WhatsappPost({ labels }: { labels: LandingDemoLabels }) {
+  return (
+    <div className="w-[60cqw] overflow-hidden rounded-[1.2cqw] bg-[#efe7dc] text-left shadow-[0_8px_24px_-8px_rgb(27_26_23/0.45)]">
+      <div className="flex items-center gap-[1.4cqw] bg-[#1f6f5c] px-[2cqw] py-[1.4cqw] text-white">
+        <span className="flex size-[5cqw] shrink-0 items-center justify-center rounded-full bg-white/20 text-[max(8px,2.4cqw)]">
+          🏠
+        </span>
+        <span className="flex min-w-0 flex-col leading-tight">
+          <span className="truncate text-[max(8px,2.3cqw)] font-semibold">
+            {labels.group}
+          </span>
+          <span className="text-[max(6px,1.7cqw)] opacity-75">
+            Marta, Pau, Irene, +214
+          </span>
+        </span>
+      </div>
+      <div className="flex flex-col gap-[1.2cqw] p-[2cqw]">
+        <span className="h-[3.4cqw] w-[38%] rounded-[1cqw] bg-white/70" />
+        <span className="h-[3.4cqw] w-[55%] self-end rounded-[1cqw] bg-[#d9f2c9]/80" />
+        <div className="relative max-w-[88%] rounded-[1cqw] rounded-tl-none bg-white px-[1.8cqw] py-[1.2cqw]">
+          <p className="text-[max(7px,1.9cqw)] font-semibold text-[#1f8a4c]">
+            {labels.sender}
+          </p>
+          <p className="mt-[0.4cqw] text-[max(8px,2.2cqw)] leading-snug text-[#1b1a17]">
+            {labels.post}
+          </p>
+          <p className="mt-[0.4cqw] text-right text-[max(6px,1.6cqw)] text-[#6b6559]">
+            22:48 <span className="text-[#34b7f1]">✓✓</span>
+          </p>
+        </div>
+        <span className="h-[3.4cqw] w-[30%] rounded-[1cqw] bg-white/70" />
+      </div>
+    </div>
+  );
+}
+
+function SourcePost({ pin, labels }: { pin: Pin; labels: LandingDemoLabels }) {
+  const dx = pin.x - POST_X;
+  const dy = (pin.y - POST_Y) * 0.75;
   return (
     <div
-      className="demo-card bg-card absolute z-20 flex w-[min(16rem,74%)] gap-2.5 rounded-md border p-2 text-left shadow-[0_3px_8px_-3px_rgb(4_54_95/0.3)]"
+      className="demo-post absolute z-40"
+      style={
+        {
+          left: `${POST_X}%`,
+          top: `${POST_Y}%`,
+          animationDelay: `${pin.delay}s`,
+          "--dx": `${dx}cqw`,
+          "--dy": `${dy}cqw`,
+        } as React.CSSProperties
+      }
+    >
+      {pin.source === "story" && (
+        <StoryPost labels={labels} delay={pin.delay} />
+      )}
+      {pin.source === "flyer" && (
+        <FlyerPost labels={labels} delay={pin.delay} />
+      )}
+      {pin.source === "whatsapp" && <WhatsappPost labels={labels} />}
+    </div>
+  );
+}
+
+function ListingCard({ pin, labels }: { pin: Pin; labels: LandingDemoLabels }) {
+  return (
+    <div
+      className="demo-card bg-card absolute z-20 flex w-[min(16.5rem,76%)] gap-2.5 rounded-md border p-2 text-left shadow-[0_3px_8px_-3px_rgb(4_54_95/0.3)]"
       style={{
         left: `${pin.x}%`,
         top: `${pin.y}%`,
@@ -188,9 +426,16 @@ function ListingCard({ pin, labels }: { pin: Pin; labels: Labels }) {
           </span>
           <span className="inline-flex items-center gap-1">
             <Receipt className="size-2.5" />
-            {labels.billsIncluded}
+            {pin.billsIncluded ? labels.billsIncluded : labels.billsNotIncluded}
           </span>
         </div>
+        <p className="text-brand mt-0.5 inline-flex items-center gap-1 text-[0.62rem] font-semibold">
+          <BadgeCheck className="size-3" />
+          {labels.reviewed}
+          <span className="text-muted-foreground font-normal">
+            · {labels.expires}
+          </span>
+        </p>
       </div>
       <span className="bg-card absolute -bottom-[5px] left-1/2 size-2.5 -translate-x-1/2 rotate-45 border-r border-b" />
     </div>
@@ -198,40 +443,47 @@ function ListingCard({ pin, labels }: { pin: Pin; labels: Labels }) {
 }
 
 /**
- * Looping illustration for the landing hero, built from the same pieces as the real map:
- * price pills and clusters on a basemap, and a listing card that opens on the active pill.
+ * Looping illustration for the landing hero. Each turn, an ad as people post it today
+ * (an Instagram story, a home-made flyer, a WhatsApp group message) appears over the
+ * map, shrinks into its pin and comes back as a tidy, reviewed Lloguer listing card.
  * Pure CSS (see `.demo-*` in globals.css), decorative only.
  */
-export function LandingMapDemo({ labels }: { labels: Labels }) {
+export function LandingMapDemo({ labels }: { labels: LandingDemoLabels }) {
   const pins: Pin[] = [
     {
-      x: 37,
-      y: 64,
+      x: 62,
+      y: 52,
       delay: 0,
-      place: "Lavapiés",
+      source: "story",
+      place: "Benimaclet",
       roomType: labels.double,
-      price: 380,
-      flatmates: 3,
+      price: 320,
+      flatmates: 2,
+      billsIncluded: true,
       tone: "blue",
     },
     {
-      x: 63,
-      y: 60,
-      delay: 4,
-      place: "Poblenou",
+      x: 39,
+      y: 64,
+      delay: 6,
+      source: "flyer",
+      place: "Russafa",
       roomType: labels.single,
-      price: 450,
+      price: 360,
       flatmates: 2,
+      billsIncluded: false,
       tone: "orange",
     },
     {
-      x: 50,
-      y: 80,
-      delay: 8,
-      place: "Ruzafa",
-      roomType: labels.double,
-      price: 340,
-      flatmates: 4,
+      x: 56,
+      y: 82,
+      delay: 12,
+      source: "whatsapp",
+      place: "Blasco Ibáñez",
+      roomType: labels.single,
+      price: 300,
+      flatmates: 3,
+      billsIncluded: false,
       tone: "gold",
     },
   ];
@@ -239,7 +491,7 @@ export function LandingMapDemo({ labels }: { labels: Labels }) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none relative aspect-[4/3] w-full overflow-hidden rounded-md border select-none"
+      className="pointer-events-none relative aspect-[4/3] w-full overflow-hidden rounded-md border select-none [container-type:inline-size]"
     >
       <BaseMap />
 
@@ -307,7 +559,7 @@ export function LandingMapDemo({ labels }: { labels: Labels }) {
               <span
                 key={offset}
                 className="demo-ring border-brand absolute inset-0 rounded-full border-2"
-                style={{ animationDelay: `${p.delay + offset}s` }}
+                style={{ animationDelay: `${p.delay + 3.1 + offset}s` }}
               />
             ))}
             <span
@@ -320,6 +572,11 @@ export function LandingMapDemo({ labels }: { labels: Labels }) {
           </span>
           <ListingCard pin={p} labels={labels} />
         </div>
+      ))}
+
+      <div className="demo-veil bg-background/70 absolute inset-0 z-30 backdrop-blur-[1.5px]" />
+      {pins.map((p) => (
+        <SourcePost key={p.source} pin={p} labels={labels} />
       ))}
     </div>
   );

@@ -157,48 +157,77 @@
 }
 
 /*
- * Landing hero demo: price pills on a stylised map take turns pinging, lighting up and
- * opening a listing card. 12 s loop, 4 s per listing (see components/landing-map-demo.tsx).
+ * Landing hero demo (see components/landing-map-demo.tsx). 18 s loop, 6 s per listing:
+ * the ad as people post it today shows over a veiled map (0 to 2.6 s), shrinks into its
+ * pin (to 3.2 s), the pin lights up and the reviewed listing card opens (to 5.6 s).
  */
 @keyframes demo-pop {
   from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
+@keyframes demo-veil {
+  0%, 53%, 100% { opacity: 0; }
+  7%, 43% { opacity: 1; }
+}
+
+@keyframes demo-post {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(0, 12px) scale(0.94);
+    animation-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1.08);
+  }
+  2.2%, 14.4% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4);
+  }
+  16.6% { opacity: 0.9; }
+  17.8%, 100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.1);
+  }
+}
+
+@keyframes demo-progress {
+  0% { width: 0; }
+  14.4%, 100% { width: 100%; }
+}
+
 @keyframes demo-ping {
   0% { opacity: 0.55; transform: scale(0.7); }
-  14%, 100% { opacity: 0; transform: scale(2.4); }
+  9%, 100% { opacity: 0; transform: scale(2.4); }
 }
 
 @keyframes demo-pill {
-  0%, 33%, 100% {
+  0%, 17.4%, 33.3%, 100% {
     background: var(--card);
     border-color: var(--brand);
     color: var(--brand);
     transform: scale(1);
     z-index: 10;
   }
-  4%, 29% {
+  18.6%, 31% {
     background: var(--primary);
     border-color: var(--primary);
     color: var(--primary-foreground);
-    transform: scale(1.1);
+    transform: scale(1.12);
     z-index: 30;
   }
 }
 
 @keyframes demo-card {
-  0% {
+  0%, 18% {
     opacity: 0;
     transform: translate(-50%, calc(-100% - 10px)) scale(0.95);
     animation-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1.08);
   }
-  5%, 28% {
+  20%, 30.5% {
     opacity: 1;
     transform: translate(-50%, calc(-100% - 20px)) scale(1);
     animation-timing-function: ease-in;
   }
-  32%, 100% {
+  33%, 100% {
     opacity: 0;
     transform: translate(-50%, calc(-100% - 26px)) scale(0.985);
   }
@@ -208,16 +237,27 @@
   transform: translate(-50%, -50%);
   animation: demo-pop 0.55s cubic-bezier(0.2, 0.9, 0.25, 1.15) backwards;
 }
-.demo-pill { animation: demo-pill 12s ease-in-out infinite backwards; }
-.demo-ring { opacity: 0; animation: demo-ping 12s ease-out infinite backwards; }
+.demo-veil { opacity: 0; animation: demo-veil 6s ease-in-out infinite; }
+.demo-post {
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: demo-post 18s infinite backwards;
+}
+.demo-progress { width: 0; animation: demo-progress 18s linear infinite backwards; }
+.demo-pill { animation: demo-pill 18s ease-in-out infinite backwards; }
+.demo-ring { opacity: 0; animation: demo-ping 18s ease-out infinite backwards; }
 .demo-card {
   opacity: 0;
   transform: translate(-50%, calc(-100% - 20px));
-  animation: demo-card 12s infinite backwards;
+  animation: demo-card 18s infinite backwards;
 }
 
+/* Without motion, show the end state of the first turn: a lit pin and its card. */
 @media (prefers-reduced-motion: reduce) {
-  .demo-pop, .demo-ring, .demo-card, .demo-pill { animation: none !important; }
+  .demo-pop, .demo-ring, .demo-card, .demo-pill, .demo-post, .demo-veil {
+    animation: none !important;
+  }
+  .demo-post, .demo-veil { display: none; }
   .demo-card[data-first] { opacity: 1; }
   .demo-pill[data-first] {
     background: var(--primary);

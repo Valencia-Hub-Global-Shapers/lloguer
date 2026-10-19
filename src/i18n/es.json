@@ -28,39 +28,98 @@
     "browseMap": "Ver el mapa"
   },
   "landing": {
-    "title": "Encontrar vivienda asequible, en un solo sitio.",
-    "subtitle": "Deja de buscar entre grupos de WhatsApp e historias de Instagram. Encuentra o publica una habitación o un piso en toda España: gratis, sin registro y con cada anuncio revisado.",
+    "kicker": "Habitaciones de persona a persona",
+    "title": "Los pisos que se anuncian en stories, ahora en un mapa.",
+    "subtitle": "Lloguer no es otro portal inmobiliario. Reúne los anuncios que nunca llegan a ellos: la habitación que alguien deja en una story de Instagram o en un grupo de WhatsApp, para que no desaparezca en 24 horas.",
     "ctaBrowse": "Explorar el mapa",
     "ctaPublish": "Publicar un anuncio",
-    "t1Title": "Gratis y sin registro",
-    "t1Body": "Publicas con un formulario y recibes un enlace privado para editar o borrar tu anuncio. Sin cuenta ni contraseña.",
+    "heroPoints": [
+      "Sin registro",
+      "Revisado a mano",
+      "Se borra a los {days} días",
+      "Gratis"
+    ],
+    "demoCaption": "De una story que caduca en 24 horas a un anuncio revisado en el mapa.",
+    "demoGroup": "Pisos y compis València",
+    "demoSender": "Marta",
+    "demoPost1": "Dejo mi habitación en Blasco Ibáñez 🙌 300 € + gastos, somos 3 compis. Para entrar en un mes, ¡escribidme!",
+    "demoStoryUser": "lauu.rm",
+    "demoStoryAge": "5 h",
+    "demoReviewed": "Revisado",
+    "demoExpires": "Caduca en {days} días",
+    "demoFilters": [
+      "Barrio",
+      "Precio",
+      "Compañeros",
+      "Género"
+    ],
+    "whatTitle": "Qué es Lloguer",
+    "whatLead": "No competimos con los portales inmobiliarios. Lloguer existe para los anuncios que nunca llegan a ellos.",
+    "whatBody": "Cuando alguien se va de Erasmus, cambia de ciudad o busca compi, no sube su habitación a un portal: la cuelga en una story, la manda a un grupo de WhatsApp o se la cuenta a sus amigos. Son anuncios de persona a persona, a menudo más asequibles, que se pierden en horas.",
+    "sources": [
+      {
+        "title": "Stories de Instagram",
+        "body": "Desaparecen a las 24 horas y solo las ve quien ya te sigue."
+      },
+      {
+        "title": "Grupos de WhatsApp y Telegram",
+        "body": "Cientos de mensajes al día, sin forma de buscar por barrio o por precio."
+      },
+      {
+        "title": "El boca a boca",
+        "body": "Carteles en la facultad, el amigo de un amigo. Si no estás en el círculo, no te enteras."
+      }
+    ],
+    "solutionBody": "Lloguer les da un sitio fijo: un mapa abierto donde se pueden buscar por barrio, precio y compañeros de piso.",
+    "isTitle": "Lloguer es",
+    "isItems": [
+      "Habitaciones y pisos que deja la gente, de persona a persona.",
+      "Un tablón gratuito y sin ánimo de lucro.",
+      "Contacto directo con quien publica, por WhatsApp o correo."
+    ],
+    "isNotTitle": "Lloguer no es",
+    "isNotItems": [
+      "Un portal inmobiliario ni una agencia.",
+      "Un sitio donde pagar por destacar tu anuncio.",
+      "Un intermediario: no cobramos comisiones ni gestionamos pagos."
+    ],
+    "trustTitle": "Por qué puedes fiarte",
+    "trustLead": "Lo bueno de los grupos de WhatsApp, sin lo malo.",
+    "t1Title": "Sin registro",
+    "t1Body": "Publicas con un formulario y recibes un enlace privado para editar, renovar o borrar tu anuncio. Sin cuenta, sin contraseña, sin app.",
     "t2Title": "Revisado a mano",
-    "t2Body": "Una persona revisa cada anuncio antes de publicarlo para evitar trolls y publicidad.",
-    "t3Title": "Siempre al día",
-    "t3Body": "Cada anuncio se desactiva solo a los {days} días, así que no hay pisos fantasma.",
-    "problemTitle": "El problema",
-    "problemBody": "Hoy, encontrar vivienda es un caos: ofertas repartidas entre grupos de WhatsApp, historias que desaparecen y plataformas distintas, sin filtros y sin saber si la habitación sigue libre.",
-    "solutionBody": "Lloguer lo reúne todo en un tablón abierto, buscable y siempre actualizado, sin intermediarios.",
-    "filtersTitle": "Encuentra lo que te encaja",
-    "filtersIntro": "Busca en el mapa o filtra por lo que de verdad importa al compartir piso.",
-    "fNeighborhood": "Barrio",
-    "fNeighborhoodBody": "Ciudad o barrio, en cualquier punto de España.",
-    "fPrice": "Precio",
-    "fPriceBody": "Fija tu presupuesto mensual.",
-    "fFlatmates": "Compañeros de piso",
-    "fFlatmatesBody": "Elige con cuánta gente quieres convivir.",
-    "fGender": "Género",
-    "fGenderBody": "Ve solo los anuncios que te aceptan.",
+    "t2Body": "Una persona revisa cada anuncio antes de publicarlo. Así dejamos fuera estafas, anuncios falsos y publicidad.",
+    "t3Title": "Se borra a los {days} días",
+    "t3Body": "Cada anuncio caduca solo a los {days} días, así que lo que ves en el mapa sigue disponible. No hay pisos fantasma.",
+    "t4Title": "Gratis y sin intermediarios",
+    "t4Body": "No cobramos nada, ni a quien publica ni a quien busca. Hablas directamente con quien deja la habitación.",
     "howTitle": "Cómo funciona",
-    "s1Title": "Busca",
-    "s1Body": "Abre el mapa, elige una zona y ajusta los filtros.",
-    "s2Title": "Contacta",
-    "s2Body": "Escribe directamente por WhatsApp o correo a quien publica. Sin intermediarios.",
-    "s3Title": "Publica",
-    "s3Body": "Marca la ubicación, añade fotos y detalles, y lo revisamos para publicarlo.",
+    "howPostTitle": "Si dejas una habitación",
+    "howPostSteps": [
+      "Marca en el mapa dónde está y añade el precio, unas fotos y cómo contactarte.",
+      "Lo revisamos a mano antes de publicarlo. Te llega un enlace privado al correo.",
+      "Está visible {days} días. Si sigue libre, lo renuevas con tu enlace; si no, desaparece solo."
+    ],
+    "howSearchTitle": "Si buscas habitación",
+    "howSearchSteps": [
+      "Abre el mapa en tu ciudad o tu barrio, en cualquier punto de España.",
+      "Filtra por precio, número de compañeros y anuncios que aceptan tu género.",
+      "Escribe directamente a quien publica, por WhatsApp o por correo."
+    ],
     "partnersTitle": "Para universidades, colectivos e instituciones",
     "partnersBody": "Lloguer es una iniciativa sin ánimo de lucro de Global Shapers Valencia. Si quieres difundirla entre tu comunidad o colaborar con nosotros, escríbenos.",
-    "partnersCta": "Escríbenos"
+    "partnersCta": "Escríbenos",
+    "demoStoryText": "Se alquila habitación en Benimaclet para entrar en noviembre",
+    "demoStoryMore": "+ info ⬇️",
+    "demoStoryMention": "@marta.vlc",
+    "demoFlyerUser": "pablo.gs",
+    "demoFlyerAge": "1 h",
+    "demoFlyerTitle1": "¡SE ALQUILA",
+    "demoFlyerTitle2": "HABITACIÓN!",
+    "demoFlyerPlace": "En Ruzafa, al lado del mercado",
+    "demoFlyerDate": "Disponible desde el 1 de noviembre",
+    "demoFlyerPeople": "Piso de 3 personas en total",
+    "demoFlyerCta": "¡Más info por MD!"
   },
   "home": {
     "emptyTitle": "No hay nada aquí",
