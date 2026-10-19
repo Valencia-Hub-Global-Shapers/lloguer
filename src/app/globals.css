@@ -265,3 +265,178 @@
     color: var(--primary-foreground);
   }
 }
+
+/*
+ * Landing page motion. `.rise` plays on load (hero), `[data-reveal]` when scrolled into
+ * view (components/landing/reveal-observer.tsx), and `.v-anim` illustrations inside a
+ * revealed card start looping then. Without scripting, everything is simply shown.
+ */
+.dot-grid {
+  background-image: radial-gradient(rgb(5 73 133 / 0.13) 1px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+.hero-fade {
+  mask-image: radial-gradient(ellipse 70% 80% at 75% 45%, #000 20%, transparent 75%);
+}
+.dot-grid-light {
+  background-image: radial-gradient(rgb(255 255 255 / 0.16) 1px, transparent 1.2px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(115deg, transparent 20%, #000 90%);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.rise { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms) backwards; }
+
+[data-reveal] {
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    border-color 150ms ease-out;
+}
+@media (scripting: enabled) {
+  [data-reveal]:not([data-visible]) { opacity: 0; transform: translateY(22px); }
+  [data-reveal]:not([data-visible]) .v-anim { animation-play-state: paused; }
+}
+
+/* Pulsing dot in the hero kicker */
+.live-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: var(--brand);
+}
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--brand);
+  animation: live-dot 2.2s ease-out infinite;
+}
+@keyframes live-dot {
+  from { opacity: 0.6; transform: scale(1); }
+  to { opacity: 0; transform: scale(3); }
+}
+
+/* Hero headline: three words take turns, with a hand-drawn underline */
+.rotator { display: grid; white-space: nowrap; }
+.rotator > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  animation: rotator 7.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite backwards;
+}
+@keyframes rotator {
+  0% { opacity: 0; transform: translateY(0.4em); filter: blur(6px); }
+  5%, 29% { opacity: 1; transform: none; filter: blur(0); }
+  33.3%, 100% { opacity: 0; transform: translateY(-0.4em); filter: blur(6px); }
+}
+.squiggle {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: squiggle 7.8s cubic-bezier(0.6, 0, 0.3, 1) infinite backwards;
+}
+@keyframes squiggle {
+  0%, 4% { stroke-dashoffset: 1; }
+  14%, 100% { stroke-dashoffset: 0; }
+}
+
+/* Floating badges around the hero demo */
+.float-chip { animation: float-chip 5s ease-in-out infinite; }
+@keyframes float-chip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Marquee of sample ads */
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: 0.75rem;
+  width: max-content;
+  padding-right: 0.75rem;
+  animation: marquee 60s linear infinite;
+}
+.marquee-track[data-reverse] { animation-direction: reverse; animation-duration: 70s; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* How it works: a hairline joins the numbered steps */
+.steps > li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 2rem;
+  bottom: -1.25rem;
+  width: 1px;
+  background: var(--border);
+}
+
+/* Trust card: no signup (6 s loop) */
+.v1-dim { animation: v1-dim 6s ease-in-out infinite; }
+.v1-strike { transform: scaleX(0); transform-origin: left; animation: v1-strike 6s ease-in-out infinite; }
+.v1-link { animation: v1-link 6s cubic-bezier(0.2, 0.9, 0.25, 1.1) infinite; }
+.v1-type { width: 0; animation: v1-type 6s steps(10) infinite; }
+@keyframes v1-dim { 0%, 15% { opacity: 1; } 28%, 90% { opacity: 0.4; } 100% { opacity: 1; } }
+@keyframes v1-strike { 0%, 10% { transform: scaleX(0); } 25%, 90% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+@keyframes v1-link {
+  0%, 30% { opacity: 0; transform: translateY(10px) scale(0.96); }
+  40%, 90% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(-4px); }
+}
+@keyframes v1-type { 0%, 42% { width: 0; } 62%, 100% { width: 10ch; } }
+
+/* Trust card: reviewed by hand (6 s loop) */
+.v2-scan { left: -3rem; animation: v2-scan 6s ease-in-out infinite; }
+.v2-spam { animation: v2-spam 6s ease-in-out infinite; }
+.v2-stamp { opacity: 0; animation: v2-stamp 6s cubic-bezier(0.2, 0.9, 0.25, 1.4) infinite; }
+.v2-ok { opacity: 0; animation: v2-ok 6s cubic-bezier(0.2, 0.9, 0.25, 1.4) infinite; }
+@keyframes v2-scan { 0% { left: -3rem; opacity: 0; } 5% { opacity: 1; } 30% { left: 100%; opacity: 1; } 31%, 100% { left: 100%; opacity: 0; } }
+@keyframes v2-spam {
+  0%, 34% { transform: none; opacity: 1; }
+  36% { transform: translateX(-4px); }
+  38% { transform: translateX(4px); }
+  40% { transform: translateX(-2px); }
+  42%, 55% { transform: none; opacity: 1; }
+  65%, 92% { transform: translateX(40%); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes v2-stamp { 0%, 34% { opacity: 0; transform: scale(1.6) rotate(-8deg); } 40%, 92% { opacity: 1; transform: rotate(-4deg); } 100% { opacity: 0; } }
+@keyframes v2-ok { 0%, 55% { opacity: 0; transform: scale(0.4); } 62%, 92% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+
+/* Trust card: deleted after N days (12 s loop, 1 s per day, then 2 s gone) */
+.v3-tick { opacity: 0; animation: v3-tick 12s steps(1, end) infinite; }
+.v3-zero, .v3-gone { opacity: 0; animation: v3-end 12s steps(1, end) infinite; }
+.v3-left { animation: v3-start 12s steps(1, end) infinite; }
+.v3-bar { width: 100%; animation: v3-bar 12s linear infinite; }
+.v3-ticks { background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), var(--card) calc(10% - 2px) 10%); }
+@keyframes v3-tick { 0% { opacity: 1; } 8.33%, 100% { opacity: 0; } }
+@keyframes v3-end { 0% { opacity: 0; } 83.33%, 100% { opacity: 1; } }
+@keyframes v3-start { 0% { opacity: 1; } 83.33%, 100% { opacity: 0; } }
+@keyframes v3-bar { 0% { width: 100%; } 83.33%, 100% { width: 0; } }
+
+/* Trust card: free (plays once) */
+.v4-strike { transform: scaleX(0); transform-origin: left; animation: v4-strike 0.5s ease-out forwards; }
+@keyframes v4-strike { to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .rise, .rotator > span, .squiggle, .float-chip, .marquee-track, .live-dot::after, .v-anim {
+    animation: none !important;
+  }
+  [data-reveal] { transition: none; opacity: 1 !important; transform: none !important; }
+  .rotator > span:first-child { opacity: 1; }
+  .squiggle { stroke-dashoffset: 0; }
+  .marquee { overflow-x: auto; }
+  .v1-strike, .v4-strike { transform: scaleX(1); }
+  .v1-dim { opacity: 0.4; }
+  .v1-type { width: 10ch; }
+  .v2-stamp, .v2-ok { opacity: 1; }
+  .v2-scan, .v3-tick:not(:first-child), .v3-zero, .v3-gone { display: none; }
+  .v3-tick:first-child { opacity: 1; }
+}

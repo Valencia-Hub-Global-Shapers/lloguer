@@ -119,7 +119,73 @@
     "demoFlyerPlace": "A Russafa, al costat del mercat",
     "demoFlyerDate": "Disponible des de l'1 de novembre",
     "demoFlyerPeople": "Pis de 3 persones en total",
-    "demoFlyerCta": "Més info per MD!"
+    "demoFlyerCta": "Més info per MD!",
+    "titleBefore": "Els pisos que s'anuncien en",
+    "titleWords": [
+      "stories",
+      "grups de WhatsApp",
+      "cartells"
+    ],
+    "titleAfter": "ara en un mapa.",
+    "marqueeLabel": "Així sonen els anuncis que reuneix Lloguer",
+    "marquee": [
+      {
+        "src": "story",
+        "text": "Deixe la meua hab. a Blasco Ibáñez, 300 € + despeses"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Algú busca pis? Queda lliure una hab. a Benimaclet"
+      },
+      {
+        "src": "flyer",
+        "text": "ES LLOGA HABITACIÓ! Russafa, des de novembre"
+      },
+      {
+        "src": "story",
+        "text": "Busque company per al curs, Campanar, 280 €"
+      },
+      {
+        "src": "telegram",
+        "text": "Me'n vaig d'Erasmus i deixe la meua habitació 🙌"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Pis de 3, entrada d'ací a un mes, + info per MD"
+      },
+      {
+        "src": "story",
+        "text": "Hab. doble al Carme, despeses incloses"
+      },
+      {
+        "src": "flyer",
+        "text": "Es busca xica per a pis a Algirós"
+      },
+      {
+        "src": "telegram",
+        "text": "Sublloguer juliol i agost a Patraix"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Som molt majos, veniu a veure'ns 😜"
+      }
+    ],
+    "v1Account": "Crear compte",
+    "v1Password": "Contrasenya",
+    "v1Link": "El teu enllaç privat",
+    "v2Spam": "Guanya 500 € al mes! Fes clic ací",
+    "v2Real": "Hab. a Benimaclet · 320 €",
+    "v2Approved": "Aprovat",
+    "v2Rejected": "Rebutjat",
+    "v3Left": "dies al mapa",
+    "v3Gone": "Esborrat automàticament",
+    "v4Items": [
+      "Comissions",
+      "Destacats",
+      "Quotes"
+    ],
+    "finalTitle": "Deixes la teua habitació?",
+    "finalBody": "Que no es perda en una story de 24 hores. Publica-la a Lloguer, gratis i sense registre."
   },
   "home": {
     "emptyTitle": "No hi ha res ací",

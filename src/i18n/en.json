@@ -119,7 +119,73 @@
     "demoFlyerPlace": "In Ruzafa, next to the market",
     "demoFlyerDate": "Available from 1 November",
     "demoFlyerPeople": "3 people in the flat in total",
-    "demoFlyerCta": "DM for more info!"
+    "demoFlyerCta": "DM for more info!",
+    "titleBefore": "The rooms posted in",
+    "titleWords": [
+      "stories",
+      "WhatsApp groups",
+      "flyers"
+    ],
+    "titleAfter": "now on a map.",
+    "marqueeLabel": "What the listings on Lloguer sound like",
+    "marquee": [
+      {
+        "src": "story",
+        "text": "Leaving my room on Blasco Ibáñez, €300 + bills"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Anyone looking? A room is free in Benimaclet"
+      },
+      {
+        "src": "flyer",
+        "text": "ROOM FOR RENT! Russafa, from November"
+      },
+      {
+        "src": "story",
+        "text": "Looking for a flatmate this year, Campanar, €280"
+      },
+      {
+        "src": "telegram",
+        "text": "Off on Erasmus, my room is up for grabs 🙌"
+      },
+      {
+        "src": "whatsapp",
+        "text": "Flat of 3, move in next month, DM for info"
+      },
+      {
+        "src": "story",
+        "text": "Double room in El Carme, bills included"
+      },
+      {
+        "src": "flyer",
+        "text": "Looking for a girl to share in Algirós"
+      },
+      {
+        "src": "telegram",
+        "text": "Sublet for July and August in Patraix"
+      },
+      {
+        "src": "whatsapp",
+        "text": "We're lovely, come and see us 😜"
+      }
+    ],
+    "v1Account": "Create account",
+    "v1Password": "Password",
+    "v1Link": "Your private link",
+    "v2Spam": "Earn €500 a month! Click here",
+    "v2Real": "Room in Benimaclet · €320",
+    "v2Approved": "Approved",
+    "v2Rejected": "Rejected",
+    "v3Left": "days on the map",
+    "v3Gone": "Deleted automatically",
+    "v4Items": [
+      "Fees",
+      "Promoted ads",
+      "Subscriptions"
+    ],
+    "finalTitle": "Leaving your room?",
+    "finalBody": "Don't let it get lost in a 24-hour story. Post it on Lloguer, free and without signing up."
   },
   "home": {
     "emptyTitle": "Nothing here",
