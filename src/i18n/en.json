@@ -98,7 +98,8 @@
     "howPostSteps": [
       "Drop a pin where it is and add the price, a few photos and how to reach you.",
       "We review it by hand before it goes live. You get a private link by email.",
-      "It stays up for {days} days. Still free? Renew it with your link. If not, it disappears by itself."
+      "It stays up for {days} days. Still free? Renew it with your link. If not, it disappears by itself.",
+      "Share it in your stories or WhatsApp status too: we make you an image with your photos and the details you choose."
     ],
     "howSearchTitle": "If you're looking for a room",
     "howSearchSteps": [
@@ -420,5 +421,51 @@
     "madeIn": "Made in La Terreta by",
     "contactEmail": "valencia.globalshapers@gmail.com",
     "membershipNote": "Global Shapers Valencia is an independent, volunteer-led hub of the Global Shapers Community, a World Economic Forum initiative. It is not a legal or financial affiliate of the World Economic Forum."
+  },
+  "story": {
+    "open": "Create story",
+    "manageCta": "Create a story to share",
+    "promoTitle": "Know someone who is looking?",
+    "promoBody": "Make a vertical image of this listing, with its photos and the details you choose, ready for your Instagram stories or WhatsApp status.",
+    "title": "Create a story",
+    "subtitle": "Choose what to show and how it looks. The preview updates as you go.",
+    "previewLabel": "Story preview",
+    "layout": "Layout",
+    "layoutCard": "Card",
+    "layoutCover": "Full photo",
+    "layoutText": "Text only",
+    "background": "Background",
+    "theme": {
+      "paper": "Paper",
+      "map": "Map",
+      "orange": "Orange",
+      "blue": "Blue",
+      "ink": "Night",
+      "sunset": "Sunset"
+    },
+    "photos": "Photos",
+    "photosHint": "Pick up to {max}, in the order you want them. Full photo uses the first one.",
+    "photoLabel": "Photo {n}",
+    "text": "Text",
+    "headline": "Headline",
+    "note": "Custom message",
+    "notePlaceholder": "E.g. Looking for an easygoing flatmate from January!",
+    "show": "What to show",
+    "showType": "Type of home",
+    "showPrice": "Price",
+    "showLocation": "Neighborhood and city",
+    "showDescription": "Description excerpt",
+    "details": "Details",
+    "contact": "Contact",
+    "contactHint": "So people can reach you straight from the story.",
+    "emailLabel": "Email",
+    "reviewedOn": "Listing reviewed on",
+    "defaultHeadlineRoom": "Room available in {place}",
+    "defaultHeadlineFlat": "Flat for rent in {place}",
+    "download": "Download image",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied. You can paste it into an Instagram link sticker.",
+    "copyFailed": "Could not copy the link."
   }
 }

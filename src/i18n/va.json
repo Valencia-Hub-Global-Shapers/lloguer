@@ -98,7 +98,8 @@
     "howPostSteps": [
       "Marca al mapa on és i afegeix el preu, unes fotos i com contactar-te.",
       "El revisem a mà abans de publicar-lo. Et arriba un enllaç privat al correu.",
-      "Es veu durant {days} dies. Si continua lliure, el renoves amb el teu enllaç; si no, desapareix sol."
+      "Es veu durant {days} dies. Si continua lliure, el renoves amb el teu enllaç; si no, desapareix sol.",
+      "Comparteix-lo també a les teues stories o el teu estat de WhatsApp: et preparem una imatge amb les teues fotos i les dades que tries."
     ],
     "howSearchTitle": "Si busques habitació",
     "howSearchSteps": [
@@ -420,5 +421,51 @@
     "madeIn": "Fet a la Terreta per",
     "contactEmail": "valencia.globalshapers@gmail.com",
     "membershipNote": "Global Shapers València és un hub independent i de voluntariat de la Global Shapers Community, una iniciativa del Fòrum Econòmic Mundial. No és una entitat legal ni financerament afiliada al Fòrum Econòmic Mundial."
+  },
+  "story": {
+    "open": "Crear story",
+    "manageCta": "Crear story per compartir",
+    "promoTitle": "Coneixes algú que el busque?",
+    "promoBody": "Crea una imatge vertical amb aquest anunci, les teues fotos i les dades que tries, preparada per a les teues stories d'Instagram o el teu estat de WhatsApp.",
+    "title": "Crea una story",
+    "subtitle": "Tria què mostrar i com es veu. La vista prèvia s'actualitza al moment.",
+    "previewLabel": "Vista prèvia de la story",
+    "layout": "Disseny",
+    "layoutCard": "Targeta",
+    "layoutCover": "Foto completa",
+    "layoutText": "Només text",
+    "background": "Fons",
+    "theme": {
+      "paper": "Paper",
+      "map": "Mapa",
+      "orange": "Taronja",
+      "blue": "Blau",
+      "ink": "Nit",
+      "sunset": "Posta de sol"
+    },
+    "photos": "Fotos",
+    "photosHint": "Tria'n fins a {max}, en l'ordre en què vols veure-les. Amb foto completa s'usa la primera.",
+    "photoLabel": "Foto {n}",
+    "text": "Text",
+    "headline": "Titular",
+    "note": "Missatge personalitzat",
+    "notePlaceholder": "Ex.: Busquem company tranquil per a gener!",
+    "show": "Què mostrar",
+    "showType": "Tipus d'habitatge",
+    "showPrice": "Preu",
+    "showLocation": "Barri i ciutat",
+    "showDescription": "Extracte de la descripció",
+    "details": "Detalls",
+    "contact": "Contacte",
+    "contactHint": "Perquè t'escriguen directament des de la story.",
+    "emailLabel": "Correu",
+    "reviewedOn": "Anunci revisat a",
+    "defaultHeadlineRoom": "Habitació lliure a {place}",
+    "defaultHeadlineFlat": "Pis de lloguer a {place}",
+    "download": "Descarrega la imatge",
+    "share": "Comparteix",
+    "copyLink": "Copia l'enllaç",
+    "linkCopied": "Enllaç copiat. Pots enganxar-lo en un adhesiu d'enllaç d'Instagram.",
+    "copyFailed": "No s'ha pogut copiar l'enllaç."
   }
 }

@@ -98,7 +98,8 @@
     "howPostSteps": [
       "Marca en el mapa dónde está y añade el precio, unas fotos y cómo contactarte.",
       "Lo revisamos a mano antes de publicarlo. Te llega un enlace privado al correo.",
-      "Está visible {days} días. Si sigue libre, lo renuevas con tu enlace; si no, desaparece solo."
+      "Está visible {days} días. Si sigue libre, lo renuevas con tu enlace; si no, desaparece solo.",
+      "Compártelo también en tus stories o tu estado de WhatsApp: te preparamos una imagen con tus fotos y los datos que elijas."
     ],
     "howSearchTitle": "Si buscas habitación",
     "howSearchSteps": [
@@ -420,5 +421,51 @@
     "madeIn": "Hecho en la Terreta por",
     "contactEmail": "valencia.globalshapers@gmail.com",
     "membershipNote": "Global Shapers Valencia es un hub independiente y de voluntariado de la Global Shapers Community, una iniciativa del Foro Económico Mundial. No es una entidad legal ni financieramente afiliada al Foro Económico Mundial."
+  },
+  "story": {
+    "open": "Crear story",
+    "manageCta": "Crear story para compartir",
+    "promoTitle": "¿Conoces a alguien que lo busque?",
+    "promoBody": "Crea una imagen vertical con este anuncio, tus fotos y los datos que elijas, lista para tus stories de Instagram o tu estado de WhatsApp.",
+    "title": "Crea una story",
+    "subtitle": "Elige qué mostrar y cómo se ve. La vista previa se actualiza al momento.",
+    "previewLabel": "Vista previa de la story",
+    "layout": "Diseño",
+    "layoutCard": "Tarjeta",
+    "layoutCover": "Foto completa",
+    "layoutText": "Solo texto",
+    "background": "Fondo",
+    "theme": {
+      "paper": "Papel",
+      "map": "Mapa",
+      "orange": "Naranja",
+      "blue": "Azul",
+      "ink": "Noche",
+      "sunset": "Atardecer"
+    },
+    "photos": "Fotos",
+    "photosHint": "Elige hasta {max}, en el orden en que quieres verlas. Con foto completa se usa la primera.",
+    "photoLabel": "Foto {n}",
+    "text": "Texto",
+    "headline": "Titular",
+    "note": "Mensaje personalizado",
+    "notePlaceholder": "Ej.: ¡Buscamos compi tranqui para enero!",
+    "show": "Qué mostrar",
+    "showType": "Tipo de vivienda",
+    "showPrice": "Precio",
+    "showLocation": "Barrio y ciudad",
+    "showDescription": "Extracto de la descripción",
+    "details": "Detalles",
+    "contact": "Contacto",
+    "contactHint": "Para que te escriban directamente desde la story.",
+    "emailLabel": "Correo",
+    "reviewedOn": "Anuncio revisado en",
+    "defaultHeadlineRoom": "Habitación libre en {place}",
+    "defaultHeadlineFlat": "Piso en alquiler en {place}",
+    "download": "Descargar imagen",
+    "share": "Compartir",
+    "copyLink": "Copiar enlace",
+    "linkCopied": "Enlace copiado. Puedes pegarlo en un sticker de enlace de Instagram.",
+    "copyFailed": "No se ha podido copiar el enlace."
   }
 }
