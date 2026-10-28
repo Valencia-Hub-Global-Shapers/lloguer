@@ -332,10 +332,9 @@
     "internalEmail": "El teu correu privat",
     "internalEmailHint": "No es publica i pot ser diferent del de contacte. T'enviem ací l'enllaç privat per editar, desactivar o esborrar el teu anunci.",
     "draftTitle": "Hem començat el teu anunci amb la teua prova",
-    "draftBody": "Ja tens el preu i el text. Revisa'ls i completa la resta: ubicació, detalls i contacte. No es publica res fins que l'envies, i tot i això el revisem abans que aparega.",
+    "draftBody": "Ja tens el preu i el text. Revisa'ls i completa la resta: ubicació, detalls i contacte.",
     "draftAddPhotos": "Afig les meues {count} fotos de la prova",
     "draftAddPhotosOne": "Afig la meua foto de la prova",
-    "draftPhotosNote": "Les teues fotos només es pugen si les afiges.",
     "draftDiscard": "Comença de zero"
   },
   "auth": {
@@ -497,7 +496,6 @@
     "demoPrice": "Preu (€/mes)",
     "demoUsePhoto": "Prova amb la meua foto",
     "demoPrivacy": "La teua foto no ix del teu dispositiu.",
-    "demoNote": "És només una prova: no es publica res.",
     "shuffle": "Sorprén-me",
     "shuffleHint": "Prova un disseny a l'atzar.",
     "shuffleDemoHint": "Un altre anunci d'exemple i un altre disseny, a l'atzar.",

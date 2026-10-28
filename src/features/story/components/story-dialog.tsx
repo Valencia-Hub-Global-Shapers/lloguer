@@ -558,7 +558,6 @@ export function StoryDialog({
 
         {demo ? (
           <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 border-t px-5 py-3">
-            <p className="text-muted-foreground mr-auto text-sm">{t("story.demoNote")}</p>
             <Button className="group" disabled={starting} onClick={startListing}>
               {t("story.demoStart")}
               <ArrowRight className="transition-transform group-hover:translate-x-0.5" />

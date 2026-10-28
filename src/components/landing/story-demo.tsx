@@ -196,9 +196,6 @@ export function StoryDemo({ locale }: { locale: string }) {
         <Sparkles />
         {t("landing.storyCta")}
       </Button>
-      <p className="text-muted-foreground mt-3 text-center text-sm">
-        {t("story.demoNote")}
-      </p>
 
       {sample ? (
         <StoryDialog

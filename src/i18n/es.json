@@ -332,10 +332,9 @@
     "internalEmail": "Tu correo privado",
     "internalEmailHint": "No se publica y puede ser distinto del de contacto. Te enviamos aquí el enlace privado para editar, desactivar o borrar tu anuncio.",
     "draftTitle": "Hemos empezado tu anuncio con tu prueba",
-    "draftBody": "Ya tienes el precio y el texto. Revísalos y completa el resto: ubicación, detalles y contacto. No se publica nada hasta que lo envíes, y aun así lo revisamos antes de que aparezca.",
+    "draftBody": "Ya tienes el precio y el texto. Revísalos y completa el resto: ubicación, detalles y contacto.",
     "draftAddPhotos": "Añadir mis {count} fotos de la prueba",
     "draftAddPhotosOne": "Añadir mi foto de la prueba",
-    "draftPhotosNote": "Tus fotos solo se suben si las añades.",
     "draftDiscard": "Empezar de cero"
   },
   "auth": {
@@ -497,7 +496,6 @@
     "demoPrice": "Precio (€/mes)",
     "demoUsePhoto": "Probar con mi foto",
     "demoPrivacy": "Tu foto no sale de tu dispositivo.",
-    "demoNote": "Es solo una prueba: no se publica nada.",
     "shuffle": "Sorpréndeme",
     "shuffleHint": "Prueba un diseño al azar.",
     "shuffleDemoHint": "Otro anuncio de ejemplo y otro diseño, al azar.",

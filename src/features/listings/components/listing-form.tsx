@@ -244,9 +244,6 @@ export function ListingForm({
               {t("publish.draftDiscard")}
             </Button>
           </div>
-          {draftPhotos.length > 0 ? (
-            <p className="text-muted-foreground text-xs">{t("publish.draftPhotosNote")}</p>
-          ) : null}
         </div>
       ) : null}
 
