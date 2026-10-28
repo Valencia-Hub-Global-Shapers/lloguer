@@ -90,6 +90,8 @@ describe("defaultStoryOptions", () => {
   it("starts with the first photo and WhatsApp as the contact", () => {
     const options = defaultStoryOptions(listing, t);
     expect(options.layout).toBe("card");
+    expect(options.palette).toBe("horchata");
+    expect(options.background).toBe("paper");
     expect(options.photos).toEqual(["a.webp"]);
     expect(options.showWhatsapp).toBe(true);
     expect(options.showEmail).toBe(false);

@@ -434,14 +434,22 @@
     "layoutCard": "Card",
     "layoutCover": "Full photo",
     "layoutText": "Text only",
+    "color": "Color",
+    "palette": {
+      "horchata": "Horchata",
+      "valencia": "Valencia",
+      "mediterranean": "Mediterranean",
+      "night": "Night",
+      "sunset": "Sunset"
+    },
     "background": "Background",
-    "theme": {
+    "backgrounds": {
+      "plain": "Plain",
       "paper": "Paper",
       "map": "Map",
-      "orange": "Orange",
-      "blue": "Blue",
-      "ink": "Night",
-      "sunset": "Sunset"
+      "dots": "Dots",
+      "waves": "Waves",
+      "tiles": "Tiles"
     },
     "photos": "Photos",
     "photosHint": "Pick up to {max}, in the order you want them. Full photo uses the first one.",

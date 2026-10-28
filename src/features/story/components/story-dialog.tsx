@@ -26,7 +26,8 @@ import {
   MAX_STORY_PHOTOS,
   STORY_HEIGHT,
   STORY_LAYOUTS,
-  STORY_THEMES,
+  STORY_BACKGROUNDS,
+  STORY_PALETTES,
   STORY_WIDTH,
   buildFacts,
   defaultStoryOptions,
@@ -34,11 +35,23 @@ import {
   placeLabel,
   togglePhoto,
   typeLabel,
+  type StoryBackgroundId,
   type StoryLayout,
   type StoryOptions,
-  type StoryTheme,
+  type StoryPalette,
+  type StoryPaletteId,
 } from "../options";
-import { STORY_FONTS, drawStory, type StoryContent, type StoryImage } from "../render";
+import {
+  STORY_FONTS,
+  drawBackgroundSample,
+  drawStory,
+  type StoryContent,
+  type StoryImage,
+} from "../render";
+
+/** Background swatches render at 2x their 40x56 CSS size. */
+const SWATCH_WIDTH = 80;
+const SWATCH_HEIGHT = 112;
 
 const LAYOUT_KEYS: Record<StoryLayout, string> = {
   card: "story.layoutCard",
@@ -148,7 +161,7 @@ export function StoryDialog({
     const ctx = canvas?.getContext("2d");
     if (!open || !canvas || !ctx || !fontsReady || !photosLoaded) return;
     const drawn: StoryImage[] = drawnPhotos.map((path) => images[path] ?? null);
-    drawStory(ctx, content, options.layout, options.theme, drawn);
+    drawStory(ctx, content, options.layout, options.palette, options.background, drawn);
 
     // Encode ahead of time: share() must run straight from the click to keep
     // the user gesture, so there is no time to encode then
@@ -254,15 +267,30 @@ export function StoryDialog({
               </ToggleGroup>
             </Section>
 
+            <Section title={t("story.color")}>
+              <div className="flex flex-wrap gap-2">
+                {STORY_PALETTES.map((palette) => (
+                  <PaletteSwatch
+                    key={palette.id}
+                    palette={palette}
+                    label={t(`story.palette.${palette.id}`)}
+                    selected={options.palette === palette.id}
+                    onSelect={() => update({ palette: palette.id })}
+                  />
+                ))}
+              </div>
+            </Section>
+
             <Section title={t("story.background")}>
               <div className="flex flex-wrap gap-2">
-                {STORY_THEMES.map((theme) => (
-                  <ThemeSwatch
-                    key={theme.id}
-                    theme={theme}
-                    label={t(`story.theme.${theme.id}`)}
-                    selected={options.theme === theme.id}
-                    onSelect={() => update({ theme: theme.id })}
+                {STORY_BACKGROUNDS.map((background) => (
+                  <BackgroundSwatch
+                    key={background}
+                    background={background}
+                    palette={options.palette}
+                    label={t(`story.backgrounds.${background}`)}
+                    selected={options.background === background}
+                    onSelect={() => update({ background })}
                   />
                 ))}
               </div>
@@ -476,40 +504,93 @@ function Toggle({
   );
 }
 
-function ThemeSwatch({
-  theme,
+function SwatchButton({
   label,
   selected,
   onSelect,
+  children,
 }: {
-  theme: StoryTheme;
   label: string;
   selected: boolean;
   onSelect: () => void;
+  children: React.ReactNode;
 }) {
-  const background =
-    typeof theme.background === "string"
-      ? theme.background
-      : `linear-gradient(135deg, ${theme.background[0]}, ${theme.background[1]})`;
   return (
     <button
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
-      className="group flex cursor-pointer flex-col items-center gap-1"
+      className="group flex w-16 cursor-pointer flex-col items-center gap-1"
     >
       <span
         className={cn(
-          "flex h-14 w-10 items-end justify-start rounded-sm border p-1.5 ring-offset-2 transition-shadow",
+          "block h-14 w-10 overflow-hidden rounded-sm border ring-offset-2 transition-shadow",
           selected ? "ring-primary ring-2" : "group-hover:ring-input group-hover:ring-2",
         )}
-        style={{ background }}
       >
-        <span className="h-1.5 w-4 rounded-full" style={{ background: theme.accent }} />
+        {children}
       </span>
-      <span className={cn("text-xs", selected ? "font-semibold" : "text-muted-foreground")}>
+      <span
+        className={cn(
+          "text-center text-xs leading-tight",
+          selected ? "font-semibold" : "text-muted-foreground",
+        )}
+      >
         {label}
       </span>
     </button>
+  );
+}
+
+function PaletteSwatch({
+  palette,
+  ...props
+}: {
+  palette: StoryPalette;
+  label: string;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <SwatchButton {...props}>
+      <span
+        className="flex size-full items-end p-1.5"
+        style={{
+          background: `linear-gradient(135deg, ${palette.ground[0]}, ${palette.ground[1]})`,
+        }}
+      >
+        <span className="h-1.5 w-4 rounded-full" style={{ background: palette.accent }} />
+      </span>
+    </SwatchButton>
+  );
+}
+
+/** Drawn with the story renderer itself, in the current color. */
+function BackgroundSwatch({
+  background,
+  palette,
+  ...props
+}: {
+  background: StoryBackgroundId;
+  palette: StoryPaletteId;
+  label: string;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const ctx = ref.current?.getContext("2d");
+    if (ctx) drawBackgroundSample(ctx, palette, background, SWATCH_WIDTH);
+  }, [background, palette]);
+  return (
+    <SwatchButton {...props}>
+      <canvas
+        ref={ref}
+        width={SWATCH_WIDTH}
+        height={SWATCH_HEIGHT}
+        aria-hidden
+        className="size-full"
+      />
+    </SwatchButton>
   );
 }

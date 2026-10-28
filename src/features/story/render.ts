@@ -1,11 +1,12 @@
 import {
   STORY_HEIGHT as H,
   STORY_WIDTH as W,
-  getTheme,
+  getPalette,
   wrapText,
+  type StoryBackgroundId,
   type StoryLayout,
-  type StoryTheme,
-  type StoryThemeId,
+  type StoryPalette,
+  type StoryPaletteId,
 } from "./options";
 
 /** Everything the story shows, already translated and filtered by the options. */
@@ -57,27 +58,28 @@ export function drawStory(
   ctx: Ctx,
   content: StoryContent,
   layout: StoryLayout,
-  themeId: StoryThemeId,
+  paletteId: StoryPaletteId,
+  background: StoryBackgroundId,
   images: StoryImage[],
 ): void {
-  const theme = getTheme(themeId);
+  const palette = getPalette(paletteId);
   ctx.save();
   ctx.textBaseline = "alphabetic";
   ctx.textAlign = "left";
-  drawBackground(ctx, theme);
+  drawGround(ctx, palette, background, 0);
 
-  if (layout === "cover") drawCover(ctx, content, theme, images[0] ?? null);
-  else if (layout === "card" && images.length > 0) drawCard(ctx, content, theme, images);
-  else drawTextOnly(ctx, content, theme);
+  if (layout === "cover") drawCover(ctx, content, palette, background, images[0] ?? null);
+  else if (layout === "card" && images.length > 0) drawCard(ctx, content, palette, images);
+  else drawTextOnly(ctx, content, palette);
 
-  drawFooter(ctx, content, theme);
+  drawFooter(ctx, content, palette);
   ctx.restore();
 }
 
 /* ---------- layouts ---------- */
 
-function drawCard(ctx: Ctx, content: StoryContent, theme: StoryTheme, images: StoryImage[]) {
-  const top = headBlocks(ctx, content, theme, false);
+function drawCard(ctx: Ctx, content: StoryContent, palette: StoryPalette, images: StoryImage[]) {
+  const top = headBlocks(ctx, content, palette, false);
   // Shrink the lower blocks until the photos get a decent share of the story
   const attempts: [number, number][] = [
     [3, 4],
@@ -88,7 +90,7 @@ function drawCard(ctx: Ctx, content: StoryContent, theme: StoryTheme, images: St
   let bottom: Block[] = [];
   let photoHeight = 0;
   for (const [chipRows, descLines] of attempts) {
-    bottom = tailBlocks(ctx, content, theme, chipRows, descLines);
+    bottom = tailBlocks(ctx, content, palette, chipRows, descLines);
     photoHeight = CONTENT_BOTTOM - SAFE_TOP - stackHeight(top) - stackHeight(bottom) - 2 * 44;
     if (photoHeight >= MIN_PHOTO) break;
   }
@@ -97,46 +99,51 @@ function drawCard(ctx: Ctx, content: StoryContent, theme: StoryTheme, images: St
 
   let y = drawStack(ctx, top, SAFE_TOP);
   y += 44;
-  drawPhotoGrid(ctx, images, theme, PAD, y, W - 2 * PAD, photoHeight);
+  drawPhotoGrid(ctx, images, palette, PAD, y, W - 2 * PAD, photoHeight);
   drawStack(ctx, bottom, CONTENT_BOTTOM - stackHeight(bottom));
 }
 
-function drawCover(ctx: Ctx, content: StoryContent, theme: StoryTheme, image: StoryImage) {
+function drawCover(
+  ctx: Ctx,
+  content: StoryContent,
+  palette: StoryPalette,
+  background: StoryBackgroundId,
+  image: StoryImage,
+) {
   if (image) drawImageCover(ctx, image, 0, 0, W, H);
-  const top = headBlocks(ctx, content, theme, false);
-  let bottom = tailBlocks(ctx, content, theme, 3, 4);
+  const top = headBlocks(ctx, content, palette, false);
+  let bottom = tailBlocks(ctx, content, palette, 3, 4);
   if (stackHeight(top) + stackHeight(bottom) > 1000) {
-    bottom = tailBlocks(ctx, content, theme, 2, 0);
+    bottom = tailBlocks(ctx, content, palette, 2, 0);
   }
   const height = stackHeight(top) + 36 + stackHeight(bottom);
   const panelTop = CONTENT_BOTTOM - height - 72;
 
-  // Fade the photo into the theme ground so text stays legible on any picture
-  const fade = groundStops(theme)[1];
+  // Fade the photo into the palette ground so text stays legible on any picture
+  const fade = palette.ground[1];
   const gradient = ctx.createLinearGradient(0, panelTop - 360, 0, panelTop);
   gradient.addColorStop(0, withAlpha(fade, 0));
   gradient.addColorStop(1, withAlpha(fade, 1));
   ctx.fillStyle = gradient;
   ctx.fillRect(0, panelTop - 360, W, 360);
-  fillGround(ctx, theme, panelTop, H - panelTop);
-  if (theme.pattern) drawPattern(ctx, theme.pattern, panelTop);
+  drawGround(ctx, palette, background, panelTop);
 
   const y = drawStack(ctx, top, panelTop + 36);
   drawStack(ctx, bottom, y + 36);
 }
 
-function drawTextOnly(ctx: Ctx, content: StoryContent, theme: StoryTheme) {
-  const top = headBlocks(ctx, content, theme, true);
-  let bottom = tailBlocks(ctx, content, theme, 4, 9);
+function drawTextOnly(ctx: Ctx, content: StoryContent, palette: StoryPalette) {
+  const top = headBlocks(ctx, content, palette, true);
+  let bottom = tailBlocks(ctx, content, palette, 4, 9);
   const room = CONTENT_BOTTOM - SAFE_TOP - 72;
-  if (stackHeight(top) + stackHeight(bottom) > room) bottom = tailBlocks(ctx, content, theme, 3, 4);
-  if (stackHeight(top) + stackHeight(bottom) > room) bottom = tailBlocks(ctx, content, theme, 2, 0);
+  if (stackHeight(top) + stackHeight(bottom) > room) bottom = tailBlocks(ctx, content, palette, 3, 4);
+  if (stackHeight(top) + stackHeight(bottom) > room) bottom = tailBlocks(ctx, content, palette, 2, 0);
   const total = stackHeight(top) + 72 + stackHeight(bottom);
   const start = Math.max(SAFE_TOP, (SAFE_TOP + CONTENT_BOTTOM) / 2 - total / 2);
 
   let y = drawStack(ctx, top, start);
   y += 36;
-  ctx.fillStyle = theme.accent;
+  ctx.fillStyle = palette.accent;
   ctx.fillRect(PAD, y, 120, 6);
   drawStack(ctx, bottom, y + 36);
 }
@@ -144,7 +151,7 @@ function drawTextOnly(ctx: Ctx, content: StoryContent, theme: StoryTheme) {
 /* ---------- blocks ---------- */
 
 /** Eyebrow, headline and the poster's own note. */
-function headBlocks(ctx: Ctx, content: StoryContent, theme: StoryTheme, large: boolean): Block[] {
+function headBlocks(ctx: Ctx, content: StoryContent, palette: StoryPalette, large: boolean): Block[] {
   const blocks: Block[] = [];
   const width = W - 2 * PAD;
 
@@ -154,7 +161,7 @@ function headBlocks(ctx: Ctx, content: StoryContent, theme: StoryTheme, large: b
       height: 34 + 22,
       draw: (c, top) => {
         c.font = `600 30px ${SANS}`;
-        c.fillStyle = theme.accent;
+        c.fillStyle = palette.accent;
         c.fillText(fitLine(c, eyebrow, width), PAD, top + 30);
       },
     });
@@ -169,7 +176,7 @@ function headBlocks(ctx: Ctx, content: StoryContent, theme: StoryTheme, large: b
       height: lines.length * lineHeight,
       draw: (c, top) => {
         c.font = `400 ${size}px ${SERIF}`;
-        c.fillStyle = theme.ink;
+        c.fillStyle = palette.ink;
         lines.forEach((line, i) => c.fillText(line, PAD, top + size * 0.82 + i * lineHeight));
       },
     });
@@ -190,10 +197,10 @@ function headBlocks(ctx: Ctx, content: StoryContent, theme: StoryTheme, large: b
       height: 28 + lines.length * lineHeight,
       draw: (c, top) => {
         const y = top + 28;
-        c.fillStyle = theme.accent;
+        c.fillStyle = palette.accent;
         c.fillRect(PAD, y + 6, 6, lines.length * lineHeight - 6);
         c.font = `500 ${size}px ${SERIF}`;
-        c.fillStyle = theme.ink;
+        c.fillStyle = palette.ink;
         lines.forEach((line, i) =>
           c.fillText(line, PAD + inset, y + size * 0.85 + i * lineHeight),
         );
@@ -207,7 +214,7 @@ function headBlocks(ctx: Ctx, content: StoryContent, theme: StoryTheme, large: b
 function tailBlocks(
   ctx: Ctx,
   content: StoryContent,
-  theme: StoryTheme,
+  palette: StoryPalette,
   chipRows: number,
   descLines: number,
 ): Block[] {
@@ -221,11 +228,11 @@ function tailBlocks(
       draw: (c, top) => {
         const baseline = top + 112;
         c.font = `500 140px ${SERIF}`;
-        c.fillStyle = theme.accent;
+        c.fillStyle = palette.accent;
         c.fillText(price, PAD, baseline);
         const priceWidth = c.measureText(price).width;
         c.font = `500 42px ${SANS}`;
-        c.fillStyle = theme.muted;
+        c.fillStyle = palette.muted;
         c.fillText(` ${content.perMonth}`, PAD + priceWidth + 6, baseline);
       },
     });
@@ -236,9 +243,9 @@ function tailBlocks(
     blocks.push({
       height: 64,
       draw: (c, top) => {
-        drawPin(c, PAD + 14, top + 22, theme.accent);
+        drawPin(c, PAD + 14, top + 22, palette.accent);
         c.font = `600 40px ${SANS}`;
-        c.fillStyle = theme.ink;
+        c.fillStyle = palette.ink;
         c.fillText(fitLine(c, place, width - 46), PAD + 46, top + 44);
       },
     });
@@ -254,10 +261,10 @@ function tailBlocks(
         rows.forEach((row, r) => {
           const y = top + 18 + r * 78;
           for (const chip of row) {
-            c.fillStyle = theme.chipBg;
+            c.fillStyle = palette.chipBg;
             roundRect(c, PAD + chip.x, y, chip.width, 64, 32);
             c.fill();
-            c.fillStyle = theme.chipInk;
+            c.fillStyle = palette.chipInk;
             c.fillText(chip.label, PAD + chip.x + 26, y + 43);
           }
         });
@@ -272,7 +279,7 @@ function tailBlocks(
       height: 24 + lines.length * 44,
       draw: (c, top) => {
         c.font = `400 32px ${SANS}`;
-        c.fillStyle = theme.muted;
+        c.fillStyle = palette.muted;
         lines.forEach((line, i) => c.fillText(line, PAD, top + 24 + 32 + i * 44));
       },
     });
@@ -286,12 +293,12 @@ function tailBlocks(
         contacts.forEach((contact, i) => {
           const baseline = top + 30 + 42 + i * 60;
           c.font = `500 30px ${SANS}`;
-          c.fillStyle = theme.muted;
+          c.fillStyle = palette.muted;
           const label = `${contact.label}  `;
           c.fillText(label, PAD, baseline);
           const labelWidth = c.measureText(label).width;
           c.font = `600 40px ${SANS}`;
-          c.fillStyle = theme.ink;
+          c.fillStyle = palette.ink;
           c.fillText(fitLine(c, contact.value, width - labelWidth), PAD + labelWidth, baseline);
         });
       },
@@ -335,35 +342,35 @@ function layoutChips(ctx: Ctx, labels: string[], width: number, maxRows: number)
 
 /* ---------- footer: the Lloguer credit every story carries ---------- */
 
-function drawFooter(ctx: Ctx, content: StoryContent, theme: StoryTheme) {
-  ctx.fillStyle = theme.rule;
+function drawFooter(ctx: Ctx, content: StoryContent, palette: StoryPalette) {
+  ctx.fillStyle = palette.rule;
   ctx.fillRect(PAD, FOOTER_TOP, W - 2 * PAD, 2);
 
   const top = FOOTER_TOP + 40;
-  drawLogo(ctx, PAD, top, 80, theme);
+  drawLogo(ctx, PAD, top, 80, palette);
   ctx.font = `600 56px ${LOGO}`;
-  ctx.fillStyle = theme.ink;
+  ctx.fillStyle = palette.ink;
   ctx.fillText("Lloguer", PAD + 104, top + 60);
 
   ctx.textAlign = "right";
   ctx.font = `500 28px ${SANS}`;
-  ctx.fillStyle = theme.muted;
+  ctx.fillStyle = palette.muted;
   ctx.fillText(content.reviewedOn, W - PAD, top + 30);
   ctx.font = `600 32px ${SANS}`;
-  ctx.fillStyle = theme.ink;
+  ctx.fillStyle = palette.ink;
   ctx.fillText(content.host, W - PAD, top + 72);
   ctx.textAlign = "left";
 }
 
 /** Same paths as LogoMark (src/components/logo-mark.tsx), on a 64-unit grid. */
-function drawLogo(ctx: Ctx, x: number, y: number, size: number, theme: StoryTheme) {
+function drawLogo(ctx: Ctx, x: number, y: number, size: number, palette: StoryPalette) {
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(size / 64, size / 64);
-  ctx.fillStyle = theme.logoTile;
+  ctx.fillStyle = palette.logoTile;
   roundRect(ctx, 0, 0, 64, 64, 14);
   ctx.fill();
-  ctx.fillStyle = theme.logoGlyph;
+  ctx.fillStyle = palette.logoGlyph;
   ctx.fill(new Path2D("M19 24 32 10l13 14v9H19Z"));
   roundRect(ctx, 29.5, 32, 5, 24, 1.5);
   ctx.fill();
@@ -371,7 +378,7 @@ function drawLogo(ctx: Ctx, x: number, y: number, size: number, theme: StoryThem
   ctx.fill();
   roundRect(ctx, 34, 46, 6, 4.5, 1);
   ctx.fill();
-  ctx.fillStyle = theme.logoTile;
+  ctx.fillStyle = palette.logoTile;
   ctx.beginPath();
   ctx.arc(32, 25, 4, 0, Math.PI * 2);
   ctx.fill();
@@ -380,74 +387,174 @@ function drawLogo(ctx: Ctx, x: number, y: number, size: number, theme: StoryThem
 
 /* ---------- ground and photos ---------- */
 
-function groundStops(theme: StoryTheme): [string, string] {
-  return typeof theme.background === "string"
-    ? [theme.background, theme.background]
-    : theme.background;
+/**
+ * Background swatch: the top-left corner of a story with this color and
+ * background, scaled so the pattern stays readable at thumbnail size.
+ */
+export function drawBackgroundSample(
+  ctx: Ctx,
+  paletteId: StoryPaletteId,
+  background: StoryBackgroundId,
+  width: number,
+): void {
+  ctx.save();
+  ctx.scale(width / 200, width / 200);
+  // Painted twice: at thumbnail size the faint story pattern would vanish
+  drawGround(ctx, getPalette(paletteId), background, 0, 2);
+  ctx.restore();
 }
 
-function fillGround(ctx: Ctx, theme: StoryTheme, y: number, height: number) {
-  const [from, to] = groundStops(theme);
-  if (from === to) {
-    ctx.fillStyle = from;
-  } else {
-    const gradient = ctx.createLinearGradient(0, 0, W, H);
-    gradient.addColorStop(0, from);
-    gradient.addColorStop(1, to);
-    ctx.fillStyle = gradient;
-  }
-  ctx.fillRect(0, y, W, height);
-}
+/** Gradient ground plus the background pattern, from fromY down. */
+function drawGround(
+  ctx: Ctx,
+  palette: StoryPalette,
+  background: StoryBackgroundId,
+  fromY: number,
+  passes = 1,
+) {
+  const gradient = ctx.createLinearGradient(0, 0, W, H);
+  gradient.addColorStop(0, palette.ground[0]);
+  gradient.addColorStop(1, palette.ground[1]);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, fromY, W, H - fromY);
 
-function drawBackground(ctx: Ctx, theme: StoryTheme) {
-  fillGround(ctx, theme, 0, H);
-  if (theme.pattern) drawPattern(ctx, theme.pattern, 0);
-}
-
-/** A loose street grid, like the map the listings live on. Seeded, so always the same. */
-function drawPattern(ctx: Ctx, color: string, fromY: number) {
-  let seed = 7;
-  const random = () => {
-    seed = (seed * 16807) % 2147483647;
-    return seed / 2147483647;
-  };
+  if (background === "plain") return;
   ctx.save();
   ctx.beginPath();
   ctx.rect(0, fromY, W, H - fromY);
   ctx.clip();
-  ctx.strokeStyle = color;
-  ctx.translate(W / 2, H / 2);
-  ctx.rotate(-0.21);
-  for (const axis of [0, 1]) {
-    let offset = -H;
-    while (offset < H) {
-      offset += 70 + random() * 120;
-      ctx.lineWidth = random() > 0.82 ? 14 : 4;
+  ctx.fillStyle = palette.pattern;
+  ctx.strokeStyle = palette.pattern;
+  for (let i = 0; i < passes; i++) {
+    ctx.save();
+    PATTERNS[background](ctx);
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+/** Same sequence on every draw, so a pattern never jumps while editing. */
+function seeded(seed: number): () => number {
+  let state = seed;
+  return () => {
+    state = (state * 16807) % 2147483647;
+    return state / 2147483647;
+  };
+}
+
+/** Each pattern paints with the current fill and stroke style over the whole story. */
+const PATTERNS: Record<Exclude<StoryBackgroundId, "plain">, (ctx: Ctx) => void> = {
+  /** Paper grain: fine specks. */
+  paper: (ctx) => {
+    const random = seeded(11);
+    for (let i = 0; i < 16000; i++) {
+      const size = random() > 0.9 ? 3 : 2;
+      ctx.fillRect(random() * W, random() * H, size, size);
+    }
+  },
+
+  /** A loose street grid, like the map the listings live on. */
+  map: (ctx) => {
+    const random = seeded(7);
+    ctx.translate(W / 2, H / 2);
+    ctx.rotate(-0.21);
+    for (const axis of [0, 1]) {
+      let offset = -H;
+      while (offset < H) {
+        offset += 70 + random() * 120;
+        ctx.lineWidth = random() > 0.82 ? 14 : 4;
+        ctx.beginPath();
+        if (axis === 0) {
+          ctx.moveTo(-H, offset);
+          ctx.lineTo(H, offset);
+        } else {
+          ctx.moveTo(offset, -H);
+          ctx.lineTo(offset, H);
+        }
+        ctx.stroke();
+      }
+    }
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.arc(-260, -520, 150, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(320, 480, 110, 0, Math.PI * 2);
+    ctx.stroke();
+  },
+
+  /** Halftone dots that grow toward the bottom-right corner. */
+  dots: (ctx) => {
+    const step = 46;
+    for (let row = 0; row * step < H + step; row++) {
+      const shift = row % 2 === 0 ? 0 : step / 2;
+      for (let x = shift; x < W + step; x += step) {
+        const y = row * step;
+        const radius = 2.5 + 8 * ((x + y) / (W + H));
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  },
+
+  /** Rows of gentle waves, for the Mediterranean. */
+  waves: (ctx) => {
+    ctx.lineWidth = 4;
+    for (let row = 0, y = 30; y < H + 40; row++, y += 64) {
       ctx.beginPath();
-      if (axis === 0) {
-        ctx.moveTo(-H, offset);
-        ctx.lineTo(H, offset);
-      } else {
-        ctx.moveTo(offset, -H);
-        ctx.lineTo(offset, H);
+      for (let x = -20; x <= W + 20; x += 12) {
+        const wave = y + 15 * Math.sin((x / 240) * Math.PI * 2 + row * 0.9);
+        if (x === -20) ctx.moveTo(x, wave);
+        else ctx.lineTo(x, wave);
       }
       ctx.stroke();
     }
-  }
-  ctx.lineWidth = 10;
-  ctx.beginPath();
-  ctx.arc(-260, -520, 150, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(320, 480, 110, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.restore();
-}
+  },
+
+  /** Line drawing of Valencian tiles: square, diamond, rosette and corner arcs. */
+  tiles: (ctx) => {
+    const cell = W / 5;
+    // Busier than the other patterns, so a little fainter
+    ctx.globalAlpha = 0.7;
+    ctx.lineWidth = 4;
+    for (let y = 0; y < H; y += cell) {
+      for (let x = 0; x < W; x += cell) {
+        const cx = x + cell / 2;
+        const cy = y + cell / 2;
+        ctx.strokeRect(x, y, cell, cell);
+        ctx.beginPath();
+        ctx.moveTo(cx, y);
+        ctx.lineTo(x + cell, cy);
+        ctx.lineTo(cx, y + cell);
+        ctx.lineTo(x, cy);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, cy, cell * 0.16, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, cy, cell * 0.05, 0, Math.PI * 2);
+        ctx.fill();
+        for (const [px, py, start] of [
+          [x, y, 0],
+          [x + cell, y, Math.PI / 2],
+          [x + cell, y + cell, Math.PI],
+          [x, y + cell, (3 * Math.PI) / 2],
+        ]) {
+          ctx.beginPath();
+          ctx.arc(px, py, cell * 0.22, start, start + Math.PI / 2);
+          ctx.stroke();
+        }
+      }
+    }
+  },
+};
 
 function drawPhotoGrid(
   ctx: Ctx,
   images: StoryImage[],
-  theme: StoryTheme,
+  palette: StoryPalette,
   x: number,
   y: number,
   w: number,
@@ -484,7 +591,7 @@ function drawPhotoGrid(
     if (image) {
       drawImageCover(ctx, image, cx, cy, cw, ch);
     } else {
-      ctx.fillStyle = theme.chipBg;
+      ctx.fillStyle = palette.chipBg;
       ctx.fillRect(cx, cy, cw, ch);
     }
     ctx.restore();

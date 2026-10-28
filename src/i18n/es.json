@@ -434,14 +434,22 @@
     "layoutCard": "Tarjeta",
     "layoutCover": "Foto completa",
     "layoutText": "Solo texto",
+    "color": "Color",
+    "palette": {
+      "horchata": "Horchata",
+      "valencia": "Valencia",
+      "mediterranean": "Mediterráneo",
+      "night": "Noche",
+      "sunset": "Atardecer"
+    },
     "background": "Fondo",
-    "theme": {
+    "backgrounds": {
+      "plain": "Liso",
       "paper": "Papel",
       "map": "Mapa",
-      "orange": "Naranja",
-      "blue": "Azul",
-      "ink": "Noche",
-      "sunset": "Atardecer"
+      "dots": "Puntos",
+      "waves": "Ondas",
+      "tiles": "Azulejo"
     },
     "photos": "Fotos",
     "photosHint": "Elige hasta {max}, en el orden en que quieres verlas. Con foto completa se usa la primera.",

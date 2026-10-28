@@ -13,12 +13,23 @@ export const MAX_NOTE_LENGTH = 140;
 export type StoryLayout = "card" | "cover" | "text";
 export const STORY_LAYOUTS: StoryLayout[] = ["card", "cover", "text"];
 
-export type StoryThemeId = "paper" | "map" | "orange" | "blue" | "ink" | "sunset";
+/** Texture or pattern drawn over the color, independent of it. */
+export type StoryBackgroundId = "plain" | "paper" | "map" | "dots" | "waves" | "tiles";
+export const STORY_BACKGROUNDS: StoryBackgroundId[] = [
+  "plain",
+  "paper",
+  "map",
+  "dots",
+  "waves",
+  "tiles",
+];
 
-export type StoryTheme = {
-  id: StoryThemeId;
-  /** Solid ground, or the gradient stops from top to bottom. */
-  background: string | [string, string];
+export type StoryPaletteId = "horchata" | "valencia" | "mediterranean" | "night" | "sunset";
+
+export type StoryPalette = {
+  id: StoryPaletteId;
+  /** Gradient stops, from the top-left corner to the bottom-right one. */
+  ground: [string, string];
   ink: string;
   muted: string;
   /** Price and highlights. */
@@ -28,65 +39,54 @@ export type StoryTheme = {
   rule: string;
   logoTile: string;
   logoGlyph: string;
-  /** Faint street pattern over the ground. */
-  pattern?: string;
+  /** Translucent ink for the background pattern. */
+  pattern: string;
 };
 
 /** Brand colors from globals.css, kept literal because canvas cannot read CSS vars. */
-export const STORY_THEMES: StoryTheme[] = [
+export const STORY_PALETTES: StoryPalette[] = [
   {
-    id: "paper",
-    background: "#faf7f0",
-    ink: "#1b1a17",
-    muted: "#6b6559",
-    accent: "#d6521d",
-    chipBg: "#f2ede2",
-    chipInk: "#1b1a17",
-    rule: "#e4ddce",
-    logoTile: "#d6521d",
-    logoGlyph: "#ffffff",
-  },
-  {
-    id: "map",
-    background: "#faf7f0",
+    id: "horchata",
+    ground: ["#fbf9f3", "#f0e9da"],
     ink: "#1b1a17",
     muted: "#6b6559",
     accent: "#d6521d",
     chipBg: "#ffffff",
-    chipInk: "#054985",
+    chipInk: "#1b1a17",
     rule: "#e4ddce",
     logoTile: "#d6521d",
     logoGlyph: "#ffffff",
     pattern: "rgba(5, 73, 133, 0.09)",
   },
   {
-    id: "orange",
-    background: "#d6521d",
+    id: "valencia",
+    ground: ["#e2622b", "#c2410c"],
     ink: "#ffffff",
-    muted: "rgba(255, 255, 255, 0.82)",
+    muted: "rgba(255, 255, 255, 0.84)",
     accent: "#ffffff",
     chipBg: "rgba(255, 255, 255, 0.18)",
     chipInk: "#ffffff",
     rule: "rgba(255, 255, 255, 0.35)",
     logoTile: "#ffffff",
     logoGlyph: "#d6521d",
+    pattern: "rgba(255, 255, 255, 0.12)",
   },
   {
-    id: "blue",
-    background: "#054985",
+    id: "mediterranean",
+    ground: ["#0a5fa8", "#04365f"],
     ink: "#ffffff",
-    muted: "rgba(255, 255, 255, 0.78)",
+    muted: "rgba(255, 255, 255, 0.8)",
     accent: "#ffffff",
     chipBg: "rgba(255, 255, 255, 0.14)",
     chipInk: "#ffffff",
     rule: "rgba(255, 255, 255, 0.3)",
     logoTile: "#d6521d",
     logoGlyph: "#ffffff",
-    pattern: "rgba(255, 255, 255, 0.07)",
+    pattern: "rgba(255, 255, 255, 0.09)",
   },
   {
-    id: "ink",
-    background: "#1b1a17",
+    id: "night",
+    ground: ["#2b2924", "#141311"],
     ink: "#faf7f0",
     muted: "rgba(250, 247, 240, 0.7)",
     accent: "#e8673a",
@@ -95,10 +95,11 @@ export const STORY_THEMES: StoryTheme[] = [
     rule: "rgba(250, 247, 240, 0.22)",
     logoTile: "#d6521d",
     logoGlyph: "#ffffff",
+    pattern: "rgba(250, 247, 240, 0.07)",
   },
   {
     id: "sunset",
-    background: ["#d6521d", "#a8325e"],
+    ground: ["#d6521d", "#a8325e"],
     ink: "#ffffff",
     muted: "rgba(255, 255, 255, 0.85)",
     accent: "#ffffff",
@@ -107,11 +108,12 @@ export const STORY_THEMES: StoryTheme[] = [
     rule: "rgba(255, 255, 255, 0.4)",
     logoTile: "#ffffff",
     logoGlyph: "#d6521d",
+    pattern: "rgba(255, 255, 255, 0.12)",
   },
 ];
 
-export function getTheme(id: StoryThemeId): StoryTheme {
-  return STORY_THEMES.find((theme) => theme.id === id) ?? STORY_THEMES[0];
+export function getPalette(id: StoryPaletteId): StoryPalette {
+  return STORY_PALETTES.find((palette) => palette.id === id) ?? STORY_PALETTES[0];
 }
 
 export type StoryFactId =
@@ -129,7 +131,8 @@ export type StoryFact = { id: StoryFactId; label: string };
 
 export type StoryOptions = {
   layout: StoryLayout;
-  theme: StoryThemeId;
+  palette: StoryPaletteId;
+  background: StoryBackgroundId;
   /** Photo paths in the order they were picked. */
   photos: string[];
   headline: string;
@@ -224,7 +227,8 @@ export function defaultStoryOptions(listing: PublicListing, t: TFn): StoryOption
   const place = listing.neighborhood ?? listing.municipality;
   return {
     layout: listing.photos.length > 0 ? "card" : "text",
-    theme: "paper",
+    palette: "horchata",
+    background: "paper",
     photos: listing.photos.slice(0, 1),
     headline: t(
       listing.type === "room" ? "story.defaultHeadlineRoom" : "story.defaultHeadlineFlat",

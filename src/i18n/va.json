@@ -434,14 +434,22 @@
     "layoutCard": "Targeta",
     "layoutCover": "Foto completa",
     "layoutText": "Només text",
+    "color": "Color",
+    "palette": {
+      "horchata": "Orxata",
+      "valencia": "València",
+      "mediterranean": "Mediterrani",
+      "night": "Nit",
+      "sunset": "Posta de sol"
+    },
     "background": "Fons",
-    "theme": {
+    "backgrounds": {
+      "plain": "Llis",
       "paper": "Paper",
       "map": "Mapa",
-      "orange": "Taronja",
-      "blue": "Blau",
-      "ink": "Nit",
-      "sunset": "Posta de sol"
+      "dots": "Punts",
+      "waves": "Ones",
+      "tiles": "Rajola"
     },
     "photos": "Fotos",
     "photosHint": "Tria'n fins a {max}, en l'ordre en què vols veure-les. Amb foto completa s'usa la primera.",
