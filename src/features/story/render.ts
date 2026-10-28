@@ -25,7 +25,7 @@ export type StoryContent = {
 };
 
 /** A photo that failed to load is null and drawn as a plain tile. */
-export type StoryImage = HTMLImageElement | ImageBitmap | null;
+export type StoryImage = HTMLImageElement | HTMLCanvasElement | ImageBitmap | null;
 
 const PAD = 88;
 /** Instagram covers the top and bottom of a story with its own UI. */
@@ -601,7 +601,7 @@ function drawPhotoGrid(
 /** Like CSS object-fit: cover. */
 function drawImageCover(
   ctx: Ctx,
-  image: HTMLImageElement | ImageBitmap,
+  image: HTMLImageElement | HTMLCanvasElement | ImageBitmap,
   x: number,
   y: number,
   w: number,

@@ -35,23 +35,12 @@ import {
   placeLabel,
   togglePhoto,
   typeLabel,
-  type StoryBackgroundId,
   type StoryLayout,
   type StoryOptions,
-  type StoryPalette,
-  type StoryPaletteId,
 } from "../options";
-import {
-  STORY_FONTS,
-  drawBackgroundSample,
-  drawStory,
-  type StoryContent,
-  type StoryImage,
-} from "../render";
-
-/** Background swatches render at 2x their 40x56 CSS size. */
-const SWATCH_WIDTH = 80;
-const SWATCH_HEIGHT = 112;
+import { drawStory, type StoryContent, type StoryImage } from "../render";
+import { BackgroundSwatch, PaletteSwatch } from "./swatches";
+import { useStoryFonts } from "./use-story-fonts";
 
 const LAYOUT_KEYS: Record<StoryLayout, string> = {
   card: "story.layoutCard",
@@ -91,7 +80,7 @@ export function StoryDialog({
   const requestedRef = useRef(new Set<string>());
   const [options, setOptions] = useState<StoryOptions>(() => defaultStoryOptions(listing, t));
   const [images, setImages] = useState<Record<string, HTMLImageElement | null>>({});
-  const [fontsReady, setFontsReady] = useState(false);
+  const fontsReady = useStoryFonts(open);
   const [fileReady, setFileReady] = useState(false);
   const [canShareFiles, setCanShareFiles] = useState(false);
   const [origin, setOrigin] = useState("");
@@ -112,13 +101,6 @@ export function StoryDialog({
       setCanShareFiles(false);
     }
   }, []);
-
-  useEffect(() => {
-    if (!open || fontsReady) return;
-    Promise.all(STORY_FONTS.map((font) => document.fonts.load(font)))
-      .catch(() => undefined)
-      .finally(() => setFontsReady(true));
-  }, [open, fontsReady]);
 
   useEffect(() => {
     if (!open) return;
@@ -501,96 +483,5 @@ function Toggle({
       </Label>
       <Switch id={id} checked={checked} onCheckedChange={onChange} />
     </div>
-  );
-}
-
-function SwatchButton({
-  label,
-  selected,
-  onSelect,
-  children,
-}: {
-  label: string;
-  selected: boolean;
-  onSelect: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={selected}
-      onClick={onSelect}
-      className="group flex w-16 cursor-pointer flex-col items-center gap-1"
-    >
-      <span
-        className={cn(
-          "block h-14 w-10 overflow-hidden rounded-sm border ring-offset-2 transition-shadow",
-          selected ? "ring-primary ring-2" : "group-hover:ring-input group-hover:ring-2",
-        )}
-      >
-        {children}
-      </span>
-      <span
-        className={cn(
-          "text-center text-xs leading-tight",
-          selected ? "font-semibold" : "text-muted-foreground",
-        )}
-      >
-        {label}
-      </span>
-    </button>
-  );
-}
-
-function PaletteSwatch({
-  palette,
-  ...props
-}: {
-  palette: StoryPalette;
-  label: string;
-  selected: boolean;
-  onSelect: () => void;
-}) {
-  return (
-    <SwatchButton {...props}>
-      <span
-        className="flex size-full items-end p-1.5"
-        style={{
-          background: `linear-gradient(135deg, ${palette.ground[0]}, ${palette.ground[1]})`,
-        }}
-      >
-        <span className="h-1.5 w-4 rounded-full" style={{ background: palette.accent }} />
-      </span>
-    </SwatchButton>
-  );
-}
-
-/** Drawn with the story renderer itself, in the current color. */
-function BackgroundSwatch({
-  background,
-  palette,
-  ...props
-}: {
-  background: StoryBackgroundId;
-  palette: StoryPaletteId;
-  label: string;
-  selected: boolean;
-  onSelect: () => void;
-}) {
-  const ref = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    const ctx = ref.current?.getContext("2d");
-    if (ctx) drawBackgroundSample(ctx, palette, background, SWATCH_WIDTH);
-  }, [background, palette]);
-  return (
-    <SwatchButton {...props}>
-      <canvas
-        ref={ref}
-        width={SWATCH_WIDTH}
-        height={SWATCH_HEIGHT}
-        aria-hidden
-        className="size-full"
-      />
-    </SwatchButton>
   );
 }

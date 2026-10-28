@@ -186,7 +186,25 @@
       "Subscriptions"
     ],
     "finalTitle": "Leaving your room?",
-    "finalBody": "Don't let it get lost in a 24-hour story. Post it on Lloguer, free and without signing up."
+    "finalBody": "Don't let it get lost in a 24-hour story. Post it on Lloguer, free and without signing up.",
+    "storyTitle": "Share it anywhere",
+    "storyLead": "Post on Lloguer and get a story ready to share.",
+    "storyBody": "Your listing lives here, but you can keep spreading it on your socials. Every published listing turns into a vertical image for your Instagram stories or WhatsApp status, with your photos and the details you choose.",
+    "storyPoints": [
+      "Your photos, the price, the neighborhood and whatever you want to highlight, with your own message.",
+      "Five colors and six backgrounds, with a live preview.",
+      "Anyone can make one from the listing, so your friends can help spread the word too."
+    ],
+    "storyTry": "Try it here",
+    "storyDemoNote2": "This is just a demo: nothing is published or saved. You get the real story, ready to download and share, when you publish your listing.",
+    "storyDemoHeadline": "Room available in Russafa",
+    "storyDemoPlace": "Russafa, València",
+    "storyDemoNote": "Looking for a flatmate from January!",
+    "storyDemoPriceLabel": "Price (€/month)",
+    "storyDemoFooter": "Example made on",
+    "storyDemoUsePhoto": "Try with my photo",
+    "storyDemoClearPhoto": "Remove photo",
+    "storyDemoPrivacy": "Your photo never leaves your device."
   },
   "home": {
     "emptyTitle": "Nothing here",

@@ -186,7 +186,25 @@
       "Cuotas"
     ],
     "finalTitle": "¿Dejas tu habitación?",
-    "finalBody": "Que no se pierda en una story de 24 horas. Publícala en Lloguer, gratis y sin registro."
+    "finalBody": "Que no se pierda en una story de 24 horas. Publícala en Lloguer, gratis y sin registro.",
+    "storyTitle": "Compártelo donde quieras",
+    "storyLead": "Publica en Lloguer y llévate una story lista para compartir.",
+    "storyBody": "Tu anuncio vive aquí, pero puedes seguir moviéndolo por tus redes. Cada anuncio publicado se convierte en una imagen vertical para tus stories de Instagram o tu estado de WhatsApp, con tus fotos y los datos que elijas.",
+    "storyPoints": [
+      "Tus fotos, el precio, el barrio y lo que quieras destacar, con tu propio mensaje.",
+      "Cinco colores y seis fondos, con la vista previa al momento.",
+      "Cualquiera puede crearla desde el anuncio, así que tus amigos también te ayudan a difundirlo."
+    ],
+    "storyTry": "Pruébalo aquí",
+    "storyDemoNote2": "Esto es solo una prueba: no se publica ni se guarda nada. La story de verdad, lista para descargar y compartir, la tienes cuando publicas tu anuncio.",
+    "storyDemoHeadline": "Habitación libre en Russafa",
+    "storyDemoPlace": "Russafa, València",
+    "storyDemoNote": "¡Buscamos compi para enero!",
+    "storyDemoPriceLabel": "Precio (€/mes)",
+    "storyDemoFooter": "Ejemplo creado en",
+    "storyDemoUsePhoto": "Probar con mi foto",
+    "storyDemoClearPhoto": "Quitar foto",
+    "storyDemoPrivacy": "Tu foto no sale de tu dispositivo."
   },
   "home": {
     "emptyTitle": "No hay nada aquí",

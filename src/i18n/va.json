@@ -186,7 +186,25 @@
       "Quotes"
     ],
     "finalTitle": "Deixes la teua habitació?",
-    "finalBody": "Que no es perda en una story de 24 hores. Publica-la a Lloguer, gratis i sense registre."
+    "finalBody": "Que no es perda en una story de 24 hores. Publica-la a Lloguer, gratis i sense registre.",
+    "storyTitle": "Comparteix-lo on vulgues",
+    "storyLead": "Publica a Lloguer i emporta't una story preparada per a compartir.",
+    "storyBody": "El teu anunci viu ací, però pots continuar movent-lo per les teues xarxes. Cada anunci publicat es converteix en una imatge vertical per a les teues stories d'Instagram o el teu estat de WhatsApp, amb les teues fotos i les dades que tries.",
+    "storyPoints": [
+      "Les teues fotos, el preu, el barri i el que vulgues destacar, amb el teu propi missatge.",
+      "Cinc colors i sis fons, amb la vista prèvia al moment.",
+      "Qualsevol pot crear-la des de l'anunci, així que els teus amics també t'ajuden a difondre'l."
+    ],
+    "storyTry": "Prova-ho ací",
+    "storyDemoNote2": "Açò és només una prova: no es publica ni es guarda res. La story de veritat, preparada per a descarregar i compartir, la tens quan publiques el teu anunci.",
+    "storyDemoHeadline": "Habitació lliure a Russafa",
+    "storyDemoPlace": "Russafa, València",
+    "storyDemoNote": "Busquem company per a gener!",
+    "storyDemoPriceLabel": "Preu (€/mes)",
+    "storyDemoFooter": "Exemple creat a",
+    "storyDemoUsePhoto": "Prova amb la meua foto",
+    "storyDemoClearPhoto": "Lleva la foto",
+    "storyDemoPrivacy": "La teua foto no ix del teu dispositiu."
   },
   "home": {
     "emptyTitle": "No hi ha res ací",
