@@ -20,6 +20,7 @@ import { AdMarquee } from "@/components/landing/ad-marquee";
 import { LandingMapDemo } from "@/components/landing/map-demo";
 import { RevealObserver } from "@/components/landing/reveal-observer";
 import { RotatingTitle } from "@/components/landing/rotating-title";
+import { StoryDemo } from "@/components/landing/story-demo";
 import {
   CountdownVisual,
   FreeVisual,
@@ -426,6 +427,48 @@ export default async function LandingPage({
         </div>
       </section>
 
+      <section className="bg-secondary/40 border-b px-4 py-16 sm:py-24">
+        <div className="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <div data-reveal="">
+              <SectionEyebrow index={4}>{l.storyTitle}</SectionEyebrow>
+            </div>
+            <h2
+              className="font-display mt-6 text-3xl leading-[1.15] tracking-[-0.02em] sm:text-[2.6rem]"
+              data-reveal=""
+              style={delay(80)}
+            >
+              {l.storyLead}
+            </h2>
+            <p
+              className="text-muted-foreground mt-6 text-lg leading-relaxed"
+              data-reveal=""
+              style={delay(140)}
+            >
+              {l.storyBody}
+            </p>
+            <ul className="mt-8 grid gap-3.5">
+              {l.storyPoints.map((point, i) => (
+                <li
+                  key={point}
+                  className="flex gap-3 leading-relaxed"
+                  data-reveal=""
+                  style={delay(200 + i * 80)}
+                >
+                  <span className="bg-brand mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full text-white">
+                    <Check className="size-3" aria-hidden />
+                  </span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div data-reveal="" style={delay(120)}>
+            <StoryDemo locale={locale} />
+          </div>
+        </div>
+      </section>
+
       <section className="bg-brand relative overflow-hidden px-4 py-16 text-white sm:py-24">
         <div className="dot-grid-light absolute inset-0" aria-hidden />
         <div
@@ -461,7 +504,7 @@ export default async function LandingPage({
 
       <section className="px-4 py-14">
         <div className="mx-auto w-full max-w-[1120px]" data-reveal="">
-          <SectionEyebrow index={4}>{l.partnersTitle}</SectionEyebrow>
+          <SectionEyebrow index={5}>{l.partnersTitle}</SectionEyebrow>
           <p className="text-muted-foreground mt-4 max-w-2xl leading-relaxed">
             {l.partnersBody}
           </p>

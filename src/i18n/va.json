@@ -98,7 +98,8 @@
     "howPostSteps": [
       "Marca al mapa on és i afegeix el preu, unes fotos i com contactar-te.",
       "El revisem a mà abans de publicar-lo. Et arriba un enllaç privat al correu.",
-      "Es veu durant {days} dies. Si continua lliure, el renoves amb el teu enllaç; si no, desapareix sol."
+      "Es veu durant {days} dies. Si continua lliure, el renoves amb el teu enllaç; si no, desapareix sol.",
+      "Comparteix-lo també a les teues stories o el teu estat de WhatsApp: et preparem una imatge amb les teues fotos i les dades que tries."
     ],
     "howSearchTitle": "Si busques habitació",
     "howSearchSteps": [
@@ -185,7 +186,19 @@
       "Quotes"
     ],
     "finalTitle": "Deixes la teua habitació?",
-    "finalBody": "Que no es perda en una story de 24 hores. Publica-la a Lloguer, gratis i sense registre."
+    "finalBody": "Que no es perda en una story de 24 hores. Publica-la a Lloguer, gratis i sense registre.",
+    "storyTitle": "Comparteix-lo on vulgues",
+    "storyLead": "Publica a Lloguer i emporta't una story preparada per a compartir.",
+    "storyBody": "El teu anunci viu ací, però pots continuar movent-lo per les teues xarxes. Cada anunci publicat es converteix en una imatge vertical per a les teues stories d'Instagram o el teu estat de WhatsApp, amb les teues fotos i les dades que tries.",
+    "storyPoints": [
+      "Les teues fotos, el preu, el barri i el que vulgues destacar, amb el teu propi missatge.",
+      "En format vertical, perfecta per a les teues stories d'Instagram o el teu estat de WhatsApp.",
+      "Preparada en un minut: tries l'estil i la veus al moment."
+    ],
+    "storyDemoNote": "Busquem company per a gener!",
+    "storyCta": "Crea una story de prova",
+    "storyDemoHood": "Russafa",
+    "storyDemoDescription": "Habitació individual amb molta llum en un pis compartit, al costat del mercat. Som dos companys tranquils que treballen i estudien."
   },
   "home": {
     "emptyTitle": "No hi ha res ací",
@@ -317,7 +330,12 @@
     "stepSubmit": "Revisió i enviament",
     "legalLink": "l'avís legal i la privacitat",
     "internalEmail": "El teu correu privat",
-    "internalEmailHint": "No es publica i pot ser diferent del de contacte. T'enviem ací l'enllaç privat per editar, desactivar o esborrar el teu anunci."
+    "internalEmailHint": "No es publica i pot ser diferent del de contacte. T'enviem ací l'enllaç privat per editar, desactivar o esborrar el teu anunci.",
+    "draftTitle": "Hem començat el teu anunci amb la teua prova",
+    "draftBody": "Ja tens el preu i el text. Revisa'ls i completa la resta: ubicació, detalls i contacte.",
+    "draftAddPhotos": "Afig les meues {count} fotos de la prova",
+    "draftAddPhotosOne": "Afig la meua foto de la prova",
+    "draftDiscard": "Comença de zero"
   },
   "auth": {
     "loginTitle": "Inicia sessió",
@@ -420,5 +438,123 @@
     "madeIn": "Fet a la Terreta per",
     "contactEmail": "valencia.globalshapers@gmail.com",
     "membershipNote": "Global Shapers València és un hub independent i de voluntariat de la Global Shapers Community, una iniciativa del Fòrum Econòmic Mundial. No és una entitat legal ni financerament afiliada al Fòrum Econòmic Mundial."
+  },
+  "story": {
+    "open": "Crear story",
+    "manageCta": "Crear story per compartir",
+    "promoTitle": "Coneixes algú que el busque?",
+    "promoBody": "Crea una imatge vertical amb aquest anunci, les teues fotos i les dades que tries, preparada per a les teues stories d'Instagram o el teu estat de WhatsApp.",
+    "title": "Crea una story",
+    "subtitle": "Tria què mostrar i com es veu. La vista prèvia s'actualitza al moment.",
+    "previewLabel": "Vista prèvia de la story",
+    "layout": "Disseny",
+    "layoutCard": "Targeta",
+    "layoutCover": "Foto completa",
+    "layoutText": "Només text",
+    "color": "Color",
+    "palette": {
+      "horchata": "Orxata",
+      "valencia": "València",
+      "mediterranean": "Mediterrani",
+      "night": "Nit",
+      "sunset": "Posta de sol"
+    },
+    "background": "Fons",
+    "backgrounds": {
+      "plain": "Llis",
+      "paper": "Paper",
+      "map": "Mapa",
+      "dots": "Punts",
+      "waves": "Ones",
+      "tiles": "Rajola"
+    },
+    "photos": "Fotos",
+    "photosHint": "Tria'n fins a {max}, en l'ordre en què vols veure-les. Amb foto completa s'usa la primera.",
+    "photoLabel": "Foto {n}",
+    "text": "Text",
+    "headline": "Titular",
+    "note": "Missatge personalitzat",
+    "notePlaceholder": "Ex.: Busquem company tranquil per a gener!",
+    "show": "Què mostrar",
+    "showType": "Tipus d'habitatge",
+    "showPrice": "Preu",
+    "showLocation": "Barri i ciutat",
+    "showDescription": "Extracte de la descripció",
+    "details": "Detalls",
+    "contact": "Contacte",
+    "contactHint": "Perquè t'escriguen directament des de la story.",
+    "emailLabel": "Correu",
+    "reviewedOn": "Anunci revisat a",
+    "defaultHeadlineRoom": "Habitació lliure a {place}",
+    "defaultHeadlineFlat": "Pis de lloguer a {place}",
+    "download": "Descarrega la imatge",
+    "share": "Comparteix",
+    "copyLink": "Copia l'enllaç",
+    "linkCopied": "Enllaç copiat. Pots enganxar-lo en un adhesiu d'enllaç d'Instagram.",
+    "copyFailed": "No s'ha pogut copiar l'enllaç.",
+    "demoFooter": "Exemple creat a",
+    "demoPrice": "Preu (€/mes)",
+    "demoUsePhoto": "Prova amb la meua foto",
+    "demoPrivacy": "La teua foto no ix del teu dispositiu.",
+    "shuffle": "Sorprén-me",
+    "shuffleHint": "Prova un disseny a l'atzar.",
+    "shuffleDemoHint": "Un altre anunci d'exemple i un altre disseny, a l'atzar.",
+    "demoStart": "Comença el meu anunci amb aquestes dades",
+    "demoPresets": [
+      {
+        "headline": "Habitació lliure a Russafa",
+        "note": "Busquem company per a gener!",
+        "price": 380,
+        "place": "Russafa, València"
+      },
+      {
+        "headline": "Deixe la meua habitació a Benimaclet",
+        "note": "Me'n vaig d'Erasmus i busque algú simpàtic",
+        "price": 320,
+        "place": "Benimaclet, València"
+      },
+      {
+        "headline": "Habitació amb balcó al Cabanyal",
+        "note": "A cinc minuts de la platja 🌊",
+        "price": 350,
+        "place": "El Cabanyal, València"
+      },
+      {
+        "headline": "Pis d'estudiants a Blasco Ibáñez",
+        "note": "Busquem la quarta companya del pis",
+        "price": 300,
+        "place": "Ciutat Universitària, València"
+      },
+      {
+        "headline": "Habitació doble a Campanar",
+        "note": "Ideal per a parelles, amb bany propi",
+        "price": 450,
+        "place": "Campanar, València"
+      },
+      {
+        "headline": "Hab. lluminosa prop de la UPV",
+        "note": "Som tres, tranquils i endreçats",
+        "price": 330,
+        "place": "Algirós, València"
+      },
+      {
+        "headline": "Habitació al centre d'Alacant",
+        "note": "Disponible ja mateix, escriu-me",
+        "price": 340,
+        "place": "Centre, Alacant"
+      },
+      {
+        "headline": "Busque company a Gràcia",
+        "note": "Pis amb terrassa i molt bon rotllo",
+        "price": 520,
+        "place": "Gràcia, Barcelona"
+      },
+      {
+        "headline": "Habitació a Lavapiés",
+        "note": "Per al curs que ve, despeses incloses",
+        "price": 480,
+        "place": "Lavapiés, Madrid"
+      }
+    ]
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Bath,
@@ -13,6 +13,7 @@ import {
   Home,
   PawPrint,
   Receipt,
+  Sparkles,
   User,
   Users,
   Wallet,
@@ -24,6 +25,7 @@ import { useI18n } from "@/i18n/client";
 import { formatDate } from "@/lib/utils";
 import type { PublicListing } from "@/lib/types/database.types";
 import { ListingMiniMap } from "@/features/map/components/listing-mini-map";
+import { StoryDialog } from "@/features/story/components/story-dialog";
 import { StatusBadge } from "./status-badge";
 import { photoUrl } from "../photos";
 
@@ -52,6 +54,14 @@ export function ListingDetail({
     fetch(`/api/listings/${listing.id}/view`, { method: "POST" }).catch(() => {});
   }, [listing.id, isPreview]);
 
+  // The manage page links here with ?story to open the generator straight away
+  const [storyOpen, setStoryOpen] = useState(false);
+  useEffect(() => {
+    if (!isPreview && new URLSearchParams(window.location.search).has("story")) {
+      setStoryOpen(true);
+    }
+  }, [isPreview]);
+
   const whatsappDigits = listing.contact_whatsapp?.replace(/[^0-9]/g, "");
   const today = new Date().toISOString().slice(0, 10);
 
@@ -61,7 +71,14 @@ export function ListingDetail({
         <Button asChild variant="ghost" size="sm">
           <Link href={`/${locale}/map`}>← {t("common.back")}</Link>
         </Button>
-        {isPreview ? <StatusBadge status={listing.status} /> : null}
+        {isPreview ? (
+          <StatusBadge status={listing.status} />
+        ) : (
+          <Button variant="outline" size="sm" onClick={() => setStoryOpen(true)}>
+            <Sparkles />
+            {t("story.open")}
+          </Button>
+        )}
       </div>
 
       {/* Gallery */}
@@ -194,9 +211,26 @@ export function ListingDetail({
         ) : null}
       </div>
 
+      {!isPreview ? (
+        <div className="bg-card mt-6 flex flex-col gap-3 rounded-md border p-4 sm:flex-row sm:items-center">
+          <div className="flex-1">
+            <h2 className="font-semibold">{t("story.promoTitle")}</h2>
+            <p className="text-muted-foreground mt-1 text-sm">{t("story.promoBody")}</p>
+          </div>
+          <Button variant="brand" onClick={() => setStoryOpen(true)}>
+            <Sparkles />
+            {t("story.open")}
+          </Button>
+        </div>
+      ) : null}
+
       <div className="mt-6">
         <ListingMiniMap lat={Number(listing.public_lat)} lng={Number(listing.public_lng)} />
       </div>
+
+      {!isPreview ? (
+        <StoryDialog listing={listing} open={storyOpen} onOpenChange={setStoryOpen} />
+      ) : null}
     </main>
   );
 }

@@ -98,7 +98,8 @@
     "howPostSteps": [
       "Drop a pin where it is and add the price, a few photos and how to reach you.",
       "We review it by hand before it goes live. You get a private link by email.",
-      "It stays up for {days} days. Still free? Renew it with your link. If not, it disappears by itself."
+      "It stays up for {days} days. Still free? Renew it with your link. If not, it disappears by itself.",
+      "Share it in your stories or WhatsApp status too: we make you an image with your photos and the details you choose."
     ],
     "howSearchTitle": "If you're looking for a room",
     "howSearchSteps": [
@@ -185,7 +186,19 @@
       "Subscriptions"
     ],
     "finalTitle": "Leaving your room?",
-    "finalBody": "Don't let it get lost in a 24-hour story. Post it on Lloguer, free and without signing up."
+    "finalBody": "Don't let it get lost in a 24-hour story. Post it on Lloguer, free and without signing up.",
+    "storyTitle": "Share it anywhere",
+    "storyLead": "Post on Lloguer and get a story ready to share.",
+    "storyBody": "Your listing lives here, but you can keep spreading it on your socials. Every published listing turns into a vertical image for your Instagram stories or WhatsApp status, with your photos and the details you choose.",
+    "storyPoints": [
+      "Your photos, the price, the neighborhood and whatever you want to highlight, with your own message.",
+      "Vertical format, perfect for your Instagram stories or WhatsApp status.",
+      "Ready in a minute: pick a style and see it right away."
+    ],
+    "storyDemoNote": "Looking for a flatmate from January!",
+    "storyCta": "Create a sample story",
+    "storyDemoHood": "Russafa",
+    "storyDemoDescription": "Bright single room in a shared flat next to the market. We are two easygoing flatmates who work and study."
   },
   "home": {
     "emptyTitle": "Nothing here",
@@ -317,7 +330,12 @@
     "stepSubmit": "Review and submit",
     "legalLink": "the legal notice and privacy policy",
     "internalEmail": "Your private email",
-    "internalEmailHint": "It is not published and can differ from the contact email. We send the private link to edit, deactivate or delete your listing here."
+    "internalEmailHint": "It is not published and can differ from the contact email. We send the private link to edit, deactivate or delete your listing here.",
+    "draftTitle": "We started your listing from your demo",
+    "draftBody": "The price and text are already in. Check them and fill in the rest: location, details and contact.",
+    "draftAddPhotos": "Add my {count} photos from the demo",
+    "draftAddPhotosOne": "Add my photo from the demo",
+    "draftDiscard": "Start from scratch"
   },
   "auth": {
     "loginTitle": "Sign in",
@@ -420,5 +438,123 @@
     "madeIn": "Made in La Terreta by",
     "contactEmail": "valencia.globalshapers@gmail.com",
     "membershipNote": "Global Shapers Valencia is an independent, volunteer-led hub of the Global Shapers Community, a World Economic Forum initiative. It is not a legal or financial affiliate of the World Economic Forum."
+  },
+  "story": {
+    "open": "Create story",
+    "manageCta": "Create a story to share",
+    "promoTitle": "Know someone who is looking?",
+    "promoBody": "Make a vertical image of this listing, with its photos and the details you choose, ready for your Instagram stories or WhatsApp status.",
+    "title": "Create a story",
+    "subtitle": "Choose what to show and how it looks. The preview updates as you go.",
+    "previewLabel": "Story preview",
+    "layout": "Layout",
+    "layoutCard": "Card",
+    "layoutCover": "Full photo",
+    "layoutText": "Text only",
+    "color": "Color",
+    "palette": {
+      "horchata": "Horchata",
+      "valencia": "Valencia",
+      "mediterranean": "Mediterranean",
+      "night": "Night",
+      "sunset": "Sunset"
+    },
+    "background": "Background",
+    "backgrounds": {
+      "plain": "Plain",
+      "paper": "Paper",
+      "map": "Map",
+      "dots": "Dots",
+      "waves": "Waves",
+      "tiles": "Tiles"
+    },
+    "photos": "Photos",
+    "photosHint": "Pick up to {max}, in the order you want them. Full photo uses the first one.",
+    "photoLabel": "Photo {n}",
+    "text": "Text",
+    "headline": "Headline",
+    "note": "Custom message",
+    "notePlaceholder": "E.g. Looking for an easygoing flatmate from January!",
+    "show": "What to show",
+    "showType": "Type of home",
+    "showPrice": "Price",
+    "showLocation": "Neighborhood and city",
+    "showDescription": "Description excerpt",
+    "details": "Details",
+    "contact": "Contact",
+    "contactHint": "So people can reach you straight from the story.",
+    "emailLabel": "Email",
+    "reviewedOn": "Listing reviewed on",
+    "defaultHeadlineRoom": "Room available in {place}",
+    "defaultHeadlineFlat": "Flat for rent in {place}",
+    "download": "Download image",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied. You can paste it into an Instagram link sticker.",
+    "copyFailed": "Could not copy the link.",
+    "demoFooter": "Example made on",
+    "demoPrice": "Price (€/month)",
+    "demoUsePhoto": "Try with my photo",
+    "demoPrivacy": "Your photo never leaves your device.",
+    "shuffle": "Surprise me",
+    "shuffleHint": "Try a random design.",
+    "shuffleDemoHint": "Another sample ad and design, at random.",
+    "demoStart": "Start my listing with these details",
+    "demoPresets": [
+      {
+        "headline": "Room available in Russafa",
+        "note": "Looking for a flatmate from January!",
+        "price": 380,
+        "place": "Russafa, València"
+      },
+      {
+        "headline": "Leaving my room in Benimaclet",
+        "note": "Off on Erasmus, looking for someone nice",
+        "price": 320,
+        "place": "Benimaclet, València"
+      },
+      {
+        "headline": "Room with a balcony in El Cabanyal",
+        "note": "Five minutes from the beach 🌊",
+        "price": 350,
+        "place": "El Cabanyal, València"
+      },
+      {
+        "headline": "Student flat on Blasco Ibáñez",
+        "note": "Looking for our fourth flatmate",
+        "price": 300,
+        "place": "Ciutat Universitària, València"
+      },
+      {
+        "headline": "Double room in Campanar",
+        "note": "Great for couples, private bathroom",
+        "price": 450,
+        "place": "Campanar, València"
+      },
+      {
+        "headline": "Bright room near the UPV",
+        "note": "We are three, quiet and tidy",
+        "price": 330,
+        "place": "Algirós, València"
+      },
+      {
+        "headline": "Room in central Alicante",
+        "note": "Available right now, message me",
+        "price": 340,
+        "place": "Centro, Alacant"
+      },
+      {
+        "headline": "Looking for a flatmate in Gràcia",
+        "note": "Flat with a terrace and great vibes",
+        "price": 520,
+        "place": "Gràcia, Barcelona"
+      },
+      {
+        "headline": "Room in Lavapiés",
+        "note": "For next academic year, bills included",
+        "price": 480,
+        "place": "Lavapiés, Madrid"
+      }
+    ]
   }
 }

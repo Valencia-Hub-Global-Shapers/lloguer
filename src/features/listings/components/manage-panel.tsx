@@ -101,6 +101,11 @@ export function ManagePanel({
           </Button>
         ) : null}
         {status === "approved" ? (
+          <Button asChild variant="brand" size="sm">
+            <Link href={`/${locale}/listing/${id}?story`}>{t("story.manageCta")}</Link>
+          </Button>
+        ) : null}
+        {status === "approved" ? (
           <Button variant="outline" size="sm" onClick={() => setConfirming("deactivate")}>
             {t("listing.deactivate")}
           </Button>
