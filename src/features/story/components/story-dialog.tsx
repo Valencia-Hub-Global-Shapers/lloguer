@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, Download, Link2, Share2 } from "lucide-react";
+import { Check, Download, ImagePlus, Link2, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,17 +48,28 @@ const LAYOUT_KEYS: Record<StoryLayout, string> = {
   text: "story.layoutText",
 };
 
-/** Loads a public listing photo for canvas use; null when it cannot be read. */
-function loadPhoto(path: string): Promise<HTMLImageElement | null> {
+/** Loads a photo for canvas use; null when it cannot be read. */
+function loadPhoto(src: string): Promise<HTMLImageElement | null> {
   return new Promise((resolve) => {
     const image = new Image();
     // Without CORS the canvas would be tainted and could not be exported
     image.crossOrigin = "anonymous";
     image.onload = () => resolve(image);
     image.onerror = () => resolve(null);
-    image.src = photoUrl(path);
+    image.src = src;
   });
 }
+
+/**
+ * Try-it mode for the landing page: the listing is a sample, price and place
+ * are editable, visitors can add a local photo, and there is no export.
+ */
+export type StoryDemo = {
+  /** Shown where the share and download buttons would be. */
+  footer: React.ReactNode;
+  /** Registers a local photo and returns the path to use for it in listing.photos. */
+  onAddPhoto: (file: File) => string;
+};
 
 /**
  * Story generator: a vertical image of a public listing to share in Instagram
@@ -69,16 +80,29 @@ export function StoryDialog({
   listing,
   open,
   onOpenChange,
+  resolvePhoto = photoUrl,
+  initialOptions,
+  demo,
 }: {
   listing: PublicListing;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Turns a listing photo path into a URL; Storage by default. */
+  resolvePhoto?: (path: string) => string;
+  initialOptions?: Partial<StoryOptions>;
+  demo?: StoryDemo;
 }) {
   const { locale, t, plural } = useI18n();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileRef = useRef<File | null>(null);
   const requestedRef = useRef(new Set<string>());
-  const [options, setOptions] = useState<StoryOptions>(() => defaultStoryOptions(listing, t));
+  const photoInputRef = useRef<HTMLInputElement>(null);
+  const [options, setOptions] = useState<StoryOptions>(() => ({
+    ...defaultStoryOptions(listing, t),
+    ...initialOptions,
+  }));
+  const [demoPrice, setDemoPrice] = useState(String(listing.price));
+  const [demoPlace, setDemoPlace] = useState(() => placeLabel(listing));
   const [images, setImages] = useState<Record<string, HTMLImageElement | null>>({});
   const fontsReady = useStoryFonts(open);
   const [fileReady, setFileReady] = useState(false);
@@ -107,9 +131,11 @@ export function StoryDialog({
     for (const path of listing.photos) {
       if (requestedRef.current.has(path)) continue;
       requestedRef.current.add(path);
-      void loadPhoto(path).then((image) => setImages((prev) => ({ ...prev, [path]: image })));
+      void loadPhoto(resolvePhoto(path)).then((image) =>
+        setImages((prev) => ({ ...prev, [path]: image })),
+      );
     }
-  }, [open, listing.photos]);
+  }, [open, listing.photos, resolvePhoto]);
 
   const content = useMemo<StoryContent>(() => {
     const contacts: StoryContent["contacts"] = [];
@@ -123,16 +149,17 @@ export function StoryDialog({
       eyebrow: options.showType ? typeLabel(listing, t) : null,
       headline: options.headline,
       note: options.note,
-      price: options.showPrice ? String(listing.price) : null,
+      price: !options.showPrice ? null : demo ? demoPrice || null : String(listing.price),
       perMonth: t("listing.perMonth"),
-      place: options.showLocation ? placeLabel(listing) : null,
+      place: !options.showLocation ? null : demo ? demoPlace.trim() || null : placeLabel(listing),
       facts: facts.filter((fact) => options.facts.includes(fact.id)).map((fact) => fact.label),
       description: options.showDescription ? listing.description : null,
       contacts,
-      reviewedOn: t("story.reviewedOn"),
+      // A demo is not a reviewed listing, so it must not claim to be one
+      reviewedOn: demo ? t("story.demoFooter") : t("story.reviewedOn"),
       host: origin ? new URL(origin).host : "",
     };
-  }, [options, listing, facts, t, origin]);
+  }, [options, listing, facts, t, origin, demo, demoPrice, demoPlace]);
 
   const drawnPhotos = photosForLayout(options);
   const photosLoaded = drawnPhotos.every((path) => path in images);
@@ -144,6 +171,7 @@ export function StoryDialog({
     if (!open || !canvas || !ctx || !fontsReady || !photosLoaded) return;
     const drawn: StoryImage[] = drawnPhotos.map((path) => images[path] ?? null);
     drawStory(ctx, content, options.layout, options.palette, options.background, drawn);
+    if (demo) return;
 
     // Encode ahead of time: share() must run straight from the click to keep
     // the user gesture, so there is no time to encode then
@@ -169,7 +197,7 @@ export function StoryDialog({
     };
     // drawnPhotos is derived from options, which is already a dependency
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, fontsReady, photosLoaded, images, content, options, listing.id]);
+  }, [open, fontsReady, photosLoaded, images, content, options, listing.id, demo]);
 
   const update = (patch: Partial<StoryOptions>) => setOptions((prev) => ({ ...prev, ...patch }));
 
@@ -198,6 +226,17 @@ export function StoryDialog({
       .writeText(listingUrl)
       .then(() => toast.success(t("story.linkCopied")))
       .catch(() => toast.error(t("story.copyFailed")));
+  };
+
+  const addDemoPhoto = (file: File | undefined) => {
+    if (!demo || !file) return;
+    const path = demo.onAddPhoto(file);
+    setOptions((prev) => ({
+      ...prev,
+      layout: prev.layout === "text" ? "card" : prev.layout,
+      photos: [path, ...prev.photos].slice(0, MAX_STORY_PHOTOS),
+    }));
+    if (photoInputRef.current) photoInputRef.current.value = "";
   };
 
   const hasPhotos = listing.photos.length > 0;
@@ -241,7 +280,7 @@ export function StoryDialog({
                   <ToggleGroupItem
                     key={layout}
                     value={layout}
-                    disabled={layout !== "text" && !hasPhotos}
+                    disabled={layout !== "text" && !hasPhotos && !demo}
                   >
                     {t(LAYOUT_KEYS[layout])}
                   </ToggleGroupItem>
@@ -278,7 +317,7 @@ export function StoryDialog({
               </div>
             </Section>
 
-            {hasPhotos && options.layout !== "text" ? (
+            {(hasPhotos || demo) && options.layout !== "text" ? (
               <Section
                 title={t("story.photos")}
                 hint={t("story.photosHint", { max: MAX_STORY_PHOTOS })}
@@ -299,7 +338,7 @@ export function StoryDialog({
                         )}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={photoUrl(path)} alt="" className="size-full object-cover" />
+                        <img src={resolvePhoto(path)} alt="" className="size-full object-cover" />
                         {order >= 0 ? (
                           <span className="bg-primary text-primary-foreground absolute top-1 right-1 flex size-5 items-center justify-center rounded-full text-[11px] font-bold">
                             {order + 1}
@@ -309,10 +348,52 @@ export function StoryDialog({
                     );
                   })}
                 </div>
+                {demo ? (
+                  <div className="grid gap-1">
+                    <input
+                      ref={photoInputRef}
+                      id="story-demo-photo"
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => addDemoPhoto(e.target.files?.[0])}
+                    />
+                    <Button variant="outline" size="sm" asChild className="justify-self-start">
+                      <label htmlFor="story-demo-photo">
+                        <ImagePlus />
+                        {t("story.demoUsePhoto")}
+                      </label>
+                    </Button>
+                    <p className="text-muted-foreground text-xs">{t("story.demoPrivacy")}</p>
+                  </div>
+                ) : null}
               </Section>
             ) : null}
 
             <Section title={t("story.text")}>
+              {demo ? (
+                <div className="grid grid-cols-[7rem_1fr] gap-3">
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="story-demo-price">{t("story.demoPrice")}</Label>
+                    <Input
+                      id="story-demo-price"
+                      inputMode="numeric"
+                      maxLength={5}
+                      value={demoPrice}
+                      onChange={(e) => setDemoPrice(e.target.value.replace(/[^0-9]/g, ""))}
+                    />
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="story-demo-place">{t("story.showLocation")}</Label>
+                    <Input
+                      id="story-demo-place"
+                      maxLength={60}
+                      value={demoPlace}
+                      onChange={(e) => setDemoPlace(e.target.value)}
+                    />
+                  </div>
+                </div>
+              ) : null}
               <div className="grid gap-1.5">
                 <Label htmlFor="story-headline">{t("story.headline")}</Label>
                 <Input
@@ -420,26 +501,32 @@ export function StoryDialog({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-2 border-t px-5 py-3">
-          <Button variant="ghost" size="sm" onClick={copyLink} className="mr-auto">
-            <Link2 />
-            {t("story.copyLink")}
-          </Button>
-          <Button
-            variant={canShareFiles ? "outline" : "default"}
-            disabled={!fileReady}
-            onClick={download}
-          >
-            <Download />
-            {t("story.download")}
-          </Button>
-          {canShareFiles ? (
-            <Button disabled={!fileReady} onClick={share}>
-              <Share2 />
-              {t("story.share")}
+        {demo ? (
+          <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 border-t px-5 py-3">
+            {demo.footer}
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-end gap-2 border-t px-5 py-3">
+            <Button variant="ghost" size="sm" onClick={copyLink} className="mr-auto">
+              <Link2 />
+              {t("story.copyLink")}
             </Button>
-          ) : null}
-        </div>
+            <Button
+              variant={canShareFiles ? "outline" : "default"}
+              disabled={!fileReady}
+              onClick={download}
+            >
+              <Download />
+              {t("story.download")}
+            </Button>
+            {canShareFiles ? (
+              <Button disabled={!fileReady} onClick={share}>
+                <Share2 />
+                {t("story.share")}
+              </Button>
+            ) : null}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

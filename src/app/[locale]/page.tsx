@@ -11,7 +11,6 @@ import {
   Megaphone,
   MessagesSquare,
   ShieldCheck,
-  Sparkles,
   Timer,
   UserRoundX,
   X,
@@ -21,7 +20,7 @@ import { AdMarquee } from "@/components/landing/ad-marquee";
 import { LandingMapDemo } from "@/components/landing/map-demo";
 import { RevealObserver } from "@/components/landing/reveal-observer";
 import { RotatingTitle } from "@/components/landing/rotating-title";
-import { StoryPlayground } from "@/components/landing/story-playground";
+import { StoryDemo } from "@/components/landing/story-demo";
 import {
   CountdownVisual,
   FreeVisual,
@@ -429,7 +428,7 @@ export default async function LandingPage({
       </section>
 
       <section className="bg-secondary/40 border-b px-4 py-16 sm:py-24">
-        <div className="mx-auto grid w-full max-w-[1120px] items-start gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="mx-auto grid w-full max-w-[1120px] items-center gap-12 lg:grid-cols-[1fr_1fr]">
           <div>
             <div data-reveal="">
               <SectionEyebrow index={4}>{l.storyTitle}</SectionEyebrow>
@@ -463,25 +462,9 @@ export default async function LandingPage({
                 </li>
               ))}
             </ul>
-            <p
-              className="text-muted-foreground mt-8 border-l-2 pl-4 text-sm leading-relaxed"
-              data-reveal=""
-            >
-              {l.storyDemoNote2}
-            </p>
-            <Button asChild className="group mt-6" data-reveal="">
-              <Link href={`/${locale}/publish`}>
-                {l.ctaPublish}
-                <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </Button>
           </div>
           <div data-reveal="" style={delay(120)}>
-            <p className="text-brand mb-3 inline-flex items-center gap-2 text-[0.72rem] font-semibold tracking-[0.16em] uppercase">
-              <Sparkles className="size-3.5" aria-hidden />
-              {l.storyTry}
-            </p>
-            <StoryPlayground />
+            <StoryDemo locale={locale} />
           </div>
         </div>
       </section>

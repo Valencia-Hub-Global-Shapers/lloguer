@@ -195,16 +195,10 @@
       "Cinco colores y seis fondos, con la vista previa al momento.",
       "Cualquiera puede crearla desde el anuncio, así que tus amigos también te ayudan a difundirlo."
     ],
-    "storyTry": "Pruébalo aquí",
-    "storyDemoNote2": "Esto es solo una prueba: no se publica ni se guarda nada. La story de verdad, lista para descargar y compartir, la tienes cuando publicas tu anuncio.",
-    "storyDemoHeadline": "Habitación libre en Russafa",
-    "storyDemoPlace": "Russafa, València",
     "storyDemoNote": "¡Buscamos compi para enero!",
-    "storyDemoPriceLabel": "Precio (€/mes)",
-    "storyDemoFooter": "Ejemplo creado en",
-    "storyDemoUsePhoto": "Probar con mi foto",
-    "storyDemoClearPhoto": "Quitar foto",
-    "storyDemoPrivacy": "Tu foto no sale de tu dispositivo."
+    "storyCta": "Crear una story de prueba",
+    "storyDemoHood": "Russafa",
+    "storyDemoDescription": "Habitación individual con mucha luz en un piso compartido, al lado del mercado. Somos dos compis tranquilos que trabajan y estudian."
   },
   "home": {
     "emptyTitle": "No hay nada aquí",
@@ -492,6 +486,11 @@
     "share": "Compartir",
     "copyLink": "Copiar enlace",
     "linkCopied": "Enlace copiado. Puedes pegarlo en un sticker de enlace de Instagram.",
-    "copyFailed": "No se ha podido copiar el enlace."
+    "copyFailed": "No se ha podido copiar el enlace.",
+    "demoFooter": "Ejemplo creado en",
+    "demoPrice": "Precio (€/mes)",
+    "demoUsePhoto": "Probar con mi foto",
+    "demoPrivacy": "Tu foto no sale de tu dispositivo.",
+    "demoNote": "Es solo una prueba: no se publica ni se guarda nada."
   }
 }

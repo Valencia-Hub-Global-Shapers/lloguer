@@ -195,16 +195,10 @@
       "Five colors and six backgrounds, with a live preview.",
       "Anyone can make one from the listing, so your friends can help spread the word too."
     ],
-    "storyTry": "Try it here",
-    "storyDemoNote2": "This is just a demo: nothing is published or saved. You get the real story, ready to download and share, when you publish your listing.",
-    "storyDemoHeadline": "Room available in Russafa",
-    "storyDemoPlace": "Russafa, València",
     "storyDemoNote": "Looking for a flatmate from January!",
-    "storyDemoPriceLabel": "Price (€/month)",
-    "storyDemoFooter": "Example made on",
-    "storyDemoUsePhoto": "Try with my photo",
-    "storyDemoClearPhoto": "Remove photo",
-    "storyDemoPrivacy": "Your photo never leaves your device."
+    "storyCta": "Create a sample story",
+    "storyDemoHood": "Russafa",
+    "storyDemoDescription": "Bright single room in a shared flat next to the market. We are two easygoing flatmates who work and study."
   },
   "home": {
     "emptyTitle": "Nothing here",
@@ -492,6 +486,11 @@
     "share": "Share",
     "copyLink": "Copy link",
     "linkCopied": "Link copied. You can paste it into an Instagram link sticker.",
-    "copyFailed": "Could not copy the link."
+    "copyFailed": "Could not copy the link.",
+    "demoFooter": "Example made on",
+    "demoPrice": "Price (€/month)",
+    "demoUsePhoto": "Try with my photo",
+    "demoPrivacy": "Your photo never leaves your device.",
+    "demoNote": "This is just a demo: nothing is published or saved."
   }
 }

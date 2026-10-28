@@ -195,16 +195,10 @@
       "Cinc colors i sis fons, amb la vista prèvia al moment.",
       "Qualsevol pot crear-la des de l'anunci, així que els teus amics també t'ajuden a difondre'l."
     ],
-    "storyTry": "Prova-ho ací",
-    "storyDemoNote2": "Açò és només una prova: no es publica ni es guarda res. La story de veritat, preparada per a descarregar i compartir, la tens quan publiques el teu anunci.",
-    "storyDemoHeadline": "Habitació lliure a Russafa",
-    "storyDemoPlace": "Russafa, València",
     "storyDemoNote": "Busquem company per a gener!",
-    "storyDemoPriceLabel": "Preu (€/mes)",
-    "storyDemoFooter": "Exemple creat a",
-    "storyDemoUsePhoto": "Prova amb la meua foto",
-    "storyDemoClearPhoto": "Lleva la foto",
-    "storyDemoPrivacy": "La teua foto no ix del teu dispositiu."
+    "storyCta": "Crea una story de prova",
+    "storyDemoHood": "Russafa",
+    "storyDemoDescription": "Habitació individual amb molta llum en un pis compartit, al costat del mercat. Som dos companys tranquils que treballen i estudien."
   },
   "home": {
     "emptyTitle": "No hi ha res ací",
@@ -492,6 +486,11 @@
     "share": "Comparteix",
     "copyLink": "Copia l'enllaç",
     "linkCopied": "Enllaç copiat. Pots enganxar-lo en un adhesiu d'enllaç d'Instagram.",
-    "copyFailed": "No s'ha pogut copiar l'enllaç."
+    "copyFailed": "No s'ha pogut copiar l'enllaç.",
+    "demoFooter": "Exemple creat a",
+    "demoPrice": "Preu (€/mes)",
+    "demoUsePhoto": "Prova amb la meua foto",
+    "demoPrivacy": "La teua foto no ix del teu dispositiu.",
+    "demoNote": "És només una prova: no es publica ni es guarda res."
   }
 }
