@@ -330,7 +330,13 @@
     "stepSubmit": "Revisió i enviament",
     "legalLink": "l'avís legal i la privacitat",
     "internalEmail": "El teu correu privat",
-    "internalEmailHint": "No es publica i pot ser diferent del de contacte. T'enviem ací l'enllaç privat per editar, desactivar o esborrar el teu anunci."
+    "internalEmailHint": "No es publica i pot ser diferent del de contacte. T'enviem ací l'enllaç privat per editar, desactivar o esborrar el teu anunci.",
+    "draftTitle": "Hem començat el teu anunci amb la teua prova",
+    "draftBody": "Ja tens el preu i el text. Revisa'ls i completa la resta: ubicació, detalls i contacte. No es publica res fins que l'envies, i tot i això el revisem abans que aparega.",
+    "draftAddPhotos": "Afig les meues {count} fotos de la prova",
+    "draftAddPhotosOne": "Afig la meua foto de la prova",
+    "draftPhotosNote": "Les teues fotos només es pugen si les afiges.",
+    "draftDiscard": "Comença de zero"
   },
   "auth": {
     "loginTitle": "Inicia sessió",
@@ -491,6 +497,66 @@
     "demoPrice": "Preu (€/mes)",
     "demoUsePhoto": "Prova amb la meua foto",
     "demoPrivacy": "La teua foto no ix del teu dispositiu.",
-    "demoNote": "És només una prova: no es publica ni es guarda res."
+    "demoNote": "És només una prova: no es publica res.",
+    "shuffle": "Sorprén-me",
+    "shuffleHint": "Prova un disseny a l'atzar.",
+    "shuffleDemoHint": "Un altre anunci d'exemple i un altre disseny, a l'atzar.",
+    "demoStart": "Comença el meu anunci amb aquestes dades",
+    "demoPresets": [
+      {
+        "headline": "Habitació lliure a Russafa",
+        "note": "Busquem company per a gener!",
+        "price": 380,
+        "place": "Russafa, València"
+      },
+      {
+        "headline": "Deixe la meua habitació a Benimaclet",
+        "note": "Me'n vaig d'Erasmus i busque algú simpàtic",
+        "price": 320,
+        "place": "Benimaclet, València"
+      },
+      {
+        "headline": "Habitació amb balcó al Cabanyal",
+        "note": "A cinc minuts de la platja 🌊",
+        "price": 350,
+        "place": "El Cabanyal, València"
+      },
+      {
+        "headline": "Pis d'estudiants a Blasco Ibáñez",
+        "note": "Busquem la quarta companya del pis",
+        "price": 300,
+        "place": "Ciutat Universitària, València"
+      },
+      {
+        "headline": "Habitació doble a Campanar",
+        "note": "Ideal per a parelles, amb bany propi",
+        "price": 450,
+        "place": "Campanar, València"
+      },
+      {
+        "headline": "Hab. lluminosa prop de la UPV",
+        "note": "Som tres, tranquils i endreçats",
+        "price": 330,
+        "place": "Algirós, València"
+      },
+      {
+        "headline": "Habitació al centre d'Alacant",
+        "note": "Disponible ja mateix, escriu-me",
+        "price": 340,
+        "place": "Centre, Alacant"
+      },
+      {
+        "headline": "Busque company a Gràcia",
+        "note": "Pis amb terrassa i molt bon rotllo",
+        "price": 520,
+        "place": "Gràcia, Barcelona"
+      },
+      {
+        "headline": "Habitació a Lavapiés",
+        "note": "Per al curs que ve, despeses incloses",
+        "price": 480,
+        "place": "Lavapiés, Madrid"
+      }
+    ]
   }
 }

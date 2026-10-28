@@ -5,6 +5,8 @@ import {
   buildFacts,
   defaultStoryOptions,
   photosForLayout,
+  pickOther,
+  randomDesign,
   togglePhoto,
   typeLabel,
   wrapText,
@@ -127,5 +129,33 @@ describe("photo selection", () => {
 describe("typeLabel", () => {
   it("adds the room type to rooms", () => {
     expect(typeLabel(listing, t)).toBe("listing.typeRoom · listing.roomDouble");
+  });
+});
+
+describe("randomDesign", () => {
+  it("always changes the color and keeps text only without photos", () => {
+    const current = { layout: "text", palette: "horchata", background: "plain" } as const;
+    for (let i = 0; i < 20; i++) {
+      const design = randomDesign(current, false);
+      expect(design.palette).not.toBe("horchata");
+      expect(design.background).not.toBe("plain");
+      expect(design.layout).toBe("text");
+    }
+  });
+
+  it("picks from every layout when there are photos", () => {
+    const values = [0, 0.5, 0.99];
+    const layouts = values.map(
+      (v) =>
+        randomDesign({ layout: "card", palette: "horchata", background: "plain" }, true, () => v)
+          .layout,
+    );
+    expect(new Set(layouts)).toEqual(new Set(["card", "cover", "text"]));
+  });
+});
+
+describe("pickOther", () => {
+  it("falls back to the only item", () => {
+    expect(pickOther(["a"], "a", Math.random)).toBe("a");
   });
 });

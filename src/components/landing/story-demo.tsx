@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n/client";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,12 @@ import {
 } from "@/features/story/options";
 import { drawStory, type StoryContent } from "@/features/story/render";
 import { drawSampleRoom } from "@/features/story/sample-room";
-import { StoryDialog } from "@/features/story/components/story-dialog";
+import { downscaleToWebP } from "@/features/listings/photos";
+import {
+  StoryDialog,
+  type StoryDemoDraft,
+} from "@/features/story/components/story-dialog";
+import { blobToDataUrl, draftDescription, savePublishDraft } from "@/lib/publish-draft";
 import { useStoryFonts } from "@/features/story/components/use-story-fonts";
 
 const SAMPLE_PHOTO = "sample-room";
@@ -54,6 +59,7 @@ const SHOWCASE: {
  */
 export function StoryDemo({ locale }: { locale: string }) {
   const { t, plural } = useI18n();
+  const router = useRouter();
   const fontsReady = useStoryFonts();
   const [open, setOpen] = useState(false);
   const [sample, setSample] = useState<HTMLCanvasElement | null>(null);
@@ -109,6 +115,27 @@ export function StoryDemo({ locale }: { locale: string }) {
     setPhotos((prev) => [src, ...prev]);
     return src;
   }, []);
+
+  // Only after an explicit click: the form opens pre-filled, and nothing is
+  // uploaded or published until the visitor does it there
+  const startListing = useCallback(
+    async (draft: StoryDemoDraft) => {
+      const photos: string[] = [];
+      for (const path of draft.photos) {
+        if (path === SAMPLE_PHOTO) continue;
+        const blob = await (await fetch(path)).blob();
+        const webp = await downscaleToWebP(new File([blob], "photo", { type: blob.type }));
+        photos.push(await blobToDataUrl(webp));
+      }
+      savePublishDraft({
+        price: draft.price,
+        description: draftDescription(draft.headline, draft.note),
+        photos,
+      });
+      router.push(`/${locale}/publish`);
+    },
+    [router, locale],
+  );
 
   useEffect(() => {
     if (!fontsReady || !sample) return;
@@ -180,20 +207,7 @@ export function StoryDemo({ locale }: { locale: string }) {
           onOpenChange={setOpen}
           resolvePhoto={resolvePhoto}
           initialOptions={{ palette: "valencia", background: "dots", note: t("landing.storyDemoNote") }}
-          demo={{
-            onAddPhoto: addPhoto,
-            footer: (
-              <>
-                <p className="text-muted-foreground mr-auto text-sm">{t("story.demoNote")}</p>
-                <Button asChild className="group">
-                  <Link href={`/${locale}/publish`}>
-                    {t("landing.ctaPublish")}
-                    <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
-                  </Link>
-                </Button>
-              </>
-            ),
-          }}
+          demo={{ onAddPhoto: addPhoto, onStartListing: startListing }}
         />
       ) : null}
     </div>

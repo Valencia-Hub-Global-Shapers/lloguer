@@ -299,3 +299,28 @@ function fitWidth(line: string, maxWidth: number, measure: (s: string) => number
   while (cut.length > 1 && measure(`${cut}…`) > maxWidth) cut = cut.slice(0, -1);
   return `${cut}…`;
 }
+
+/** A random item other than `current` (when there is another one to pick). */
+export function pickOther<T>(items: readonly T[], current: T, random: () => number): T {
+  const others = items.filter((item) => item !== current);
+  const pool = others.length > 0 ? others : items;
+  return pool[Math.floor(random() * pool.length) % pool.length];
+}
+
+/** New random layout, color and background; always a different color, so it visibly changes. */
+export function randomDesign(
+  current: Pick<StoryOptions, "layout" | "palette" | "background">,
+  hasPhotos: boolean,
+  random: () => number = Math.random,
+): Pick<StoryOptions, "layout" | "palette" | "background"> {
+  const layouts = hasPhotos ? STORY_LAYOUTS : (["text"] as StoryLayout[]);
+  return {
+    layout: layouts[Math.floor(random() * layouts.length) % layouts.length],
+    palette: pickOther(
+      STORY_PALETTES.map((palette) => palette.id),
+      current.palette,
+      random,
+    ),
+    background: pickOther(STORY_BACKGROUNDS, current.background, random),
+  };
+}

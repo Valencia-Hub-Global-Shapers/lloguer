@@ -21,9 +21,12 @@ type Item = { path: string; uploading: boolean; preview: string };
 export function PhotoUploader({
   value,
   onChange,
+  incoming,
 }: {
   value: string[];
   onChange: (paths: string[]) => void;
+  /** Files handed over by the parent (e.g. from the landing demo), uploaded once. */
+  incoming?: File[];
 }) {
   const { t } = useI18n();
   // One random folder per form session keeps a poster's uploads together
@@ -46,7 +49,7 @@ export function PhotoUploader({
     onChangeRef.current(next.filter((i) => !i.uploading).map((i) => i.path));
   };
 
-  const addFiles = async (files: FileList | null) => {
+  const addFiles = async (files: FileList | File[] | null) => {
     if (!files?.length) return;
     const supabase = createClient();
 
@@ -94,6 +97,15 @@ export function PhotoUploader({
       }
     }
   };
+
+  const handledIncoming = useRef<File[] | undefined>(undefined);
+  useEffect(() => {
+    if (!incoming?.length || handledIncoming.current === incoming) return;
+    handledIncoming.current = incoming;
+    void addFiles(incoming);
+    // addFiles only reads refs; re-running it for the same files would upload twice
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [incoming]);
 
   // Anonymous posters cannot delete from storage; the file is just unreferenced.
   const remove = (path: string) => {

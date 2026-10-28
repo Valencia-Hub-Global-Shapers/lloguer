@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, Download, ImagePlus, Link2, Share2 } from "lucide-react";
+import { ArrowRight, Check, Download, ImagePlus, Link2, Share2, Shuffle } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +32,9 @@ import {
   buildFacts,
   defaultStoryOptions,
   photosForLayout,
+  pickOther,
   placeLabel,
+  randomDesign,
   togglePhoto,
   typeLabel,
   type StoryLayout,
@@ -65,10 +67,18 @@ function loadPhoto(src: string): Promise<HTMLImageElement | null> {
  * are editable, visitors can add a local photo, and there is no export.
  */
 export type StoryDemo = {
-  /** Shown where the share and download buttons would be. */
-  footer: React.ReactNode;
   /** Registers a local photo and returns the path to use for it in listing.photos. */
   onAddPhoto: (file: File) => string;
+  /** Takes the visitor to the publish form, pre-filled with what they typed. */
+  onStartListing: (draft: StoryDemoDraft) => Promise<void>;
+};
+
+export type StoryDemoDraft = {
+  price: number | null;
+  headline: string;
+  note: string;
+  /** Selected photo paths, in order. */
+  photos: string[];
 };
 
 /**
@@ -92,7 +102,7 @@ export function StoryDialog({
   initialOptions?: Partial<StoryOptions>;
   demo?: StoryDemo;
 }) {
-  const { locale, t, plural } = useI18n();
+  const { locale, dict, t, plural } = useI18n();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileRef = useRef<File | null>(null);
   const requestedRef = useRef(new Set<string>());
@@ -103,6 +113,7 @@ export function StoryDialog({
   }));
   const [demoPrice, setDemoPrice] = useState(String(listing.price));
   const [demoPlace, setDemoPlace] = useState(() => placeLabel(listing));
+  const [starting, setStarting] = useState(false);
   const [images, setImages] = useState<Record<string, HTMLImageElement | null>>({});
   const fontsReady = useStoryFonts(open);
   const [fileReady, setFileReady] = useState(false);
@@ -241,6 +252,40 @@ export function StoryDialog({
 
   const hasPhotos = listing.photos.length > 0;
 
+  // New design; in the demo also a new sample ad, so trying it takes one click
+  const shuffle = () => {
+    const design = randomDesign(options, hasPhotos);
+    if (!demo) {
+      update(design);
+      return;
+    }
+    const presets = dict.story.demoPresets;
+    const preset = pickOther(
+      presets,
+      presets.find((p) => p.headline === options.headline) ?? presets[0],
+      Math.random,
+    );
+    setDemoPrice(String(preset.price));
+    setDemoPlace(preset.place);
+    update({ ...design, headline: preset.headline, note: preset.note });
+  };
+
+  const startListing = () => {
+    if (!demo) return;
+    setStarting(true);
+    demo
+      .onStartListing({
+        price: demoPrice ? Number(demoPrice) : null,
+        headline: options.headline,
+        note: options.note,
+        photos: options.photos,
+      })
+      .catch(() => {
+        toast.error(t("errors.generic"));
+        setStarting(false);
+      });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex max-h-[94dvh] w-[calc(100%-1.5rem)] max-w-4xl flex-col gap-0 overflow-hidden p-0">
@@ -269,6 +314,16 @@ export function StoryDialog({
 
           {/* Controls */}
           <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-5 py-5">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <Button variant="brand" size="sm" onClick={shuffle}>
+                <Shuffle />
+                {t("story.shuffle")}
+              </Button>
+              <p className="text-muted-foreground text-xs">
+                {demo ? t("story.shuffleDemoHint") : t("story.shuffleHint")}
+              </p>
+            </div>
+
             <Section title={t("story.layout")}>
               <ToggleGroup
                 type="single"
@@ -503,7 +558,11 @@ export function StoryDialog({
 
         {demo ? (
           <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 border-t px-5 py-3">
-            {demo.footer}
+            <p className="text-muted-foreground mr-auto text-sm">{t("story.demoNote")}</p>
+            <Button className="group" disabled={starting} onClick={startListing}>
+              {t("story.demoStart")}
+              <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
+            </Button>
           </div>
         ) : (
           <div className="flex flex-wrap items-center justify-end gap-2 border-t px-5 py-3">

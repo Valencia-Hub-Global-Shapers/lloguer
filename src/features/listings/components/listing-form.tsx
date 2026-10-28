@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Copy } from "lucide-react";
+import { CheckCircle2, Copy, ImagePlus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +28,7 @@ import { useI18n } from "@/i18n/client";
 import { PinPickerMap } from "@/features/map/components/pin-picker-map";
 import { reverseGeocode } from "@/features/map/geocode";
 import { VALENCIA_CENTER } from "@/lib/utils";
+import { dataUrlToFile, takePublishDraft } from "@/lib/publish-draft";
 import {
   listingFormSchema,
   submissionSchema,
@@ -54,7 +55,7 @@ export function ListingForm({
   token?: string;
   defaults: SubmissionValues;
 }) {
-  const { locale, t } = useI18n();
+  const { locale, t, plural } = useI18n();
   const router = useRouter();
   const [created, setCreated] = useState<CreatedListing | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -79,6 +80,35 @@ export function ListingForm({
     setValue,
     formState: { errors, isSubmitting },
   } = form;
+
+  // Pre-fill from the landing story demo, if the visitor came from there.
+  // Photos stay in the browser until the visitor chooses to add them.
+  const [draftPhotos, setDraftPhotos] = useState<string[] | null>(null);
+  const [incomingPhotos, setIncomingPhotos] = useState<File[]>();
+  useEffect(() => {
+    if (mode !== "create") return;
+    const draft = takePublishDraft();
+    if (!draft) return;
+    setValue("type", "room");
+    if (draft.price != null) setValue("price", draft.price);
+    if (draft.description) setValue("description", draft.description);
+    setDraftPhotos(draft.photos);
+  }, [mode, setValue]);
+
+  const addDraftPhotos = async () => {
+    if (!draftPhotos) return;
+    const files = await Promise.all(
+      draftPhotos.map((src, i) => dataUrlToFile(src, `demo-${i + 1}.webp`)),
+    );
+    setIncomingPhotos(files);
+    setDraftPhotos([]);
+  };
+
+  const discardDraft = () => {
+    setValue("price", createDefaults.price);
+    setValue("description", createDefaults.description);
+    setDraftPhotos(null);
+  };
 
   const type = watch("type");
   const lat = watch("lat");
@@ -195,6 +225,30 @@ export function ListingForm({
       <p className="text-muted-foreground -mt-3 text-sm">
         <span className="text-primary">*</span> {t("publish.requiredNote")}
       </p>
+
+      {draftPhotos ? (
+        <div className="border-brand/30 bg-card grid gap-3 rounded-md border p-4">
+          <p className="text-brand flex items-center gap-2 font-semibold">
+            <Sparkles className="size-4" aria-hidden />
+            {t("publish.draftTitle")}
+          </p>
+          <p className="text-muted-foreground text-sm">{t("publish.draftBody")}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            {draftPhotos.length > 0 ? (
+              <Button type="button" size="sm" variant="brand" onClick={() => void addDraftPhotos()}>
+                <ImagePlus />
+                {plural("publish.draftAddPhotos", draftPhotos.length)}
+              </Button>
+            ) : null}
+            <Button type="button" size="sm" variant="ghost" onClick={discardDraft}>
+              {t("publish.draftDiscard")}
+            </Button>
+          </div>
+          {draftPhotos.length > 0 ? (
+            <p className="text-muted-foreground text-xs">{t("publish.draftPhotosNote")}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* 1. Type + location */}
       <Card>
@@ -444,6 +498,7 @@ export function ListingForm({
             <PhotoUploader
               value={watch("photos") ?? []}
               onChange={(paths) => setValue("photos", paths, { shouldValidate: true })}
+              incoming={incomingPhotos}
             />
             {fieldError(errors.photos?.message as string | undefined)}
           </div>
